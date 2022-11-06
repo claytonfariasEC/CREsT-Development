@@ -88,7 +88,7 @@ public class RunSimulations {  //Class to run debug tests
         for (int i = 0; i < simulationDebug.getCircuitListSpecs().size(); i++) {
 
 
-            SimualtionType sim_mtf_debug = new SimualtionType(simulationDebug.getCircuitListSpecs().get(i)); // first Circuit c.v
+            SimulationType sim_mtf_debug = new SimulationType(simulationDebug.getCircuitListSpecs().get(i)); // first Circuit c.v
             try {
                     sim_mtf_debug.monteCarloReliabilityAPI("");
                 // sim_mtf_debug.GateCounter();
@@ -140,7 +140,7 @@ public class RunSimulations {  //Class to run debug tests
 
              //   try {
                     System.out.println(j + "  --> circ: "+ versao.getCircuitListSpecs().get(i).getCircuit());
-                    SimualtionType sim_mtf_debug = new SimualtionType(versao.getCircuitListSpecs().get(i));
+                    SimulationType sim_mtf_debug = new SimulationType(versao.getCircuitListSpecs().get(i));
                   //  if(i) {
                        //sim_mtf_debug.monteCarloReliabilityAPI("teste/lookup_table.csv");
 

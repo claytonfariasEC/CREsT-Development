@@ -2,7 +2,7 @@ package simulation;
 
 import java.util.ArrayList;
 
-public class SimualtionType {
+public class SimulationType {
 
     private SimulationCircuit simulationCircuit;
 
@@ -12,7 +12,7 @@ public class SimualtionType {
 
     public ArrayList <String> info = new ArrayList<>();
 
-    public SimualtionType(SimulationCircuit simulationCircuit){
+    public SimulationType(SimulationCircuit simulationCircuit){
         this.simulationCircuit = simulationCircuit;
     }
 
