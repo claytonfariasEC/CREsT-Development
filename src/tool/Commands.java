@@ -648,7 +648,7 @@ public class Commands {
                           //simulationCircuit.print();
                           SimualtionType experimento = new SimualtionType(simulationCircuit);
                           experimento.printSpecSimulation();
-                          experimento.faultToleranceExhaustiveSETAPI();
+                          experimento.exhaustiveSensitiveAreaAnalysisAPI();
 
                        System.out.println("Simulation results:\n"
                                

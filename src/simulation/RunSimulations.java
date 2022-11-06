@@ -3,7 +3,7 @@ package simulation;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class MAIN {  //Class to run debug tests
+public class RunSimulations {  //Class to run debug tests
     int threads;
     int sample;
     String reliabilityConst;
@@ -12,7 +12,7 @@ public class MAIN {  //Class to run debug tests
     String OUTPUT_INFO;
     ArrayList<String> gates =  new ArrayList<>();
 
-    public MAIN(int threads, String reliabilityConst, String relativePath, String genlib){
+    public RunSimulations(int threads, String reliabilityConst, String relativePath, String genlib){
             this.threads = threads;
             this.reliabilityConst = reliabilityConst;
             this.relativePath = relativePath;
@@ -147,8 +147,10 @@ public class MAIN {  //Class to run debug tests
                     //sim_mtf_debug.faultToleranceExhaustiveCompleteMETAPIESTIMATION();
 
                 // TODO: 26/09/2022  v1
-                 //sim_mtf_debug.faultToleranceExhaustiveSETAPI();//Fault Free
-                 sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); // Fault Injection
+
+                sim_mtf_debug.exhaustiveSensitiveAreaAnalysisAPI();//Fault Free
+
+                //sim_mtf_debug.faultToleranceExhaustiveSETAndSensitiveAreaAnalysisAPI(); // Fault Injection
 
                         //sim_mtf_debug.faultToleranceExhaustiveCompleteMETAPI();
                         // sim_mtf_debug.monteCarloReliabilityAPI("teste/lookup_table.csv");
@@ -204,7 +206,7 @@ public class MAIN {  //Class to run debug tests
     public static void main(String[] args) throws Exception{
 
             System.out.println("- New methodology....");
-            MAIN experiment = new MAIN(0 ,"", "", "");
+            RunSimulations experiment = new RunSimulations(0 ,"", "", "");
             String relativePath = "teste/mapped/EPFL2015/5-full_no_cost/"; //"teste/demo/";
             String genlib = "5-full_no_cost.genlib"; // "cadence.genlib"; //"lib_min_no_cost.genlib"; //"cadence.genlib";
             String signalsToinjectFault = "ALL_SIGNALS";
