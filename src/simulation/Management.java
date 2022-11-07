@@ -693,7 +693,18 @@ public class Management extends RunSimulations {
                 return (Duration.between(startTimer, stopTimer).toSeconds());
         }
 
-        public void
+        public LocalDateTime getTimeStampDate(){
+                LocalDateTime myDateObj = LocalDateTime.now();
+                //DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                //String formattedDate = myDateObj.format(myFormatObj);
+                return  myDateObj;
+        }
+
+        public String getTimeStampDateString(LocalDateTime myDateObj){
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                return  (myDateObj.format(myFormatObj));
+        }
+
 
         public void runExhausticSimulationAndSensitiveAreaAnalysis(String option) throws IOException, Exception { //Test All possibilities
 
@@ -704,10 +715,14 @@ public class Management extends RunSimulations {
 
 
                 Instant start = Instant.now();
-
+                /*
                 LocalDateTime myDateObj = LocalDateTime.now();
                 DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                 String formattedDate = myDateObj.format(myFormatObj);
+                */
+
+                LocalDateTime myDateObj = this.getTimeStampDate();
+                String formattedDate = this.getTimeStampDateString(myDateObj);
 
                 this.setupEnviroment("\n ----- Exaustive Simulation Version For SET (SF's) ------");
 
