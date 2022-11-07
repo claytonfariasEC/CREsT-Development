@@ -616,6 +616,7 @@ public class Management extends RunSimulations {
 
         public String getER(String identification) {
 
+
                 //float ER, int sample, int unmasked_faults, long propagatedTime
                 String result;
 
@@ -1361,7 +1362,7 @@ public class Management extends RunSimulations {
                 this.returnCircuit(simulationModeAdapter);
                 //this.circuit = circuit;
                 //simulationModeAdapter.getER("ER");
-                System.out.println("This Circuit: " + this.circuit.getName());
+                //System.out.println("This Circuit: " + this.circuit.getName());
         }
         public List particionateExausticVector(ArrayList<ArrayList<Integer>> ListInputVectors) throws ScriptException, Exception {
 
