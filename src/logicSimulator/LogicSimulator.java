@@ -1447,7 +1447,7 @@ import signalProbability.ProbCircuit;
 
     }
 
-        private  void propagateFaultInjections(int testNumber, ArrayList <Integer> vector, Signal faultSig, int index, TestVectorInformation thread_item) throws IOException, WriteException{
+        private  void propagateSignalsAndCalculateSA(int testNumber, ArrayList <Integer> vector, Signal faultSig, int index, TestVectorInformation thread_item) throws IOException, WriteException{
            
              this.threadID = (long) Thread.currentThread().getId();
            
@@ -2799,7 +2799,7 @@ import signalProbability.ProbCircuit;
 
     }
 
-    public  void startSimulationFaultInjection() throws IOException, WriteException{
+    public  void startPropagationSA() throws IOException, WriteException{
 
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                 /*
@@ -2818,7 +2818,7 @@ import signalProbability.ProbCircuit;
 
 
                 this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
-                this.propagateFaultInjections(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getFaultSignal(), i,  this.threadSimulationList.get(i));
+                this.propagateSignalsAndCalculateSA(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getFaultSignal(), i,  this.threadSimulationList.get(i));
                 this.getFaultInjectionResults(this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i));
 
                 /*
@@ -3920,7 +3920,7 @@ import signalProbability.ProbCircuit;
 
                             }
 
-                        this.calculateLogicalMasking(faultSig);
+                        //this.calculateLogicalMasking(faultSig);
                         }
                         signals.add(inputsSignals.get(index).getLogicValue());
 
@@ -4164,7 +4164,9 @@ import signalProbability.ProbCircuit;
      public void calculateGateAS(final Map<ArrayList<Boolean>, Boolean> comb, final ArrayList<Boolean> input,  final ArrayList<Boolean> input_original, DepthGate gate, String concat_inputs, String concat_inputs_original, TestVectorInformation thread_item, Cell cells, Signal faultSig){
 
          //Convert the input signal values to boolean
-         boolean output_converted = this.calculateTheOutputGatesInBoolean(comb, input_original, gate); // hero to convert
+         boolean output_converted = this.calculateTheOutputGatesInBoolean(comb, input, gate); // hero to convert
+
+          boolean output_original_converted = this.calculateTheOutputGatesInBoolean(comb, input_original, gate); // hero to convert
 
          /* Calculate Sensitive Area of This Gate */
          ///SensitiveCell cell = this.sensitive_cells.get(gate.getGate().getType()  + "_" + concat_inputs);
@@ -4180,7 +4182,7 @@ import signalProbability.ProbCircuit;
          }
 
          SensitiveCell cell = this.sensitive_cells.get(key_original);
-
+         SensitiveCell cell2 = this.sensitive_cells.get(key);
          //if(gate.getGate().toString().equals("U0")){
              ///System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell + " = " + gateSensitivivity.getgateSensitiveArea() + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);
          //}
@@ -4195,9 +4197,10 @@ import signalProbability.ProbCircuit;
              GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
              gateSensitivivity.setGate(gate);
              gateSensitivivity.setCell(cells);
-             gateSensitivivity.setInputs(input_original);
-             gateSensitivivity.setInputsOriginal(input);
+             gateSensitivivity.setInputs(input);
+             gateSensitivivity.setInputsOriginal(input_original);
              gateSensitivivity.setOutputs(output_converted);
+             gateSensitivivity.setOutputsOriginal(output_original_converted);
 
              /// Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
@@ -4206,6 +4209,10 @@ import signalProbability.ProbCircuit;
                   thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
                   gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
                   thread_item.setGatesLogicalPath(gateSensitivivity);
+
+
+
+                    //gateSensitivivity.calculatGateSusceptibility(input);
 
                  // gateSensitivivity.calculatGateSusceptibility(input);
                 //thread_item.circuitPath.add(gateSensitivivity);
@@ -4744,10 +4751,10 @@ import signalProbability.ProbCircuit;
                     break;
 
                 case ("Single"):
-                    System.out.println("SIMULATION ID (000): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
+                    System.out.println("SIMULATION ID (000) : ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
                     try {
                         startSimulationFaultFree();
-                        startSimulationFaultInjection();
+                        startPropagationSA();
                         //startSimulationMultipleFaultInjection();
 
                     } catch (IOException | WriteException ex) {

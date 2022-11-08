@@ -13,15 +13,20 @@ public class GateDetailedInformation {
     private ArrayList <String> inputs_original;
     private ArrayList <String> outputs;
 
+    private ArrayList <String> outputs_original;
+
     private DepthGate gate;
 
     private Float gateSensitiveArea;
+
+    private Float gateSensitiveAreaOriginal;
 
     private Cell cells;
     GateDetailedInformation(){
         //this.gate = gate;
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
+        this.outputs_original = new ArrayList<>();
     }
 
     public void setGate(DepthGate gate) {
@@ -39,8 +44,24 @@ public class GateDetailedInformation {
         }
     }
 
+    public void setOutputsOriginal( Boolean outputsOriginal) {
+
+        if(outputsOriginal == true){
+            this.outputs_original.add("1");
+        }
+        if(outputsOriginal == false){
+            this.outputs_original.add("0");
+        }
+
+           // this.outputs = outputsOriginal;
+
+    }
+
     public ArrayList<String> getOutputs() {
         return outputs;
+    }
+    public ArrayList<String> getOutputsOriginal() {
+        return outputs_original;
     }
 
     public void setgateSensitiveArea(Float gateSensitiveArea) {
@@ -48,6 +69,9 @@ public class GateDetailedInformation {
     }
 
     public Float getgateSensitiveArea() {
+        return gateSensitiveArea;
+    }
+    public Float getgateSensitiveAreaOriginal() {
         return gateSensitiveArea;
     }
 
