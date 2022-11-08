@@ -153,7 +153,6 @@ public class GateDetailedInformation {
         }
         return inputNew;
     }
-    
     public void calculatGateSusceptibility(ArrayList <Boolean> input){ //Trazer o original também
 
         final Map<ArrayList<Boolean>, Boolean> combx = this.cells.getComb(); // Calculate the gate output
