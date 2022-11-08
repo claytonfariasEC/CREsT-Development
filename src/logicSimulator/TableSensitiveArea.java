@@ -110,9 +110,10 @@ public class TableSensitiveArea {
                 //Vectors axis X 000; 0000; 0000; 0000; 0000;
                 //System.out.print(x.get(j).getinputVector().toString()); // Head
 
-                    Float sum = 0F;
-                    vectorPassed.add(x.get(j));
+                Float sum = 0F;
+                vectorPassed.add(x.get(j));
 
+                if (x.get(j).getFaultSignal().toString().equals(x.get(0).getFaultSignal().toString())) {
                     String content = x.get(j).getinputVector().toString();
                     //String contentv2 = "";
 
@@ -145,6 +146,7 @@ public class TableSensitiveArea {
 
                     f.add(content);
                 }
+            }
 
 
 
