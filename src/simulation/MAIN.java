@@ -150,6 +150,8 @@ public class MAIN {  //Class to run debug tests
                 sim_mtf_debug.faultToleranceExhaustiveSETAPI();
                 // sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT();
 
+
+
                         //sim_mtf_debug.faultToleranceExhaustiveCompleteMETAPI();
                         // sim_mtf_debug.monteCarloReliabilityAPI("teste/lookup_table.csv");
                              // SimulationMode sim_mtf_debugz = new SimulationMode(versao.getCircuitListSpecs().get(i));
