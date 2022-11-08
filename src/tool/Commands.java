@@ -58,7 +58,7 @@ import signalProbability.ProbSignal;
 
 
 import simulation.SimulationCircuit;
-import simulation.SimulationType;
+import simulation.SimualtionType;
 import simulation.checkFiles;
 import writers.GenlibWriter;
 import writers.VerilogWriter;
@@ -268,7 +268,7 @@ public class Commands {
 
         SimulationCircuit simulationCircuit = new SimulationCircuit(circuit, relativePath, genlib , "ALL_SIGNALS", threads, constReliability,  Integer.parseInt(mc_sample));
         //simulationCircuit.print();
-        SimulationType experimento = new SimulationType(simulationCircuit);
+        SimualtionType experimento = new SimualtionType(simulationCircuit);
         experimento.printSpecSimulation();
         experimento.faultToleranceMonteCarloAPI();
 
@@ -493,8 +493,6 @@ public class Commands {
      * @throws ScriptException
      * @throws Exception
      */
-
-
     public void Monte_Carlo_Multiple_Transient_Fault_Injection_Proportion(String genlib, String circuit, ArrayList <String> splittedCommand) throws IOException, ScriptException, Exception {
         //String path = CommonOps.getWorkPath(this) + "abc" + File.separator + filename;
         /*
@@ -567,7 +565,7 @@ public class Commands {
         System.out.println("-CREST Linking Monte Carlo Fault Simulator API...");
             SimulationCircuit simulationCircuit = new SimulationCircuit(circuit, relativePath, genlib, "ALL_SIGNALS", threads, constReliability, x);
                 //simulationCircuit.print();
-                SimulationType experimento = new SimulationType(simulationCircuit);
+                SimualtionType experimento = new SimualtionType(simulationCircuit);
                         experimento.printSpecSimulation();
                             experimento.faultToleranceMonteCarloMETAPI("CREsT");
 
@@ -648,9 +646,9 @@ public class Commands {
 
                           SimulationCircuit simulationCircuit = new SimulationCircuit(circuit, relativePath, path + genlib, "ALL_SIGNALS", threads, constReliability, 1);
                           //simulationCircuit.print();
-                          SimulationType experimento = new SimulationType(simulationCircuit);
+                          SimualtionType experimento = new SimualtionType(simulationCircuit);
                           experimento.printSpecSimulation();
-                          experimento.exhaustiveSensitiveAreaAnalysisAPI();
+                          experimento.faultToleranceExhaustiveSETAPI();
 
                        System.out.println("Simulation results:\n"
                                
@@ -714,7 +712,7 @@ public class Commands {
 
             SimulationCircuit simulationCircuit = new SimulationCircuit(circuit, relativePath, relativePath +  genlib, "ALL_SIGNALS", threads, constReliability, 1);
             //simulationCircuit.print();
-            SimulationType experimento = new SimulationType(simulationCircuit);
+            SimualtionType experimento = new SimualtionType(simulationCircuit);
             experimento.printSpecSimulation();
             experimento.faultToleranceExhaustiveCompleteMETAPI();
 
