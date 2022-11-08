@@ -46,6 +46,8 @@ public class TestVectorInformation {
 
     public Float circuitSensitiveArea;
 
+    public Float circuitSensitiveAreaOriginal;
+
     public void printSpecs(){
         System.out.println("         -------- ");
         System.out.println("        faultSingnals: " + this.faultSignals);
@@ -115,6 +117,7 @@ public class TestVectorInformation {
 
             this.gatesLogicalPath = new ArrayList<>();
             this.circuitSensitiveArea = 0.0F;
+            this.circuitSensitiveAreaOriginal = 0.0F;
             
     }
 
@@ -139,6 +142,9 @@ public class TestVectorInformation {
         this.sum_sensitive_cells_area = this.sum_sensitive_cells_area + cells_sensitive_area;
     }
 
+    public void sum_sensitive_cells_area_original(float cells_sensitive_area){
+        this.circuitSensitiveAreaOriginal = this.circuitSensitiveAreaOriginal + cells_sensitive_area;
+    }
     public void sum_sensitive_cells_area_gate(float cells_sensitive_area, DepthGate x){
         //vectorSensitiveAreaSum.add(cells_sensitive_area);
         help.add(x);
@@ -182,6 +188,13 @@ public class TestVectorInformation {
 
     public String getSum_sensitive_cells_area_str() {
         float myFloat = this.sum_sensitive_cells_area;
+        String formattedString = String.format("%.03f", myFloat);
+        formattedString = formattedString.replace(",",".");
+        return  formattedString;
+    }
+
+    public String getSum_sensitive_cells_area_original_str() {
+        float myFloat = this.circuitSensitiveAreaOriginal;
         String formattedString = String.format("%.03f", myFloat);
         formattedString = formattedString.replace(",",".");
         return  formattedString;

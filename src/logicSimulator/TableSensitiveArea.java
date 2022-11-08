@@ -110,7 +110,7 @@ public class TableSensitiveArea {
                 //Vectors axis X 000; 0000; 0000; 0000; 0000;
                 //System.out.print(x.get(j).getinputVector().toString()); // Head
 
-
+                    Float sum = 0F;
                     vectorPassed.add(x.get(j));
 
                     String content = x.get(j).getinputVector().toString();
@@ -122,7 +122,7 @@ public class TableSensitiveArea {
                         if (!passed && i == 0) {
                             contentHeader = contentHeader + x.get(j).getGatesLogicalPath().get(k).getGate() + ";";
                         }
-
+                        //x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea()
 
                         // System.out.print(" " + x.get(j).getGatesLogicalPath().get(k).getGate()
                         // + " In: " + x.get(j).getGatesLogicalPath().get(k).getInputs()
@@ -131,12 +131,12 @@ public class TableSensitiveArea {
 
                         //contentv2 = contentv2 + x.get(j).getGatesLogicalPath().get(k).getGate() + "-" + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea() + ";";
 
-                        content = content + "; " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea();
+                        content = content + "; " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
                         //passed_vector = true;
-
+                        sum = sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
 
                     }
-                    content = content + ";" + x.get(j).getSum_sensitive_cells_area_str();
+                    content = content + ";" + sum;
 
                     if (i == 0 && (!passed)) {
                         f.add(contentHeader + " AStotal" + ";");

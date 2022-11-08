@@ -27,6 +27,8 @@ public class GateDetailedInformation {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
         this.outputs_original = new ArrayList<>();
+        this.gateSensitiveArea = 0F;
+        this.gateSensitiveAreaOriginal = 0F;
     }
 
     public void setGate(DepthGate gate) {
@@ -64,15 +66,19 @@ public class GateDetailedInformation {
         return outputs_original;
     }
 
-    public void setgateSensitiveArea(Float gateSensitiveArea) {
-        this.gateSensitiveArea = gateSensitiveArea;
+    public void setgateSensitiveArea(Float gSA) {
+        this.gateSensitiveArea = gSA;
+    }
+
+    public void setgateSensitiveAreaOriginal(Float gSA) {
+        this.gateSensitiveAreaOriginal = gSA;
     }
 
     public Float getgateSensitiveArea() {
-        return gateSensitiveArea;
+        return this.gateSensitiveArea;
     }
     public Float getgateSensitiveAreaOriginal() {
-        return gateSensitiveArea;
+        return this.gateSensitiveAreaOriginal;
     }
 
     public void setInputs(ArrayList <Boolean> vector_value){

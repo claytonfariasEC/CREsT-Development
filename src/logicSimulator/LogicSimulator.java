@@ -4190,25 +4190,45 @@ import signalProbability.ProbCircuit;
          if((cell != null)){
              // System.out.println("Cell: " + cell);
 
-
+            String SAGate  = this.sensitive_cells.get(key_original).getSensitive_are();
 
                //Do something about masking
              //TODO: Add the X1 in contain keys
              GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
+
              gateSensitivivity.setGate(gate);
+
              gateSensitivivity.setCell(cells);
+
              gateSensitivivity.setInputs(input);
+
              gateSensitivivity.setInputsOriginal(input_original);
+
              gateSensitivivity.setOutputs(output_converted);
+
              gateSensitivivity.setOutputsOriginal(output_original_converted);
+
+             gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell2.getSensitive_are()));
+
+             gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(SAGate));
 
              /// Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
 
+                  thread_item.sum_sensitive_cells_area(Float.parseFloat(SAGate));
+                  thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(SAGate), gate);
+                  thread_item.sum_sensitive_cells_area_original(Float.parseFloat(SAGate));
+
+                  thread_item.setGatesLogicalPath(gateSensitivivity);
+
+                  /*
                   thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
                   thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
+                  thread_item.sum_sensitive_cells_area_original(Float.parseFloat(cell.getSensitive_are()));
                   gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
                   thread_item.setGatesLogicalPath(gateSensitivivity);
+                  */
+
 
 
 
