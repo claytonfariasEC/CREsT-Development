@@ -76,7 +76,6 @@ import signalProbability.ProbCircuit;
         private String mode;
 
         private String setMode="";
-
         public int bitflipcounter;
 
 

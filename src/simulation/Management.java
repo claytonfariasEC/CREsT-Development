@@ -1720,7 +1720,7 @@ public class Management extends MAIN {
                                 this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());
                                 random_input_vectors = this.generateInputVector("TRUE_TABLE"); // Generate Random Input Vectors or InputTrueTable
                                 ListInputVectors = this.splitInputPatternsInInt(random_input_vectors, this.probCircuit.getInputs().size());
-                                thread_list = particionateExausticVectorSA(ListInputVectors); // x - vectors per thread
+                                thread_list = particionateExausticVectorSAADAPTIVE(ListInputVectors); // x - vectors per thread
                                 break;
                         //"TRUE_TABLE_SINGLE_SA"
                         case "TRUE_TABLE_SINGLE_SA_FREE":
@@ -2193,7 +2193,7 @@ public class Management extends MAIN {
 
                 this.signals_to_inject_faults = this.signalsToInjectFault(option);
 
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA");
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA_ADAPTIVE");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 
@@ -2232,6 +2232,8 @@ public class Management extends MAIN {
                 long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
 
                 this.defineAvgSensitiveArea();
+
+                this.setSAMode("ADAPTIVE");
 
                 // this.printSensitiveAreasAnalysis();
 
@@ -4022,6 +4024,15 @@ public class Management extends MAIN {
                                 // All vectors AS for each gate
                                 filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FREE_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
+                                break;
+
+
+                        case("ADAPTIVE"):
+                                tableSensitiveArea = new TableSensitiveArea(itemx_list);
+                                tableSensitiveAreaContent = tableSensitiveArea.createTableFaultNotMasked(this.relativePath, this.circuit.getName());
+                                //optionMode = "FAULT_INJECTED";
+                                // All vectors AS for each gate
+                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "ADAPTIVE_FAULT_SA_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
                                 break;
 
                         case(""):
