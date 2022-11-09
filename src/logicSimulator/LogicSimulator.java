@@ -3591,6 +3591,11 @@ import signalProbability.ProbCircuit;
             gateSensitivivity.setOutputs(output_converted);
 
 
+            gateSensitivivity.setInputsOriginal(input);
+            gateSensitivivity.setOutputsOriginal(output_converted);
+
+
+
             //gateSensitivivity.print();
             //thread_item.circuitPath.setGateInCircuitPath(gateSensitivivity);
 
@@ -3602,6 +3607,8 @@ import signalProbability.ProbCircuit;
             //this.sum_sensitive_cells_area = this.sum_sensitive_cells_area + Float.parseFloat(cell.getSensitive_are());
             thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
             thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
+            thread_item.sum_sensitive_cells_area_original(Float.parseFloat(cell.getSensitive_are()));
+
             gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
             thread_item.setGatesLogicalPath(gateSensitivivity);
             System.out.println("idx: " + thread_item.getSimulationIndex() + "  invec: " + thread_item.getinputVector() + " gateid: " + gate.getGate().getId() + " gate: " + gate.getGate().getOutputs() + " sigs: " + gate.getGate().getInputs() +  " CEll founded: " + cell.getCell_id() + " input: " +cell.getInput_vec()  +

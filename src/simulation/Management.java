@@ -1158,6 +1158,90 @@ public class Management extends MAIN {
         }
 
 
+        public List particionateExausticVectorSAFREE(ArrayList<ArrayList<Integer>> ListInputVectors) throws ScriptException, Exception {
+                //"MTF-Sensitive_Area-Generate_Netlist"
+                List thread_list = new ArrayList();
+
+                int N = this.sampleSize;
+
+                int partition;
+                if (this.threads == 1) {
+                        partition = N; //final_pos/NThreads ;
+                } else {
+                        double temp;
+                        temp = Math.floor(N / this.threads);
+                        partition = (int) temp;//(int) Math.round(collapsed_faults/NThreads);
+                }
+
+                int start = 0;
+                int end = partition;
+
+                /* In case logic gates One and Zero
+                    //ArrayList <Signal> Signals_CTE_ONE_ZERO = identificate_ONE_ZERO_CTE();  //ONLY USE WHEN ITS NOT CADENCE.GENLIB
+                    //System.out.println("LOGIC GATES consider WIRES (CTE) Can't inject fault: " + Signals_CTE_ONE_ZERO);
+               */
+
+
+                for (int i = 0; i < this.threads; i++) { //Loop of simulations
+
+                        ArrayList<TestVectorInformation> ItemxSimulationList = new ArrayList<>();
+                        ArrayList<Integer> inputVector = new ArrayList<>();
+
+                        if ((this.threads - 1) == (i)) {
+
+                                start = end;
+                                end = N;
+                        } else {
+                                if (i == 0) {
+                                        start = 0;
+                                        end = partition;
+                                } else {
+                                        start = start + partition;
+                                        end = start + partition;
+                                }
+
+                        }
+
+
+                        System.out.println(" - starting thread: " + i + " - simulate fault injection (number): " + partition);
+
+                        for (int j = start; j < end; j++) {
+
+                                for (int aux = 0; aux < this.signals_to_inject_faults.size(); aux++) {
+
+                                        inputVector = this.get_Input_Vectors(ListInputVectors, j); //input Test n
+
+                                        int SigIndex = aux;//this.sortRandomFaultInjection(); //int SigIndex = decide_Random_Signals_Contrains(Signals_CTE_ONE_ZERO);
+
+                                        TestVectorInformation temp = new TestVectorInformation(inputVector, this.signals_to_inject_faults.get(SigIndex), j + 1);
+                                        ItemxSimulationList.add(temp);
+
+                                        //System.out.println("Vec: " + inputVector + " Fault Signal: " + this.signals_to_inject_faults.get(SigIndex));
+
+                                        //aux = this.signals_to_inject_faults.size();
+                                }
+
+                        }
+
+                        LogicSimulator threadItem = new LogicSimulator(ItemxSimulationList, this.circuit, this.cellLibrary, this.levelCircuit, start, end, this.genlib, this.circuitNameStr); // Thread contex info
+
+
+                        threadItem.setSensitiveCellsMap(this.sensitive_cells);
+                        threadItem.setMode("Single_SA");
+                        itemx_list.add(threadItem);
+
+                        Runnable runnable = threadItem;
+                        Thread thread = new Thread(runnable);
+                        thread.setName(Integer.toString(threadItem.hashCode()));
+                        thread_list.add(thread);
+
+                }
+
+                return thread_list;
+
+        }
+
+
         public List particionateExausticVectorComplete(ArrayList<ArrayList<Integer>> ListInputVectors) throws ScriptException, Exception {
 
                 List thread_list = new ArrayList();
@@ -1541,6 +1625,14 @@ public class Management extends MAIN {
                                 break;
 
                         case "TRUE_TABLE_SINGLE_SA":
+                                System.out.println("STF - Exhaustive for STF and Sensitive Area ANALYSIS");
+                                this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());
+                                random_input_vectors = this.generateInputVector("TRUE_TABLE"); // Generate Random Input Vectors or InputTrueTable
+                                ListInputVectors = this.splitInputPatternsInInt(random_input_vectors, this.probCircuit.getInputs().size());
+                                thread_list = particionateExausticVectorSAFREE(ListInputVectors); // x - vectors per thread
+                                break;
+
+                        case "TRUE_TABLE_SINGLE_SA_FREE":
                                 System.out.println("STF - Exhaustive for STF and Sensitive Area ANALYSIS");
                                 this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());
                                 random_input_vectors = this.generateInputVector("TRUE_TABLE"); // Generate Random Input Vectors or InputTrueTable
@@ -3263,6 +3355,8 @@ public class Management extends MAIN {
 
                         System.out.println("-----------------------END SIMULATION---------------------------------");
 
+                        this.setSAMode("SA_FREE");
+
                         String avgAs = calculateTotalSensitiveArea();
 
                         this.avgASFLOAT = Float.parseFloat(avgAs);
@@ -3718,7 +3812,7 @@ public class Management extends MAIN {
                        tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
                        //optionMode= this.SAMode;
                         // All vectors AS for each gate
-                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FREE_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
                 }else{
                         tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
