@@ -1227,7 +1227,8 @@ public class Management extends MAIN {
 
 
                         threadItem.setSensitiveCellsMap(this.sensitive_cells);
-                        threadItem.setMode("Single_SA");
+                        ///threadItem.setMode("Single_SA");
+                        threadItem.setMode("Single_Fault");
                         itemx_list.add(threadItem);
 
                         Runnable runnable = threadItem;
@@ -3832,7 +3833,7 @@ public class Management extends MAIN {
                         case(""):
                                 tableSensitiveArea = new TableSensitiveArea(itemx_list);
                                 tableSensitiveAreaContent = tableSensitiveArea.createTableFaultAdaptive(this.relativePath, this.circuit.getName());
-                                optionMode = "FAULT_INJECTED";
+                                //optionMode = "FAULT_INJECTED";
                                 // All vectors AS for each gate
                                 filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
                                 break;
