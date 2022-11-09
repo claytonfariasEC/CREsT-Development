@@ -70,6 +70,8 @@ public class GateDetailedInformation {
         this.gateSensitiveArea = gSA;
     }
 
+
+
     public void setgateSensitiveAreaOriginal(Float gSA) {
         this.gateSensitiveAreaOriginal = gSA;
     }

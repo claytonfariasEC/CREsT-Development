@@ -4198,7 +4198,7 @@ import signalProbability.ProbCircuit;
              gateSensitivivity.setInputs(input_original);
              gateSensitivivity.setInputsOriginal(input);
              gateSensitivivity.setOutputs(output_converted);
-
+             gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(cell.getSensitive_are()));
              /// Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
 
