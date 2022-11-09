@@ -4255,8 +4255,9 @@ import signalProbability.ProbCircuit;
             // System.out.println("Cell: " + cell);
 
 
-
+            boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input_original, gate);
             //Do something about masking
+
             //TODO: Add the X1 in contain keys
             GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
             gateSensitivivity.setGate(gate);
@@ -4264,6 +4265,7 @@ import signalProbability.ProbCircuit;
             gateSensitivivity.setInputs(input);
             gateSensitivivity.setInputsOriginal(input_original);
             gateSensitivivity.setOutputs(output_converted);
+            gateSensitivivity.setOutputsOriginal(output_converted_original);
 
             Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
@@ -4296,7 +4298,7 @@ import signalProbability.ProbCircuit;
 
                 //SensitiveCell cell_original = this.sensitive_cells.get(key_original);
 
-               float gateMasked = 0.0F;
+                float gateMasked = 0.0F;
                 thread_item.sum_sensitive_cells_area(gateMasked);
                 thread_item.sum_sensitive_cells_area_gate(gateMasked, gate);
                 gateSensitivivity.setgateSensitiveArea(gateMasked);

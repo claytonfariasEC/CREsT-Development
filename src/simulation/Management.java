@@ -3678,7 +3678,7 @@ public class Management extends MAIN {
                         List <TestVectorInformation> x =  this.itemx_list.get(i).get_threadSimulationList();
 
 
-                        for (int j = 0; j < 2; j++) {
+                        for (int j = 0; j < x.size(); j++) {
                                 //for (int j = 0; j < x.size(); j++) {
                                 // System.out.println("index: " + x.get(j).getSimulationIndex() + " vec: " + x.get(j).getinputVector() + " sensitive area sum: " + x.get(j).getSum_sensitive_cells_area() );
 
@@ -3713,15 +3713,22 @@ public class Management extends MAIN {
 
                 TableSensitiveArea tableSensitiveArea = new TableSensitiveArea(itemx_list);
                 ArrayList <String> tableSensitiveAreaContent = new ArrayList<>();
+                String optionMode = "";
                 if(this.SAMode.equals("SA_FREE")){
                        tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
+                       //optionMode= this.SAMode;
+                        // All vectors AS for each gate
+                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+
                 }else{
                         tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
+                        optionMode = "FAULT_INJECTED";
+                        // All vectors AS for each gate
+                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+
                 }
 
 
-                // All vectors AS for each gate
-                WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
 
         }
@@ -3761,7 +3768,7 @@ public class Management extends MAIN {
 
                 this.classifyTotalSensitiveAreas();
 
-                this.classifyGatesSensitiveAreas();
+                this.classifyGatesSensitiveAreas(); // Create Table
 
 
 
