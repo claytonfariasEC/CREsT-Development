@@ -3989,8 +3989,8 @@ public class Management extends MAIN {
                                 for (int k = 0; k < x.get(j).getGatesLogicalPath().size(); k++) {
                                         temp_sum = temp_sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea();
                                         System.out.print(ANSI_YELLOW + x.get(j).getinputVector() + " " +  x.get(j).getGatesLogicalPath().get(k).getInputsOriginal() + " -" + x.get(j).getGatesLogicalPath().get(k).getGate().getGate()
-                                                + " In: " + x.get(j).getGatesLogicalPath().get(k).getGate().getGate().getInputs()+ ": " + x.get(j).getGatesLogicalPath().get(k).getInputs() + "|" +  x.get(j).getGatesLogicalPath().get(k).getInputsOriginal()
-                                                + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
+                                                + " In: " + x.get(j).getGatesLogicalPath().get(k).getGate().getGate().getInputs()+ ": N" + x.get(j).getGatesLogicalPath().get(k).getInputs() + "|O " +  x.get(j).getGatesLogicalPath().get(k).getInputsOriginal()
+                                                + " OutN: " + x.get(j).getGatesLogicalPath().get(k).getOutputs() + " OutOr: " + x.get(j).getGatesLogicalPath().get(k).getOutputsOriginal()  + " Outsig: " +x.get(j).getGatesLogicalPath().get(0).getGate().getGate().getOutputs()
                                                 + " SA: " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea()  + " ~ SAtotal: " +  temp_sum  + "  " + ANSI_RESET);
 
                                 }

@@ -4268,7 +4268,6 @@ import signalProbability.ProbCircuit;
             boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input_original, gate);
             //Do something about masking
 
-            //TODO: Add the X1 in contain keys
             GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
             gateSensitivivity.setGate(gate);
             gateSensitivivity.setCell(cells);
@@ -4276,7 +4275,6 @@ import signalProbability.ProbCircuit;
             gateSensitivivity.setInputsOriginal(input_original);
             gateSensitivivity.setOutputs(output_converted);
             gateSensitivivity.setOutputsOriginal(output_converted_original);
-
             Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
             if(!masked){ // Propagated fault
@@ -4286,6 +4284,12 @@ import signalProbability.ProbCircuit;
                         " out: " + output_converted +
                         " sensitive area: "+ cell.getSensitive_are() + " sum: " + thread_item.getSum_sensitive_cells_area() + " ~ " + ANSI_RESET) ;
                 */
+                //TODO: Add the X1 in contain keys
+
+
+
+
+
 
 
                 //TODO: IF MASKED COMPUTE THE SENSITIVE AREA

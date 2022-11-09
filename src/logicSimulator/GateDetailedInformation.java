@@ -60,25 +60,26 @@ public class GateDetailedInformation {
     }
 
     public ArrayList<String> getOutputs() {
-        return outputs;
+        return this.outputs;
     }
+
     public ArrayList<String> getOutputsOriginal() {
-        return outputs_original;
+        return this.outputs_original;
     }
 
     public void setgateSensitiveArea(Float gSA) {
         this.gateSensitiveArea = gSA;
     }
 
+    public Float getgateSensitiveArea() {
+        return this.gateSensitiveArea;
+    }
 
 
     public void setgateSensitiveAreaOriginal(Float gSA) {
         this.gateSensitiveAreaOriginal = gSA;
     }
 
-    public Float getgateSensitiveArea() {
-        return this.gateSensitiveArea;
-    }
 
     public Float getgateSensitiveAreaOriginal() {
         return this.gateSensitiveAreaOriginal;
@@ -115,11 +116,11 @@ public class GateDetailedInformation {
     }
 
     public ArrayList<String> getInputs() {
-        return inputs;
+        return this.inputs;
     }
 
     public ArrayList<String> getInputsOriginal() {
-        return inputs_original;
+        return this.inputs_original;
     }
 
 
