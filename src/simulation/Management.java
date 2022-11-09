@@ -1835,7 +1835,7 @@ public class Management extends MAIN {
 
                 this.defineAvgSensitiveArea();
 
-                this.printSensitiveAreasAnalysis("SA_free");
+                this.printSensitiveAreasAnalysis();
 
                 this.defineMTBFBasedInAvgSensitiveAreaAvg();
 
@@ -1940,7 +1940,7 @@ public class Management extends MAIN {
 
                 this.defineAvgSensitiveArea();
 
-                this.printSensitiveAreasAnalysis("Fault_SA");
+                this.printSensitiveAreasAnalysis();
 
                 this.defineMTBFBasedInAvgSensitiveAreaAvg();
 
@@ -3581,7 +3581,7 @@ public class Management extends MAIN {
         }
         public static final String ANSI_YELLOW = "\u001B[33m";
         public static final String ANSI_RESET = "\u001B[0m";
-        public void classifyTotalSensitiveAreas(String option){
+        public void classifyTotalSensitiveAreas(){
                 System.out.println("\n");
                 System.out.println("- Classification of Sensitive Areas per input vector: ");
                // Map < Float, String > map = new HashMap<>();
@@ -3625,7 +3625,7 @@ public class Management extends MAIN {
 
 
                 // All vectors AS total
-                WriteFile file = new WriteFile(this.relativePath+option+"_TotalASVectors_" + this.circuit.getName(), f, ".txt");
+                WriteFile file = new WriteFile(this.relativePath+"TotalASVectors_" + this.circuit.getName(), f, ".txt");
 
                 /*
                 try {
@@ -3662,7 +3662,7 @@ public class Management extends MAIN {
         // TODO: verify why sensitive areas are not being calculated in genlibs with NAND2X1 (X1)
 
 
-        public void classifyGatesSensitiveAreas(String option){
+        public void classifyGatesSensitiveAreas(){
                 System.out.println("\n");
 
                 System.out.println("- Classification of Sensitive Areas per Input vector x Gates: ");
@@ -3671,7 +3671,7 @@ public class Management extends MAIN {
                         List <TestVectorInformation> x =  this.itemx_list.get(i).get_threadSimulationList();
 
 
-                        for (int j = 0; j < x.size(); j++) {
+                        for (int j = 0; j < 13; j++) {
                                 //for (int j = 0; j < x.size(); j++) {
                                 // System.out.println("index: " + x.get(j).getSimulationIndex() + " vec: " + x.get(j).getinputVector() + " sensitive area sum: " + x.get(j).getSum_sensitive_cells_area() );
 
@@ -3685,15 +3685,14 @@ public class Management extends MAIN {
                                         +  x.get(j).getSum_sensitive_cells_area_str()
                                         +   "  Nc: "  + x.get(j).getGatesLogicalPath().size());
                                         */
-
-                                System.out.print(i + "," + j + " >  Fsig(" + x.get(j).getFaultSignal() +") " );
                                 float temp_sum = 0.0F;
+                                System.out.print(i + "," + j + " >  Fsig(" + x.get(j).getFaultSignal() +") " );
                                 for (int k = 0; k < x.get(j).getGatesLogicalPath().size(); k++) {
                                         temp_sum = temp_sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea();
                                         System.out.print(ANSI_YELLOW + x.get(j).getinputVector() + " " +  x.get(j).getGatesLogicalPath().get(k).getInputsOriginal() + " -" + x.get(j).getGatesLogicalPath().get(k).getGate().getGate()
-                                                + " In: " + x.get(j).getGatesLogicalPath().get(k).getGate().getGate().getInputs()+ ": " + x.get(j).getGatesLogicalPath().get(k).getInputsOriginal() + "|" +  x.get(j).getGatesLogicalPath().get(k).getInputs()
-                                                + " OutOri: " + x.get(j).getGatesLogicalPath().get(k).getOutputsOriginal() + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
-                                                + " SAOri: " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal()   + " SA: " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea() + " ~ SAtotal: " +  temp_sum  + "  " + ANSI_RESET);
+                                                + " In: " + x.get(j).getGatesLogicalPath().get(k).getGate().getGate().getInputs()+ ": " + x.get(j).getGatesLogicalPath().get(k).getInputs() + "|" +  x.get(j).getGatesLogicalPath().get(k).getInputsOriginal()
+                                                + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
+                                                + " SA: " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea()  + " ~ SAtotal: " +  temp_sum  + "  " + ANSI_RESET);
 
                                 }
                                 System.out.println("");
@@ -3706,22 +3705,16 @@ public class Management extends MAIN {
                 }
 
                 TableSensitiveArea tableSensitiveArea = new TableSensitiveArea(itemx_list);
-                ArrayList <String> tableSensitiveAreaContent = new ArrayList<>();
-                if(option.equals("SA_free")){
-                        tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
-                }else{
-                        tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
-                }
-
+                ArrayList <String> tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
 
                 // All vectors AS for each gate
-                WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + option+"_"+"CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+                WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
 
         }
         // TODO: verify why sensitive areas are not being calculated in genlibs with NAND2X1 (X1)
 
-        public void printSensitiveAreasAnalysis(String option){
+        public void printSensitiveAreasAnalysis(){
                 //System.out.println("CElls: " + this.sensitive_cells);
                 System.out.println("\n\n\n------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
                 float counter = 0;
@@ -3753,8 +3746,8 @@ public class Management extends MAIN {
                 //System.out.println("- Sensitive Areas (ASvec) based on " + counter + " vectors: " + (sum/counter) + " and ASavg based in AS average from each cell: " + this.avgASFLOAT);
                 System.out.println("- Difference : " + (((sum/counter)/this.avgASFLOAT) - 1) + "(%)");
 
-                this.classifyTotalSensitiveAreas(option);
-                this.classifyGatesSensitiveAreas(option);
+                this.classifyTotalSensitiveAreas();
+                this.classifyGatesSensitiveAreas();
 
 
 

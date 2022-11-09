@@ -32,7 +32,7 @@ public class SimualtionType {
         System.out.println("> : " + simulationCircuit.getMtf_sizes().get(0));
         simulacaoMultithreading.monteCarloReliabilitySpiceGeneration(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), simulationCircuit.getRelativePath() + "lookup_table.csv");
                //Comentado para simulação // simulacaoMultithreading.generateSensitiveNodesForSETSpiceFile(spiceScriptsFolder, PTMLibrary, SpiceNetListLibrary);
-                    simulacaoMultithreading.printSensitiveAreasAnalysis("AS");
+                    simulacaoMultithreading.printSensitiveAreasAnalysis();
                          //simulacaoMultithreading.PrintGatesCounterDetailsSortedCompliled(0, simulationCircuit.getRelativePath() + simulationCircuit.getCircuit());
                 this.OUTPUT_INFO = simulacaoMultithreading.getER(" MTFT Sample (Monte Carlo = N)");
 
@@ -51,7 +51,7 @@ public class SimualtionType {
 
         //Comentado para simulação // simulacaoMultithreading.generateSensitiveNodesForSETSpiceFile(spiceScriptsFolder, PTMLibrary, SpiceNetListLibrary);
 
-        simulacaoMultithreading.printSensitiveAreasAnalysis("AS");
+        simulacaoMultithreading.printSensitiveAreasAnalysis();
 
         //simulacaoMultithreading.PrintGatesCounterDetailsSortedCompliled(0, simulationCircuit.getRelativePath() + simulationCircuit.getCircuit());
         this.OUTPUT_INFO = simulacaoMultithreading.getER(" MTFT Sample (Monte Carlo = N)");
@@ -70,7 +70,7 @@ public class SimualtionType {
         //simulacaoMultithreading.PrintGatesCounterDetailsSortedCompliled();
         simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(),
                 Sensitive_Library);
-        simulacaoMultithreading.printSensitiveAreasAnalysis("AS");
+        simulacaoMultithreading.printSensitiveAreasAnalysis();
         //String output = simulacaoMultithreading.PrintGatesCounterDetailsSortedCompliled();
         this.OUTPUT_INFO = simulacaoMultithreading.getMTBF(" MTFT Sample (Monte Carlo = N): ");
         System.out.println(this.OUTPUT_INFO);
@@ -87,7 +87,7 @@ public class SimualtionType {
 
         /* Monte Carlo Simulation */
         simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
-        simulacaoMultithreading.classifyTotalSensitiveAreas("AS");
+        simulacaoMultithreading.classifyTotalSensitiveAreas();
         /* Sensitive Areas Analysis based in all vectors (20k)*/
         //info.add(simulacaoMultithreading.printGates(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library));
 
@@ -299,7 +299,7 @@ public class SimualtionType {
 
         //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
         simulacaoMultithreading.ExhaustiveSensitiveAreaAnalysis(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), simulationCircuit.getRelativePath() + "lookup_table.csv");
-         simulacaoMultithreading.printSensitiveAreasAnalysis("AS");
+         simulacaoMultithreading.printSensitiveAreasAnalysis();
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");
     }
