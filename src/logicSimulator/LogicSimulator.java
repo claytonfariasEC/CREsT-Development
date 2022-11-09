@@ -4381,7 +4381,7 @@ import signalProbability.ProbCircuit;
             gateSensitivivity.setOutputs(output_converted);
             gateSensitivivity.setOutputsOriginal(output_converted_original);
 
-            Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
+            //Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
             //if(!masked){ // Propagated fault
                 /*
