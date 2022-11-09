@@ -98,9 +98,11 @@ public class TableSensitiveArea {
 
         String contentHeader = "Vectors;";
         Boolean passed = false;
+        int cont = 0;
         List<TestVectorInformation> vectorPassed = new ArrayList<>();
 
         for (int i = 0; i < this.thread_items_list.size(); i++) {
+
             //0 to 8 threads
             List<TestVectorInformation> x = this.thread_items_list.get(i).get_threadSimulationList();
             //passed_vector = false;
@@ -112,10 +114,12 @@ public class TableSensitiveArea {
                 Float sum = 0F;
                 vectorPassed.add(x.get(j));
 
+
+
                 if (x.get(j).getFaultSignal().toString().equals(x.get(0).getFaultSignal().toString())) {
                     String content = x.get(j).getinputVector().toString();
                     //String contentv2 = "";
-
+                    cont++;
                     for (int k = 0; k < x.get(j).getGatesLogicalPath().size(); k++) {
                         //Values for each gate
 
@@ -124,10 +128,10 @@ public class TableSensitiveArea {
                         }
                         //x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea()
 
-                        // System.out.print(" " + x.get(j).getGatesLogicalPath().get(k).getGate()
-                        // + " In: " + x.get(j).getGatesLogicalPath().get(k).getInputs()
-                        // + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
-                        //    + " " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea());
+                         System.out.print(i + "_"+ cont + " " + x.get(j).getGatesLogicalPath().get(k).getGate()
+                         + " In: " + x.get(j).getGatesLogicalPath().get(k).getInputs()
+                         + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
+                            + " " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea());
 
                         //contentv2 = contentv2 + x.get(j).getGatesLogicalPath().get(k).getGate() + "-" + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea() + ";";
 
@@ -136,6 +140,8 @@ public class TableSensitiveArea {
                         sum = sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
 
                     }
+
+                    System.out.println("");
                     content = content + ";" + sum;
 
                     if (i == 0 && (!passed)) {
@@ -147,7 +153,7 @@ public class TableSensitiveArea {
                 }
             }
 
-
+            System.out.println("Content: " + f);
         }
 
         //System.out.println(header);
