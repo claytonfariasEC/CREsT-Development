@@ -293,6 +293,31 @@ public class SimualtionType {
 
     /**
      *
+     * @throws Exception
+     */
+    public void faultToleranceExhaustiveSETAPIFAULTADAPTIVE() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
+
+        /*
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath() + simulationCircuit.getGenlib(), simulationCircuit.getRelativePath() + simulationCircuit.getCircuit());
+
+         */
+        System.out.println("Exaustive");
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
+
+        //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.runMultithreadingExhausticSimulationAdaptiveSensitiveArea(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.printSensitiveAreasAnalysis();
+
+        //simulacaoMultithreading.printSensitiveAreasAnalysis();
+        this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
+                + "2^Signals * Gates)");
+    }
+
+
+    /**
+     *
      * @apiNote  STABLE - Use this method to extract the circuit Sensitive Area x Vectors (True Table)
      * @param spiceScriptsFolder
      * @param PTMLibrary

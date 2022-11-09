@@ -75,6 +75,8 @@ import signalProbability.ProbCircuit;
         private int tempIndex;
         private String mode;
 
+        private String setMode="";
+
         public int bitflipcounter;
 
 
@@ -4137,9 +4139,11 @@ import signalProbability.ProbCircuit;
 
         }
 
-
-        this.calculateGateASLogicalMasking(comb, input, input_original, gate, concat_inputs, concat_inputs_original, thread_item, cells, faultSig);
-
+        if(this.setMode.equals("ADAPTIVE")){
+            this.calculateGateASLogicalMaskingADAPTIVE(comb, input, input_original, gate, concat_inputs, concat_inputs_original, thread_item, cells, faultSig);
+        }else {
+            this.calculateGateASLogicalMasking(comb, input, input_original, gate, concat_inputs, concat_inputs_original, thread_item, cells, faultSig);
+        }
         return (boolean) output;
     }
 
@@ -4323,6 +4327,91 @@ import signalProbability.ProbCircuit;
                           */
 
             }
+            //}
+
+             /*
+            gateSensitivivity.setSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
+            circuitPath.setGateInCircuitPath(gateSensitivivity);
+            thread_item.circuitPath.add(gateSensitivivity);
+            */
+
+
+        }
+
+    }
+
+
+
+    public void calculateGateASLogicalMaskingADAPTIVE(final Map<ArrayList<Boolean>, Boolean> comb, final ArrayList<Boolean> input,  final ArrayList<Boolean> input_original, DepthGate gate, String concat_inputs, String concat_inputs_original, TestVectorInformation thread_item, Cell cells, Signal faultSig){
+
+        //Convert the input signal values to boolean
+        boolean output_converted = this.calculateTheOutputGatesInBoolean(comb, input, gate); // hero to convert
+
+        /* Calculate Sensitive Area of This Gate */
+        ///SensitiveCell cell = this.sensitive_cells.get(gate.getGate().getType()  + "_" + concat_inputs);
+        String key = "";
+        String key_original = "";
+        if(gate.getGate().getType().toString().contains("X1")){ // "X1" version
+            key = gate.getGate().getType()  + "_" + concat_inputs; // Calculate the exact input vector
+            key_original =  gate.getGate().getType()  + "_" + concat_inputs_original;
+        }
+        else{
+            key = gate.getGate().getType()  + "X1_" + concat_inputs; // Calculate the exact input vector
+            key_original = gate.getGate().getType()  + "X1_" + concat_inputs_original; // Calculate the exact input vector
+        }
+
+        SensitiveCell cell = this.sensitive_cells.get(key);
+
+        //if(gate.getGate().toString().equals("U0")){
+        ///System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell + " = " + gateSensitivivity.getgateSensitiveArea() + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);
+        //}
+
+        if((cell != null)){
+            // System.out.println("Cell: " + cell);
+
+
+            boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input_original, gate);
+            //Do something about masking
+
+            //TODO: Add the X1 in contain keys
+            GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
+            gateSensitivivity.setGate(gate);
+            gateSensitivivity.setCell(cells);
+            gateSensitivivity.setInputs(input);
+            gateSensitivivity.setInputsOriginal(input_original);
+            gateSensitivivity.setOutputs(output_converted);
+            gateSensitivivity.setOutputsOriginal(output_converted_original);
+
+            Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
+
+            //if(!masked){ // Propagated fault
+                /*
+                System.out.println(ANSI_YELLOW + " NOT MASKED Vec: " + thread_item.getinputVector() + " gateid: " + gate.getGate().getId() + " gate: " + gate.getGate().getOutputs() + " sigs: " + gate.getGate().getInputs() +  " CEll founded: " + cell.getCell_id()
+                        + " input: " +cell.getInput_vec()  + " | " + " faultSigIn: " + gate.getGate().getInputs() + " faultSigOut: " + gate.getGate().getOutputs() + " faultSig: " + faultSig.getId() + " inOrigial: "+ faultSig.getOriginalLogicValue() + " inLogical: " + faultSig.getLogicValue() + "|" +
+                        " out: " + output_converted +
+                        " sensitive area: "+ cell.getSensitive_are() + " sum: " + thread_item.getSum_sensitive_cells_area() + " ~ " + ANSI_RESET) ;
+                */
+
+
+                //TODO: IF MASKED COMPUTE THE SENSITIVE AREA
+                //System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell.getCell_id() + " = " + cell.sensitive_are + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);
+                //thread_item.circuitPathv2.setGateInCircuitPath(gateSensitivivity);
+                //this.sum_sensitive_cells_area = this.sum_sensitive_cells_area + Float.parseFloat(cell.getSensitive_are());
+                thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
+                thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
+                gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
+                thread_item.setGatesLogicalPath(gateSensitivivity);
+
+                //gateSensitivivity.calculatGateSusceptibility(input);
+
+
+           // }else{ //Masked fault
+
+
+                //TO DO something to masking
+                //TODO: DO NOT COMPUTE SENSITIVE AREA BECAUSE IT IS ALREADY MASKED -> USE AS regular
+
+
             //}
 
              /*
@@ -4778,6 +4867,21 @@ import signalProbability.ProbCircuit;
                 case ("Single_Fault"):
                     System.out.println("SIMULATION ID (000Fault): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
                     try {
+                        startSimulationFaultFree();
+                        startSimulationFaultInjectionLogicalMasking();
+                        //startSimulationFaultInjectionLogicalMasking();
+                        //startSimulationMultipleFaultInjection();
+
+                    } catch (IOException | WriteException ex) {
+                        Logger.getLogger(LogicSimulator.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+
+                    break;
+
+                case ("Single_Fault_ADAPTIVE"):
+                    System.out.println(" ADAPTIVE SIMULATION ID (000Fault): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
+                    try {
+                        this.setMode = "ADAPTIVE";
                         startSimulationFaultFree();
                         startSimulationFaultInjectionLogicalMasking();
                         //startSimulationFaultInjectionLogicalMasking();
