@@ -4268,10 +4268,13 @@ import signalProbability.ProbCircuit;
             Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
             if(!masked){ // Propagated fault
+                /*
                 System.out.println(ANSI_YELLOW + " NOT MASKED Vec: " + thread_item.getinputVector() + " gateid: " + gate.getGate().getId() + " gate: " + gate.getGate().getOutputs() + " sigs: " + gate.getGate().getInputs() +  " CEll founded: " + cell.getCell_id()
                         + " input: " +cell.getInput_vec()  + " | " + " faultSigIn: " + gate.getGate().getInputs() + " faultSigOut: " + gate.getGate().getOutputs() + " faultSig: " + faultSig.getId() + " inOrigial: "+ faultSig.getOriginalLogicValue() + " inLogical: " + faultSig.getLogicValue() + "|" +
                         " out: " + output_converted +
                         " sensitive area: "+ cell.getSensitive_are() + " sum: " + thread_item.getSum_sensitive_cells_area() + " ~ " + ANSI_RESET) ;
+                */
+
 
                 //TODO: IF MASKED COMPUTE THE SENSITIVE AREA
                 //System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell.getCell_id() + " = " + cell.sensitive_are + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);

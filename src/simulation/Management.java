@@ -1132,7 +1132,7 @@ public class Management extends MAIN {
                                         TestVectorInformation temp = new TestVectorInformation(inputVector, this.signals_to_inject_faults.get(SigIndex), j + 1);
                                         ItemxSimulationList.add(temp);
 
-                                        System.out.println("Vec: " + inputVector + " Fault Signal: " + this.signals_to_inject_faults.get(SigIndex));
+                                        //System.out.println("Vec: " + inputVector + " Fault Signal: " + this.signals_to_inject_faults.get(SigIndex));
 
                                         //aux = this.signals_to_inject_faults.size();
                                 }
@@ -2897,7 +2897,7 @@ public class Management extends MAIN {
                 int base = 0;
 
                 for(int i = 0; i < this.circuit.getGates().size(); i ++) {              // Circuits gates
-                        System.out.println("xx Gate: " + this.circuit.getGates().get(i).getType());
+                        //System.out.println("xx Gate: " + this.circuit.getGates().get(i).getType());
                         if(this.circuit.getGates().get(i).getType().toString().contains("X1")){
                                // System.out.println("Founded... " + this.circuit.getGates().get(i).getId());
                                         base++;
@@ -3678,7 +3678,7 @@ public class Management extends MAIN {
                         List <TestVectorInformation> x =  this.itemx_list.get(i).get_threadSimulationList();
 
 
-                        for (int j = 0; j < x.size(); j++) {
+                        for (int j = 0; j < 2; j++) {
                                 //for (int j = 0; j < x.size(); j++) {
                                 // System.out.println("index: " + x.get(j).getSimulationIndex() + " vec: " + x.get(j).getinputVector() + " sensitive area sum: " + x.get(j).getSum_sensitive_cells_area() );
 
