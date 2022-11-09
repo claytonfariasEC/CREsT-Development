@@ -1,6 +1,5 @@
 package simulation;
 
-import com.sun.jdi.ArrayReference;
 import datastructures.CellLibrary;
 import datastructures.Circuit;
 import datastructures.Gate;
@@ -1144,7 +1143,7 @@ public class Management extends MAIN {
 
 
                         threadItem.setSensitiveCellsMap(this.sensitive_cells);
-                        threadItem.setMode("Single_SA");
+                        threadItem.setMode("Single_Fault");
                         itemx_list.add(threadItem);
 
                         Runnable runnable = threadItem;
@@ -1873,13 +1872,13 @@ public class Management extends MAIN {
 
 
         /**
-         * Exhaustic Single STF (SET) Simulation
+         * Exhaustic Single STF (SET) Simulation + Considering AS not logical masked
          *
          * @param option
          * @throws IOException
          * @throws Exception
          */
-        public void runMultithreadingExausticSimulationFAULT(String option) throws IOException, Exception { //Test All possibilities
+        public void runMultithreadingExhausticSimulationAndNotMaskedSensitiveArea(String option) throws IOException, Exception { //Test All possibilities
 
 
 
@@ -1908,7 +1907,7 @@ public class Management extends MAIN {
 
                 this.signals_to_inject_faults = this.signalsToInjectFault(option);
 
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE");
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 

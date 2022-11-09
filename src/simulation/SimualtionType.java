@@ -1,6 +1,5 @@
 package simulation;
 
-import java.io.IOException;
 import java.util.ArrayList;
 
 public class SimualtionType {
@@ -284,7 +283,7 @@ public class SimualtionType {
                 simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
 
         //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
-        simulacaoMultithreading.runMultithreadingExausticSimulationFAULT(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.runMultithreadingExhausticSimulationAndNotMaskedSensitiveArea(simulationCircuit.getSignalsToinjectFault());
 
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();

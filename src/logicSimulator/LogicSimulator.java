@@ -4185,11 +4185,7 @@ import signalProbability.ProbCircuit;
          //if(gate.getGate().toString().equals("U0")){
              ///System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell + " = " + gateSensitivivity.getgateSensitiveArea() + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);
          //}
-
-
              // System.out.println("Cell: " + cell);
-
-
 
                //Do something about masking
              //TODO: Add the X1 in contain keys
@@ -4286,22 +4282,26 @@ import signalProbability.ProbCircuit;
                 gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
                 thread_item.setGatesLogicalPath(gateSensitivivity);
 
-                gateSensitivivity.calculatGateSusceptibility(input);
+                //gateSensitivivity.calculatGateSusceptibility(input);
 
 
             }else{ //Masked fault
 
+
                 //TO DO something to masking
                 //TODO: DO NOT COMPUTE SENSITIVE AREA BECAUSE IT IS ALREADY MASKED -> USE AS regular
 
-                SensitiveCell cell_original = this.sensitive_cells.get(key_original);
+                //SensitiveCell cell_original = this.sensitive_cells.get(key_original);
 
-                thread_item.sum_sensitive_cells_area(Float.parseFloat(cell_original.getSensitive_are()));
-                thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell_original.getSensitive_are()), gate);
-                gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell_original.getSensitive_are()));
+               float gateMasked = 0.0F;
+                thread_item.sum_sensitive_cells_area(gateMasked);
+                thread_item.sum_sensitive_cells_area_gate(gateMasked, gate);
+                gateSensitivivity.setgateSensitiveArea(gateMasked);
                 thread_item.setGatesLogicalPath(gateSensitivivity);
 
-                gateSensitivivity.calculatGateSusceptibility(input_original);
+
+
+                //gateSensitivivity.calculatGateSusceptibility(input_original);
 
                 /*
                   System.out.println("masked: " +  ANSI_YELLOW + " Vec: " + thread_item.getinputVector() + "  faultSig: " + faultSig+ " gateid: " + gate.getGate().getId() + " gate: " + gate.getGate().getOutputs() + " sigs: " + gate.getGate().getInputs() +  " CEll founded: " + cell.getCell_id()
