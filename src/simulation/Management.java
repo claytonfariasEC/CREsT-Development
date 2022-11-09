@@ -55,7 +55,7 @@ public class Management extends MAIN {
         private float avgASFLOAT;
 
         private long sumSet = 0;
-        private String SAMode;
+        private String SAMode="";
         //abc test
 
         private ArrayList<Signal> signals_to_inject_faults = new ArrayList<>();
@@ -1839,11 +1839,11 @@ public class Management extends MAIN {
                 long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
 
 
-                this.setSAMode("SA_FREE");
+                //this.setSAMode("SA_FREE");
 
                 this.defineAvgSensitiveArea();
 
-                this.printSensitiveAreasAnalysis();
+                //this.printSensitiveAreasAnalysis();
 
                 this.defineMTBFBasedInAvgSensitiveAreaAvg();
 

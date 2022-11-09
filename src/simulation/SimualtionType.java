@@ -1,5 +1,6 @@
 package simulation;
 
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class SimualtionType {
@@ -262,11 +263,15 @@ public class SimualtionType {
            //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
             simulacaoMultithreading.runMultithreadingExausticSimulation(simulationCircuit.getSignalsToinjectFault());
 
-
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");
     }
+
+    /**
+     *
+     * @throws Exception
+     */
     public void faultToleranceExhaustiveSETAPIFAULT() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
 
         /*
@@ -287,6 +292,13 @@ public class SimualtionType {
                 + "2^Signals * Gates)");
     }
 
+    /**
+     *
+     * @apiNote  STABLE - Use this method to extract the circuit Sensitive Area x Vectors (True Table)
+     * @param spiceScriptsFolder
+     * @param PTMLibrary
+     * @param SpiceNetListLibrary
+     * */
     public void faultToleranceExhaustiveSET_SensitiveAreaAPI(String spiceScriptsFolder, String PTMLibrary, String SpiceNetListLibrary) throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
 
         /*
