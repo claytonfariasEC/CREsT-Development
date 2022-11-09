@@ -1227,8 +1227,8 @@ public class Management extends MAIN {
 
 
                         threadItem.setSensitiveCellsMap(this.sensitive_cells);
-                        ///threadItem.setMode("Single_SA");
-                        threadItem.setMode("Single_Fault");
+                        threadItem.setMode("Single_SA");
+
                         itemx_list.add(threadItem);
 
                         Runnable runnable = threadItem;
@@ -1630,7 +1630,7 @@ public class Management extends MAIN {
                                 this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());
                                 random_input_vectors = this.generateInputVector("TRUE_TABLE"); // Generate Random Input Vectors or InputTrueTable
                                 ListInputVectors = this.splitInputPatternsInInt(random_input_vectors, this.probCircuit.getInputs().size());
-                                thread_list = particionateExausticVectorSAFREE(ListInputVectors); // x - vectors per thread
+                                thread_list = particionateExausticVectorSA(ListInputVectors); // x - vectors per thread
                                 break;
 
                         case "TRUE_TABLE_SINGLE_SA_FREE":
@@ -1638,7 +1638,7 @@ public class Management extends MAIN {
                                 this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());
                                 random_input_vectors = this.generateInputVector("TRUE_TABLE"); // Generate Random Input Vectors or InputTrueTable
                                 ListInputVectors = this.splitInputPatternsInInt(random_input_vectors, this.probCircuit.getInputs().size());
-                                thread_list = particionateExausticVectorSA(ListInputVectors); // x - vectors per thread
+                                thread_list = particionateExausticVectorSAFREE(ListInputVectors); // x - vectors per thread
                                 break;
 
                         case "TRUE_TABLE_COMPLETE":
@@ -2000,7 +2000,7 @@ public class Management extends MAIN {
 
                 this.signals_to_inject_faults = this.signalsToInjectFault(option);
 
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA");
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_FAULT");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 
@@ -3311,7 +3311,7 @@ public class Management extends MAIN {
 
                         // original List thread_list =  this.createVectorsAndParticionate(this.sampleSize, option, "MTF-Sensitive_Area-Generate_Netlist");
                        // List thread_list =  this.createVectorsAndParticionate(this.sampleSize, option, "TRUE_TABLE_SINGLE_SA");
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA");
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA_FREE");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 
