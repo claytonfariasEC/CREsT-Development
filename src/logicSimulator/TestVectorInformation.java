@@ -30,6 +30,7 @@ public class TestVectorInformation {
     private long threadID;
 
     private float sum_sensitive_cells_area;
+    private float sum_sensitive_cells_area_original;
 
     private boolean MTF;
     private final  ArrayList <Signal> MTF_FaultSignal_List;
@@ -76,6 +77,7 @@ public class TestVectorInformation {
         }
         return Concat;
     }
+
     public String concatMTFFaultSignals(String separator){
         String Concat = "";
         for (Signal x: this.MTF_FaultSignal_List_thd){
@@ -145,6 +147,10 @@ public class TestVectorInformation {
         vectorSensitiveAreaSum.add(cells_sensitive_area);
     }
 
+    public void setSum_sensitive_cells_area_original(float cells_sensitive_area){
+        this.sum_sensitive_cells_area_original = this.sum_sensitive_cells_area_original + cells_sensitive_area;
+    }
+
     public Float getCircuitSensitiveArea() {
         return circuitSensitiveArea;
     }
@@ -180,8 +186,19 @@ public class TestVectorInformation {
         return this.sum_sensitive_cells_area;
     }
 
+    public float getSum_sensitive_cells_area_original() {
+        return this.sum_sensitive_cells_area_original;
+    }
+
     public String getSum_sensitive_cells_area_str() {
         float myFloat = this.sum_sensitive_cells_area;
+        String formattedString = String.format("%.03f", myFloat);
+        formattedString = formattedString.replace(",",".");
+        return  formattedString;
+    }
+
+    public String getSum_sensitive_cells_area_original_str() {
+        float myFloat = this.sum_sensitive_cells_area_original;
         String formattedString = String.format("%.03f", myFloat);
         formattedString = formattedString.replace(",",".");
         return  formattedString;

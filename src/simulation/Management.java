@@ -3715,7 +3715,7 @@ public class Management extends MAIN {
                 TableSensitiveArea tableSensitiveArea = new TableSensitiveArea(itemx_list);
                 ArrayList <String> tableSensitiveAreaContent = new ArrayList<>();
                 if(this.SAMode.equals("SA_FREE")){
-                        tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
+                       tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
                 }else{
                         tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
                 }

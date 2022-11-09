@@ -142,7 +142,7 @@ public class TableSensitiveArea {
                     }
 
                     System.out.println("");
-                    content = content + ";" + sum;
+                    content = content + ";" + x.get(i).getSum_sensitive_cells_area();
 
                     if (i == 0 && (!passed)) {
                         f.add(contentHeader + " AStotal" + ";");
