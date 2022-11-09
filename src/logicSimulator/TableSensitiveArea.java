@@ -127,22 +127,23 @@ public class TableSensitiveArea {
                             contentHeader = contentHeader + x.get(j).getGatesLogicalPath().get(k).getGate() + ";";
                         }
                         //x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea()
+                        sum = sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
 
-                         System.out.print(i + "_"+ cont + " " + x.get(j).getGatesLogicalPath().get(k).getGate()
-                         + " In: " + x.get(j).getGatesLogicalPath().get(k).getInputs()
-                         + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputs()
-                            + " " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea());
+                         System.out.print(" " + i + "_"+ cont + " -" + x.get(j).getGatesLogicalPath().get(k).getGate()
+                         + " In: " + x.get(j).getGatesLogicalPath().get(k).getInputsOriginal()
+                         + " Out: " + x.get(j).getGatesLogicalPath().get(k).getOutputsOriginal()
+                            + " " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal() + " sum: " + sum + "  AST: " + x.get(j).getSum_sensitive_cells_area_original_str());
 
                         //contentv2 = contentv2 + x.get(j).getGatesLogicalPath().get(k).getGate() + "-" + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveArea() + ";";
 
                         content = content + "; " + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
                         //passed_vector = true;
-                        sum = sum + x.get(j).getGatesLogicalPath().get(k).getgateSensitiveAreaOriginal();
+
 
                     }
 
                     System.out.println("");
-                    content = content + ";" + x.get(i).getSum_sensitive_cells_area();
+                    content = content + ";" + x.get(j).getSum_sensitive_cells_area_original_str();
 
                     if (i == 0 && (!passed)) {
                         f.add(contentHeader + " AStotal" + ";");

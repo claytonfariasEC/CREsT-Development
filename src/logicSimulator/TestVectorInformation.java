@@ -147,7 +147,7 @@ public class TestVectorInformation {
         vectorSensitiveAreaSum.add(cells_sensitive_area);
     }
 
-    public void setSum_sensitive_cells_area_original(float cells_sensitive_area){
+    public void sum_sensitive_cells_area_original(float cells_sensitive_area){
         this.sum_sensitive_cells_area_original = this.sum_sensitive_cells_area_original + cells_sensitive_area;
     }
 

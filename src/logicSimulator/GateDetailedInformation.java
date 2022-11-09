@@ -79,6 +79,7 @@ public class GateDetailedInformation {
     public Float getgateSensitiveArea() {
         return this.gateSensitiveArea;
     }
+
     public Float getgateSensitiveAreaOriginal() {
         return this.gateSensitiveAreaOriginal;
     }

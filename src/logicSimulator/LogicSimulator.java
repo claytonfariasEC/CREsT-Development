@@ -4164,7 +4164,8 @@ import signalProbability.ProbCircuit;
      public void calculateGateAS(final Map<ArrayList<Boolean>, Boolean> comb, final ArrayList<Boolean> input,  final ArrayList<Boolean> input_original, DepthGate gate, String concat_inputs, String concat_inputs_original, TestVectorInformation thread_item, Cell cells, Signal faultSig){
 
          //Convert the input signal values to boolean
-         boolean output_converted = this.calculateTheOutputGatesInBoolean(comb, input_original, gate); // hero to convert
+         boolean output_converted = this.calculateTheOutputGatesInBoolean(comb, input, gate); // hero to convert
+         boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input_original, gate); // hero to convert
 
          /* Calculate Sensitive Area of This Gate */
          ///SensitiveCell cell = this.sensitive_cells.get(gate.getGate().getType()  + "_" + concat_inputs);
@@ -4185,7 +4186,7 @@ import signalProbability.ProbCircuit;
              ///System.out.println("--sensitiveList: " + this.sensitive_cells.size() + " Key: " + key + " - gate: " + cell + " = " + gateSensitivivity.getgateSensitiveArea() + "  GATE: " + gate.getGate() + " Inputs: " + input + " Output: " + output_converted);
          //}
 
-         if((cell != null)){
+
              // System.out.println("Cell: " + cell);
 
 
@@ -4198,13 +4199,19 @@ import signalProbability.ProbCircuit;
              gateSensitivivity.setInputs(input);
              gateSensitivivity.setInputsOriginal(input_original);
              gateSensitivivity.setOutputs(output_converted);
+
+             gateSensitivivity.setOutputsOriginal(output_converted_original);
              gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(cell.getSensitive_are()));
              /// Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
 
+         if((cell != null)){
 
                   thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
                   thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
+                  thread_item.sum_sensitive_cells_area_original(Float.parseFloat(cell.getSensitive_are()));
                   gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cell.getSensitive_are()));
+
+
                   thread_item.setGatesLogicalPath(gateSensitivivity);
 
                  // gateSensitivivity.calculatGateSusceptibility(input);
