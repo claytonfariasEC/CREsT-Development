@@ -1,8 +1,5 @@
 package logicSimulator;
 
-import java.io.File;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -183,7 +180,7 @@ public class TableSensitiveArea {
          */
     }
 
-    public ArrayList<String> createTableFaultAdaptive(String path, String circuitName) {
+    public ArrayList<String> createTableFaultNotMasked(String path, String circuitName) {
 
         ArrayList<String> f = new ArrayList<>();
 
