@@ -3355,7 +3355,7 @@ public class Management extends MAIN {
 
                         System.out.println("-----------------------END SIMULATION---------------------------------");
 
-                        this.setSAMode("SA_FREE");
+                        this.setSAMode("ONLY_SA");
 
                         String avgAs = calculateTotalSensitiveArea();
 
@@ -3805,22 +3805,39 @@ public class Management extends MAIN {
                         }
                 }
 
-                TableSensitiveArea tableSensitiveArea = new TableSensitiveArea(itemx_list);
+                WriteFile filetableSensitiveAreaContent;
+                TableSensitiveArea tableSensitiveArea;
                 ArrayList <String> tableSensitiveAreaContent = new ArrayList<>();
                 String optionMode = "";
-                if(this.SAMode.equals("SA_FREE")){
-                       tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
-                       //optionMode= this.SAMode;
-                        // All vectors AS for each gate
-                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FREE_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
-                }else{
-                        tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
-                        optionMode = "FAULT_INJECTED";
-                        // All vectors AS for each gate
-                        WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+                switch (this.SAMode){
+                        case("ONLY_SA"):
+                                tableSensitiveArea = new TableSensitiveArea(itemx_list);
+                                tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
+                                //optionMode= this.SAMode;
+                                // All vectors AS for each gate
+                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "ONLY_FREE_SA_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
 
+                                break;
+
+                        case("SA_FREE"):
+                                tableSensitiveArea = new TableSensitiveArea(itemx_list);
+                                tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
+                                //optionMode= this.SAMode;
+                                // All vectors AS for each gate
+                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FREE_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+
+                                break;
+
+                        case(""):
+                                tableSensitiveArea = new TableSensitiveArea(itemx_list);
+                                tableSensitiveAreaContent = tableSensitiveArea.createTableFaultAdaptive(this.relativePath, this.circuit.getName());
+                                optionMode = "FAULT_INJECTED";
+                                // All vectors AS for each gate
+                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+                                break;
                 }
+
 
 
 
