@@ -55,6 +55,7 @@ public class Management extends MAIN {
         private float avgASFLOAT;
 
         private long sumSet = 0;
+        private String SAMode;
         //abc test
 
         private ArrayList<Signal> signals_to_inject_faults = new ArrayList<>();
@@ -82,6 +83,10 @@ public class Management extends MAIN {
                 this.relativePath = relativePath;
                 this.threads = threads;
                 this.mtf_list = new ArrayList<>();
+        }
+
+        public void setSAMode(String SAMode) {
+                this.SAMode = SAMode;
         }
 
         public void initProbCircuit() {
@@ -1832,6 +1837,9 @@ public class Management extends MAIN {
                 Instant endTimelogGeneration = Instant.now();
 
                 long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
+
+
+                this.setSAMode("SA_FREE");
 
                 this.defineAvgSensitiveArea();
 
@@ -3705,7 +3713,13 @@ public class Management extends MAIN {
                 }
 
                 TableSensitiveArea tableSensitiveArea = new TableSensitiveArea(itemx_list);
-                ArrayList <String> tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
+                ArrayList <String> tableSensitiveAreaContent = new ArrayList<>();
+                if(this.SAMode.equals("SA_FREE")){
+                        tableSensitiveAreaContent = tableSensitiveArea.createTableFaultFree(this.relativePath, this.circuit.getName());
+                }else{
+                        tableSensitiveAreaContent = tableSensitiveArea.createTable(this.relativePath, this.circuit.getName());
+                }
+
 
                 // All vectors AS for each gate
                 WriteFile filetableSensitiveAreaContent = new WriteFile(this.relativePath + "CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
@@ -3747,6 +3761,7 @@ public class Management extends MAIN {
                 System.out.println("- Difference : " + (((sum/counter)/this.avgASFLOAT) - 1) + "(%)");
 
                 this.classifyTotalSensitiveAreas();
+
                 this.classifyGatesSensitiveAreas();
 
 
