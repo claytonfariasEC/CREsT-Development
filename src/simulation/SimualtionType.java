@@ -284,7 +284,7 @@ public class SimualtionType {
 
         //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
         simulacaoMultithreading.runMultithreadingExhausticSimulationAndNotMaskedSensitiveArea(simulationCircuit.getSignalsToinjectFault());
-
+            simulacaoMultithreading.printSensitiveAreasAnalysis();
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "

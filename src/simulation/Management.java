@@ -2000,7 +2000,7 @@ public class Management extends MAIN {
 
                 this.signals_to_inject_faults = this.signalsToInjectFault(option);
 
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_FAULT");
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 
@@ -2040,7 +2040,7 @@ public class Management extends MAIN {
 
                 this.defineAvgSensitiveArea();
 
-                this.printSensitiveAreasAnalysis();
+               // this.printSensitiveAreasAnalysis();
 
                 this.defineMTBFBasedInAvgSensitiveAreaAvg();
 
@@ -3835,7 +3835,7 @@ public class Management extends MAIN {
                                 tableSensitiveAreaContent = tableSensitiveArea.createTableFaultAdaptive(this.relativePath, this.circuit.getName());
                                 //optionMode = "FAULT_INJECTED";
                                 // All vectors AS for each gate
-                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
+                                filetableSensitiveAreaContent = new WriteFile(this.relativePath + "FAULT_SA_CompletedTableAS_ " + this.circuit.getName(), tableSensitiveAreaContent , ".csv");
                                 break;
                 }
 
