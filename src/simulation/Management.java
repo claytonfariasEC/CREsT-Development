@@ -4132,13 +4132,13 @@ public class Management extends MAIN {
                                                         //String SensitiveNode = testVectorInformation.get_MTF_FaultSignal_List_thd().toString();
                                                                 //testVectorInformation.printSpecs();
                                         //System.out.println("                    - Sensitive Node: " + SensitiveNode);
-                                        System.out.println("    III i:" + i + " j:" + j + " >> thd: " + this.itemx_list.get(i).getthreadSimulationList().get(j).getinputVector() + "  content blanck: " + this.itemx_list.get(i).getparsedNetlistContent().get(j).equals(""));
+                                        //System.out.println("    III i:" + i + " j:" + j + " >> thd: " + this.itemx_list.get(i).getthreadSimulationList().get(j).getinputVector() + "  content blanck: " + this.itemx_list.get(i).getparsedNetlistContent().get(j).equals(""));
                                         counter+=1;
                                         String circuitSpiceName = this.circuit.getName() + "_" + this.itemx_list.get(i).getthreadSimulationList().get(j).concatInputVector()  + this.itemx_list.get(i).getthreadSimulationList().get(j).concatMTFFaultSignals() + ".txt";
                                         this.writeInformationInFileLog(this.relativePath + spiceScriptsFolder, "", this.itemx_list.get(i).getParsedNetlistContent().get(j), circuitSpiceName);
                                 }
                         }
-                        //System.out.println(" SET counter: " + counter);
+                        System.out.println(" SET counter: " + counter);
                         /*
                         if(!this.itemx_list.get(i).getParsedNetlistContent().equals("") && (!this.itemx_list.get(i).getParsedNetlistContent().contains("ERROR"))){
                                 String circuitSpiceName = this.circuit.getName() + "_vec_" + i + ".txt";

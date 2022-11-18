@@ -557,7 +557,7 @@ import signalProbability.ProbCircuit;
             String bitflipValue =  Integer.toString(x.getLogicValue());//Integer.toString(threadSimulationList.getFaultSignal().getLogicValue());
             //"\t\t*Iexp 0 " + SensitiveNode + " exp(" + bitflipValue + " 190u 1n 10p 1.00001n 320p) \n" +
             String bit = "";
-            int critCharge = 200;
+            int critCharge = 68;
             String critChargeStr = "";
             if(bitflipValue == "0"){
                 bit = "0";
