@@ -1,9 +1,28 @@
 import pandas as pd
+
 import xlsxwriter
 import scipy
 import numpy as np
-
+import seaborn as sns
 import matplotlib.pyplot as plt
+
+class identifySETSusceptibility:
+    def __init__(self, pathfilename, faultSignals, outputSignals):
+        self.pathfilename = pathfilename
+        self.faultSognals = faultSignals
+        self.outputSignals = outputSignals
+        self.signalsComb = faultSignals + outputSignals
+        self.file = ""
+    def readFile(self):
+        self.file = pd.read_csv(self.pathfilename, header=None, delim_whitespace=True, names=self.signalsComb)
+
+    def getfile(self):
+        return self.file
+
+    def getSpecs(self, header):
+        self.file[header].head()
+
+
 def returnList(list, i, column):
     t = []
     for index in range(len(list)):
@@ -97,14 +116,7 @@ def getTimeSeriesOutput(contentFile, signalsList):
 
 def parseOutputSimulation(filename, signalList):  # AQUI
 
-    #file = open (filename, 'r')
-    #contentFile = file.readlines()
-
     print("filename: " + filename)
-
-    #print(contentFile)
-
-    #time = getTimeSeriesOutput(contentFile, signalList)
 
     file = pd.read_csv(filename, header=None, delim_whitespace=True, names=signalList)
 
@@ -112,26 +124,30 @@ def parseOutputSimulation(filename, signalList):  # AQUI
 
     print(file['w3'].head())
 
-    file['w3'].plot(kind='kde', figsize=(14, 6))
+    #plt.style.use('_mpl-gallery')
 
-    fig, ax = plt.subplots()
-    ax = sns.regplot(x='minutos', y='Lag_1', data=agenda, ci=None, scatter_kws=dict(color='0.35'))
-    ax.set_aspect('equal')
-    ax.set_title('Lag Plot of Hardcover Sales');
+    # make data
+    x = file['time'] #np.linspace(0, 10, 100)
+    y = file['w3'] #4 + 2 * np.sin(2 * x)
 
-    #writer = pd.ExcelWriter(str("nome_saida") + '.xlsx', engine='xlsxwriter')
 
-    # Convert the dataframe to an XlsxWriter Excel object.
-    #pd.to_excel(writer, sheet_name="nome_inversor")
+    sns.set_theme(style="darkgrid")
 
-    # Close the Pandas Excel writer and output the Excel file.
-    #writer.save()
-    #print("Time: " + str(time))
+    # Load an example dataset with long-form data
+    fmri = sns.load_dataset("fmri")
 
-    #file.close()
+    # Plot the responses for different events and regions
+    #3 sns.lineplot(x="timepoint", y="signal",
+    #             hue="region", style="event",
+    #             data=fmri)
 
-    # print("Arquivos temporarios excluidos")
-    # sos.remove("saida_parcial_inv_"+str(numero_aleatorio)+".txt")
+    sns.lineplot(x="time", y="w3",
+                 data=file)
+
+    plt.show()
+
+
+
 
 signalsList = ["time", "w3","time2", "G6gat","time3", "G7gat"]
 parseOutputSimulation("./teste/c1700000__w3_Outputs_G6gat_G7gat.txt", signalsList)
