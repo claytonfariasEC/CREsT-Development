@@ -61,18 +61,28 @@ class identifySETSusceptibility:
         #y1 = self.data['w3'] #np.sin(2 * np.pi * x)
         #y2 = self.data['G6gat']
         #y3 = self.data['G7gat']
+        sns.set_theme(style="darkgrid")
 
         data = pd.DataFrame(self.data)
         fig, ax = plt.subplots()
-
+        cont = 0
+        subStr = ""
         for i in columnsList:
-            ax = sns.lineplot(x='time', y=i, data=data,  label= "Signal " + str(i))
+            if(cont == 0):
+                subStr ="Fault "
+                cont= cont + 1
+            ax = sns.lineplot(x='time', y=i, data=data,  label=  subStr + "Signal " + str(i))
+            subStr = ""
+        #my_dict = dict(x=x, h=h)
+        h = 0.5
+        ax = sns.lineplot(x='time', y=h, data=data,  label= "Threshold")
         #ax1 = sns.lineplot(x='time', y='G6gat', data=data)
         #print("X0: " + str(len(self.data)))
 
         plt.xlabel(axisNameX)
         plt.ylabel(axisNameY)
-        plt.legend()
+        plt.legend(loc='upper right')
+        plt.title("All signals")
         plt.show()
 
 class dataSetInformation:
@@ -91,6 +101,23 @@ class dataSetInformation:
         print("Min: " + str(min))
         print("Theshold voltage to consider bitflip: " + str(self.nominalVoltage/2) + " (V)")
 
+    def analysisSETFault (self, outputSignal):
+        list = []
+        thresholdVoltage = self.nominalVoltage/2
+
+        interval = self.data[self.data[outputSignal] > thresholdVoltage]
+        #initTime = interval[outputSignal][0]
+        #finalTime = interval[outputSignal][len(interval)]
+
+        #for i in self.data[faultSignal]:
+        #    if(self.data[faultSignal][i] >= thresholdVoltage):
+        #        print(str(self.data[faultSignal][i]))
+        #        #list.append(self.data[faultSignal][i])
+
+        print("-------------------")
+        print(interval)
+        #print("Init: " + str(initTime))
+        #print("Final: " + str(finalTime))
     #def singleEventTransientanalysisThreshold(self):
 
 
@@ -107,9 +134,9 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
     c17.delcolumns(["time2", "time3"])
     c17.getInfo()
 
-    c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "w3")
+    #c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "w3")
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
-    c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
+    #c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
 
     c17.plotLineFigureThreshold("Time n(s)", "Voltage (V)", ["w3", "G6gat", "G7gat"])
 
@@ -117,6 +144,7 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
 
     analysis = dataSetInformation(c17.getdata(), nominalVoltage)
     analysis.extractInformation("w3")
+    analysis.analysisSETFault("G6gat")
     #analysis.singleEventTransientanalysisThreshold()
 
 
@@ -148,9 +176,5 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
 
 signalsList = ["time", "w3","time2", "G6gat","time3", "G7gat"]
 parseOutputSimulation("./teste/c1700000__w3_Outputs_G6gat_G7gat.txt", signalsList)
-
-
-print("Hello World")
-
 
 
