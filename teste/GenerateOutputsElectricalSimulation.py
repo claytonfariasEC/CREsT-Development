@@ -46,6 +46,35 @@ class identifySETSusceptibility:
         plt.ylabel(axisNameY)
         plt.show()
 
+    def plotLineFigureThreshold(self, axisNameX, axisNameY, columnsList):
+        '''
+        sns.set_theme(style="darkgrid")
+        sns.lineplot(x=columnX, y=columnY,
+                     data=self.data).set(title=columnY)
+        plt.xlabel(axisNameX)
+        plt.ylabel(axisNameY)
+        plt.show()
+        '''
+
+        #n = 100
+
+        #y1 = self.data['w3'] #np.sin(2 * np.pi * x)
+        #y2 = self.data['G6gat']
+        #y3 = self.data['G7gat']
+
+        data = pd.DataFrame(self.data)
+        fig, ax = plt.subplots()
+
+        for i in columnsList:
+            ax = sns.lineplot(x='time', y=i, data=data,  label= "Signal " + str(i))
+        #ax1 = sns.lineplot(x='time', y='G6gat', data=data)
+        #print("X0: " + str(len(self.data)))
+
+        plt.xlabel(axisNameX)
+        plt.ylabel(axisNameY)
+        plt.legend()
+        plt.show()
+
 class dataSetInformation:
     def __init__(self, data, nominalVoltage):
         self.data = data
@@ -62,8 +91,9 @@ class dataSetInformation:
         print("Min: " + str(min))
         print("Theshold voltage to consider bitflip: " + str(self.nominalVoltage/2) + " (V)")
 
-    def singleEventTransientanalysisThreshold(self):
-        return
+    #def singleEventTransientanalysisThreshold(self):
+
+
 
 def parseOutputSimulation(dataname, signalList):  # AQUI
 
@@ -81,8 +111,13 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
 
+    c17.plotLineFigureThreshold("Time n(s)", "Voltage (V)", ["w3", "G6gat", "G7gat"])
+
+
+
     analysis = dataSetInformation(c17.getdata(), nominalVoltage)
     analysis.extractInformation("w3")
+    #analysis.singleEventTransientanalysisThreshold()
 
 
     #data = pd.read_csv(dataname, header=None, delim_whitespace=True, names=signalList)
