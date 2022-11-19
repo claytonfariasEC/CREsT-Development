@@ -7,60 +7,102 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 
 class identifySETSusceptibility:
-    def __init__(self, pathfilename, faultSignals, outputSignals, siganalList):
-        self.pathfilename = pathfilename
+    def __init__(self, pathdataname, faultSignals, outputSignals, siganalList):
+        self.pathdataname = pathdataname
         self.faultSognals = faultSignals
         self.outputSignals = outputSignals
         self.signalsComb = siganalList
         self.signalList = signalsList
-        self.file = pd.read_csv(self.pathfilename, header=None, delim_whitespace=True, names=self.signalList)
+        self.data = pd.read_csv(self.pathdataname, header=None, delim_whitespace=True, names=self.signalList)
 
-    def getfile(self):
-        return self.file
+    def getdata(self):
+        return self.data
 
     def getSpecs(self, header):
-        #self.file[header].head()
-        print(str(self.file[header].head()))
+        #self.data[header].head()
+        print(str(self.data[header].head()))
+    def getInfo(self):
+        print("---------------------------------------")
+        print(str(self.data.head()))
+        print(str(self.data.describe()))
+        print("---------------------------------------")
+
+    def delcolumns(self, namelist):
+
+        for i in range(len(namelist)):
+            #df = pd.DataFrame({"a": [1, 2, 3], "b": [2, 4, 6]})
+            print("The DataFrame object before deleting the column")
+            #print(df)
+            del self.data[namelist[i]]
+            print("The DataFrame object after deleting the column --> " + str(namelist[i]))
+            #print(self.data)
 
     def plotLineFigure(self, axisNameX, axisNameY, columnX, columnY):
 
         sns.set_theme(style="darkgrid")
         sns.lineplot(x=columnX, y=columnY,
-                     data=self.file)
+                     data=self.data).set(title=columnY)
         plt.xlabel(axisNameX)
         plt.ylabel(axisNameY)
         plt.show()
 
-def parseOutputSimulation(filename, signalList):  # AQUI
 
-    print("filename: " + filename)
+
+
+
+
+class dataSetInformation:
+    def __init__(self, data):
+        self.data = data
+        self.max = 0
+        self.min = -100
+
+    def extractInformation(self, column):
+        max = self.data[column].max()
+        min = self.data[column].min()
+
+        print("column: " + column)
+        print("max: " + str(max))
+        print("min: " + str(min))
+
+    def singleEventTransientanalysisThreshold(self):
+        return
+
+def parseOutputSimulation(dataname, signalList):  # AQUI
+
+    print("dataname: " + dataname)
     l = ["G76gat", "G7gat"]
-    c17 = identifySETSusceptibility(pathfilename=filename, faultSignals=["w3"], outputSignals= l, siganalList= signalList)
+    c17 = identifySETSusceptibility(pathdataname=dataname, faultSignals=["w3"], outputSignals= l, siganalList= signalList)
     c17.getSpecs('w3')
+    c17.delcolumns(["time2", "time3"])
+    c17.getInfo()
 
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "w3")
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
 
+    analysis = dataSetInformation(c17.getdata())
+    analysis.extractInformation("w3")
 
-    #file = pd.read_csv(filename, header=None, delim_whitespace=True, names=signalList)
 
-    #print(file)
+    #data = pd.read_csv(dataname, header=None, delim_whitespace=True, names=signalList)
 
-    # print(file['w3'].head())
+    #print(data)
+
+    # print(data['w3'].head())
 
     #plt.style.use('_mpl-gallery')
 
     # make data
     '''
-    x = file['time'] #np.linspace(0, 10, 100)
-    y = file['w3'] #4 + 2 * np.sin(2 * x)
+    x = data['time'] #np.linspace(0, 10, 100)
+    y = data['w3'] #4 + 2 * np.sin(2 * x)
 
 
     sns.set_theme(style="darkgrid")
 
     sns.lineplot(x="time", y="w3",
-                 data=file)
+                 data=data)
     plt.xlabel('Time')
     plt.ylabel('Voltage(V)')
     plt.show()
