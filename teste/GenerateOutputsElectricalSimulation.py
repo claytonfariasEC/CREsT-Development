@@ -46,24 +46,21 @@ class identifySETSusceptibility:
         plt.ylabel(axisNameY)
         plt.show()
 
-
-
-
-
-
 class dataSetInformation:
-    def __init__(self, data):
+    def __init__(self, data, nominalVoltage):
         self.data = data
         self.max = 0
         self.min = -100
+        self.nominalVoltage = nominalVoltage
 
     def extractInformation(self, column):
         max = self.data[column].max()
         min = self.data[column].min()
 
-        print("column: " + column)
-        print("max: " + str(max))
-        print("min: " + str(min))
+        print("Column Name: " + column)
+        print("Max: " + str(max))
+        print("Min: " + str(min))
+        print("Theshold voltage to consider bitflip: " + str(self.nominalVoltage/2) + " (V)")
 
     def singleEventTransientanalysisThreshold(self):
         return
@@ -71,6 +68,9 @@ class dataSetInformation:
 def parseOutputSimulation(dataname, signalList):  # AQUI
 
     print("dataname: " + dataname)
+
+
+    nominalVoltage = 1.0
     l = ["G76gat", "G7gat"]
     c17 = identifySETSusceptibility(pathdataname=dataname, faultSignals=["w3"], outputSignals= l, siganalList= signalList)
     c17.getSpecs('w3')
@@ -81,7 +81,7 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
     c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
 
-    analysis = dataSetInformation(c17.getdata())
+    analysis = dataSetInformation(c17.getdata(), nominalVoltage)
     analysis.extractInformation("w3")
 
 
