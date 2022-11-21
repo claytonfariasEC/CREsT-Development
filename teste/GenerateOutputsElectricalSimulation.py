@@ -1,3 +1,6 @@
+
+from datetime import datetime
+
 import pandas as pd
 
 import xlsxwriter
@@ -5,6 +8,7 @@ import scipy
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import time
 
 class identifySETSusceptibility:
     def __init__(self, pathdataname, faultSignals, outputSignals, siganalList):
@@ -151,6 +155,7 @@ class dataSetInformation:
         totalTime = float (finalTime['time']) - float(initTime['time'])
 
 
+
         #for i in self.data[faultSignal]:
         #    if(self.data[faultSignal][i] >= thresholdVoltage):
         #        print(str(self.data[faultSignal][i]))
@@ -162,7 +167,8 @@ class dataSetInformation:
         print(str(interval.describe()))
         print("Init: " + str(initTime))
         print("Final: " + str(finalTime))
-        print("Total time n(s): " + str(totalTime))
+        print("Total time n(s) from interval: " + str(totalTime))
+
 
 
 
