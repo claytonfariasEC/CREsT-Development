@@ -49,13 +49,15 @@ class identifySETSusceptibility:
         plt.ylabel(axisNameY)
         plt.show()
 
-    def plotLineFigureData(self, DATA, axisNameX, axisNameY, columnX, columnY):
+    def plotLineFigureData(self, DATA, axisNameX, axisNameY, columnX, columnY, plotName):
 
         sns.set_theme(style="darkgrid")
         sns.lineplot(x=columnX, y=columnY,
-                     data=DATA).set(title=columnY)
+                     data=DATA, label=  "Signal " + columnY).set(title=columnY)
         plt.xlabel(axisNameX)
         plt.ylabel(axisNameY)
+        plt.legend(loc='lower right')
+        plt.title(plotName)
         plt.show()
     def plotMultipleLineFigure(self, axisNameX, axisNameY, columnsList):
 
@@ -146,7 +148,7 @@ class dataSetInformation:
         interval = self.data[self.data[outputSignal] > thresholdVoltage]
         initTime = interval[0:1]
         finalTime = interval[len(interval)-1:len(interval)]
-
+        totalTime = float (finalTime['time']) - float(initTime['time'])
 
 
         #for i in self.data[faultSignal]:
@@ -160,9 +162,12 @@ class dataSetInformation:
         print(str(interval.describe()))
         print("Init: " + str(initTime))
         print("Final: " + str(finalTime))
+        print("Total time n(s): " + str(totalTime))
+
+
 
         fig = identifySETSusceptibility(pathdataname="", faultSignals=["w3"], outputSignals= ["G6gat", "G7gat"], siganalList=["G6gat","time3", "G7gat"] )
-        fig.plotLineFigureData(interval, "Time n(s)", "Voltage (V)", "time", "G6gat")
+        fig.plotLineFigureData(interval, "Time n(s)", "Voltage (V)", "time", "G6gat", "interval Threshold")
         #def singleEventTransientanalysisThreshold(self):
 
 
