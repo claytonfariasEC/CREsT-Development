@@ -13,8 +13,11 @@ class identifySETSusceptibility:
         self.outputSignals = outputSignals
         self.signalsComb = siganalList
         self.signalList = signalsList
-        self.data = pd.read_csv(self.pathdataname, header=None, delim_whitespace=True, names=self.signalList)
 
+        try:
+            self.data = pd.read_csv(self.pathdataname, header=None, delim_whitespace=True, names=self.signalList)
+        except:
+            print("NOT INCLUDED INPUT FILE:  " + pathdataname)
     def getdata(self):
         return self.data
 
@@ -44,6 +47,40 @@ class identifySETSusceptibility:
                      data=self.data).set(title=columnY)
         plt.xlabel(axisNameX)
         plt.ylabel(axisNameY)
+        plt.show()
+
+    def plotLineFigureData(self, DATA, axisNameX, axisNameY, columnX, columnY):
+
+        sns.set_theme(style="darkgrid")
+        sns.lineplot(x=columnX, y=columnY,
+                     data=DATA).set(title=columnY)
+        plt.xlabel(axisNameX)
+        plt.ylabel(axisNameY)
+        plt.show()
+    def plotMultipleLineFigure(self, axisNameX, axisNameY, columnsList):
+
+        sns.set_theme(style="darkgrid")
+
+        data = pd.DataFrame(self.data)
+        fig, ax = plt.subplots()
+        cont = 0
+        subStr = ""
+        for i in columnsList:
+            if(cont == 0):
+                #subStr =
+                cont= cont + 1
+            ax = sns.lineplot(x='time', y=i, data=data,  label=  subStr + "Signal " + str(i))
+            subStr = ""
+        #my_dict = dict(x=x, h=h)
+        h = 0.5
+        ax = sns.lineplot(x='time', y=h, data=data,  label= "Threshold")
+        #ax1 = sns.lineplot(x='time', y='G6gat', data=data)
+        #print("X0: " + str(len(self.data)))
+
+        plt.xlabel(axisNameX)
+        plt.ylabel(axisNameY)
+        plt.legend(loc='upper right')
+        plt.title("All signals")
         plt.show()
 
     def plotLineFigureThreshold(self, axisNameX, axisNameY, columnsList):
@@ -103,22 +140,30 @@ class dataSetInformation:
 
     def analysisSETFault (self, outputSignal):
         list = []
+
         thresholdVoltage = self.nominalVoltage/2
 
         interval = self.data[self.data[outputSignal] > thresholdVoltage]
-        #initTime = interval[outputSignal][0]
-        #finalTime = interval[outputSignal][len(interval)]
+        initTime = interval[0:1]
+        finalTime = interval[len(interval)-1:len(interval)]
+
+
 
         #for i in self.data[faultSignal]:
         #    if(self.data[faultSignal][i] >= thresholdVoltage):
         #        print(str(self.data[faultSignal][i]))
         #        #list.append(self.data[faultSignal][i])
 
-        print("-------------------")
+        print("--------- Identified interval ----------")
         print(interval)
-        #print("Init: " + str(initTime))
-        #print("Final: " + str(finalTime))
-    #def singleEventTransientanalysisThreshold(self):
+        print("Shape: " + str(interval.shape))
+        print(str(interval.describe()))
+        print("Init: " + str(initTime))
+        print("Final: " + str(finalTime))
+
+        fig = identifySETSusceptibility(pathdataname="", faultSignals=["w3"], outputSignals= ["G6gat", "G7gat"], siganalList=["G6gat","time3", "G7gat"] )
+        fig.plotLineFigureData(interval, "Time n(s)", "Voltage (V)", "time", "G6gat")
+        #def singleEventTransientanalysisThreshold(self):
 
 
 
@@ -135,9 +180,10 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
     c17.getInfo()
 
     #c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "w3")
-    c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
+    #c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G6gat")
     #c17.plotLineFigure("Time n(s)", "Voltage (V)", "time", "G7gat")
 
+    c17.plotMultipleLineFigure("Time n(s)", "Voltage (V)", ["G6gat", "G7gat"])
     c17.plotLineFigureThreshold("Time n(s)", "Voltage (V)", ["w3", "G6gat", "G7gat"])
 
 
@@ -145,31 +191,7 @@ def parseOutputSimulation(dataname, signalList):  # AQUI
     analysis = dataSetInformation(c17.getdata(), nominalVoltage)
     analysis.extractInformation("w3")
     analysis.analysisSETFault("G6gat")
-    #analysis.singleEventTransientanalysisThreshold()
 
-
-    #data = pd.read_csv(dataname, header=None, delim_whitespace=True, names=signalList)
-
-    #print(data)
-
-    # print(data['w3'].head())
-
-    #plt.style.use('_mpl-gallery')
-
-    # make data
-    '''
-    x = data['time'] #np.linspace(0, 10, 100)
-    y = data['w3'] #4 + 2 * np.sin(2 * x)
-
-
-    sns.set_theme(style="darkgrid")
-
-    sns.lineplot(x="time", y="w3",
-                 data=data)
-    plt.xlabel('Time')
-    plt.ylabel('Voltage(V)')
-    plt.show()
-    '''
 
 
 
