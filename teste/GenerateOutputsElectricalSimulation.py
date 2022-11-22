@@ -2,7 +2,6 @@
 from datetime import datetime
 
 import pandas as pd
-
 import xlsxwriter
 import scipy
 import numpy as np
@@ -22,6 +21,7 @@ class identifySETSusceptibility:
             self.data = pd.read_csv(self.pathdataname, header=None, delim_whitespace=True, names=self.signalList)
         except:
             print("NOT INCLUDED INPUT FILE:  " + pathdataname)
+
     def getdata(self):
         return self.data
 
@@ -146,15 +146,23 @@ class dataSetInformation:
 
     def analysisSETFault (self, outputSignal):
         list = []
-
+        fault_masked = False
         thresholdVoltage = self.nominalVoltage/2
 
-        interval = self.data[self.data[outputSignal] > thresholdVoltage]
+
+        interval = self.data[self.data[outputSignal] > thresholdVoltage ]#thresholdVoltage - 0.4]
+
+        if(len(interval) > 0):
+            #SET fault propagated
+            interval = self.data[self.data[outputSignal] > 0.05]
+            fault_masked = False
+        else:
+            #SET fault masked
+            fault_masked = True
+
         initTime = interval[0:1]
         finalTime = interval[len(interval)-1:len(interval)]
         totalTime = float (finalTime['time']) - float(initTime['time'])
-
-
 
         #for i in self.data[faultSignal]:
         #    if(self.data[faultSignal][i] >= thresholdVoltage):
@@ -168,7 +176,6 @@ class dataSetInformation:
         print("Init: " + str(initTime))
         print("Final: " + str(finalTime))
         print("Total time n(s) from interval: " + str(totalTime))
-
 
 
 
