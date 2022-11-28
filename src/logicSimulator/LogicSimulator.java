@@ -307,7 +307,7 @@ import signalProbability.ProbCircuit;
                                 }
                                 */
                             }
-                            else{           
+                            else{
                                 thread_item.setSignalOriginalValue(0);
                                 //sig.setLogicValue(0);
                                 gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
