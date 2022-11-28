@@ -175,9 +175,9 @@ import signalProbability.ProbCircuit;
  
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
-                    this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i));
-                    this.creatCircuitAccordingVector(i);
-                    this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
+                    //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i));
+                this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+                this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
             }  
         }
 
@@ -335,9 +335,97 @@ import signalProbability.ProbCircuit;
                 
            }
 
+
            
          
      }
+
+    /**
+     * NEW VWESION COULD ONTAIN ERRORS AND BUGS
+     * @param testNumber
+     * @param vector
+     * @param thread_item
+     * @param index
+     * @throws IOException
+     * @throws WriteException
+     */
+    private  void propagateInputVectors(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int index) throws IOException, WriteException{
+
+        this.threadID = (long) Thread.currentThread().getId();
+        thread_item.setThreadID(this.threadID);
+
+        //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
+        //System.out.println("  Vector: " + vector);
+        final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+
+        for (int j = 0; j < gatesLevels.size(); j++) {
+
+            ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+
+            for (int k = 0; k < gatesInThisLevel.size(); k++) {
+                String AwnsString = gatesInThisLevel.get(k).getClass().toString();
+                //System.out.println("Aws: "+ AwnsString);
+                if(AwnsString.equals("class levelDatastructures.DepthGate")){
+                    Object object = gatesInThisLevel.get(k);
+                    DepthGate gate = (DepthGate) object;
+                    //gate.getGate().getType()
+                    //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
+                    boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
+
+
+                    for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
+
+                        Signal sig = gate.getGate().getOutputs().get(s);
+
+                        //System.out.println(faultSig+" Sig EQUAL "+sig);
+
+                        if(outputGate == true){    //Saida do GATE  = 1
+                            thread_item.setSignalOriginalValue(1);
+
+
+                            //sig.setLogicValue(1);
+                            gate.getGate().getOutputs().get(s).setOriginalLogicValue(1);
+                            gate.getGate().getOutputs().get(s).setLogicValue(1);
+                            gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.TRUE);
+
+                                /*
+                                if(sig.getId().equals(faultSig.getId())){
+                                   // System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
+                                    faultSig.setOriginalLogicValue(1);
+                                }
+                                */
+                        }
+                        else{
+                            thread_item.setSignalOriginalValue(0);
+                            //sig.setLogicValue(0);
+                            gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
+                            gate.getGate().getOutputs().get(s).setLogicValue(0);
+                            gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.FALSE);
+
+                                /*
+                                if(sig.getId().equals(faultSig.getId())){
+                                    //System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
+                                    faultSig.setOriginalLogicValue(0);
+                                }
+                                */
+                        }
+                            /*
+                             System.out.println("              - Gate: "+ gatesInThisLevel.get(k)
+                                     +  "  type: "+ gate.getGate().getType()
+                                     +  " - Inputs: " + gate.getGate().getInputs().get(0) + " value: " + gate.getGate().getInputs().get(0).getLogicValue()
+                                     +  " - Inputs: " + gate.getGate().getInputs().get(1)+ " value: " + gate.getGate().getInputs().get(1).getLogicValue()
+                                     +  "              - output: " + sig.getOriginalLogicValue());
+                            */
+                    }
+                }
+            }
+
+        }
+        this.creatCircuitAccordingVector(index, gatesLevels);
+
+
+
+    }
 
     private  void propagateInputVectorsForSensitiveAreaCalculation(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item) throws IOException, WriteException{
 
@@ -5017,8 +5105,8 @@ import signalProbability.ProbCircuit;
 
         }
 
-    public void creatCircuitAccordingVector(int index) {
-        createCircuitVectorIndependent newCircuit = new createCircuitVectorIndependent(this.circuit, this.cellLibrary, this.levelCircuit, index);
+    public void creatCircuitAccordingVector(int index, ArrayList <GateLevel> gatesLevels) {
+        createCircuitVectorIndependent newCircuit = new createCircuitVectorIndependent(this.circuit, this.cellLibrary, this.levelCircuit, index, gatesLevels);
         this.circuitAccordingVector.add(newCircuit);
     }
 

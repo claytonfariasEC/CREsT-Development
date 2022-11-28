@@ -2,27 +2,29 @@ package logicSimulator;
 
 import datastructures.CellLibrary;
 import datastructures.Circuit;
+import levelDatastructures.GateLevel;
 import levelDatastructures.LevelCircuit;
 
 import java.util.ArrayList;
 
 public class createCircuitVectorIndependent {
 
-    private Circuit circuit;
+    final private Circuit circuit;
     //private ArrayList<Circuit> circuitAccordingVector = new ArrayList<>();
-    private CellLibrary cellLibrary;
-    private LevelCircuit levelCircuit;
-
-    private int threadSimulationIndex;
+    final private CellLibrary cellLibrary;
+    final private LevelCircuit levelCircuit;
+    final private int threadSimulationIndex;
+    final private ArrayList <GateLevel> gatesLevels;
     String vector;
     String faultSig;
-    public createCircuitVectorIndependent(Circuit circuit, CellLibrary cellLibrary, LevelCircuit levelCircuit, int threadSimulationIndex){
+    public createCircuitVectorIndependent(Circuit circuit, CellLibrary cellLibrary, LevelCircuit levelCircuit, int threadSimulationIndex, ArrayList <GateLevel> gatesLevels){
         this.circuit = circuit;
         this.levelCircuit = levelCircuit;
         this.cellLibrary = cellLibrary;
         this.vector = "";
         this.faultSig = "";
         this.threadSimulationIndex = threadSimulationIndex;
+        this.gatesLevels = gatesLevels;
     }
 
     public Circuit getCircuit() {
