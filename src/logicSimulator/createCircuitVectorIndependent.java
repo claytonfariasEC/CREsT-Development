@@ -13,25 +13,36 @@ public class createCircuitVectorIndependent {
     private CellLibrary cellLibrary;
     private LevelCircuit levelCircuit;
 
+    private int threadSimulationIndex;
     String vector;
     String faultSig;
-    public createCircuitVectorIndependent(Circuit circuit, CellLibrary cellLibrary, LevelCircuit levelCircuit){
+    public createCircuitVectorIndependent(Circuit circuit, CellLibrary cellLibrary, LevelCircuit levelCircuit, int threadSimulationIndex){
         this.circuit = circuit;
         this.levelCircuit = levelCircuit;
         this.cellLibrary = cellLibrary;
         this.vector = "";
         this.faultSig = "";
+        this.threadSimulationIndex = threadSimulationIndex;
     }
 
     public Circuit getCircuit() {
-        return circuit;
+        return this.circuit;
     }
 
     public CellLibrary getCellLibrary() {
-        return cellLibrary;
+        return this.cellLibrary;
     }
 
     public LevelCircuit getLevelCircuit() {
-        return levelCircuit;
+        return this.levelCircuit;
+    }
+
+    public int getThreadSimulationIndex() {
+        return this.threadSimulationIndex;
+    }
+
+    @Override
+    public int hashCode() {
+        return this.levelCircuit.hashCode();
     }
 }

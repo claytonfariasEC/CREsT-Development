@@ -176,6 +176,7 @@ import signalProbability.ProbCircuit;
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
                     this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i));
+                    this.creatCircuitAccordingVector(i);
                     this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
             }  
         }
@@ -333,6 +334,7 @@ import signalProbability.ProbCircuit;
                }
                 
            }
+
            
          
      }
@@ -1603,9 +1605,12 @@ import signalProbability.ProbCircuit;
 
         //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
         //System.out.println("  Vector: " + vector);
-        ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
 
 
+        createCircuitVectorIndependent circuitAccordingVector  = this.circuitAccordingVector.get(index);
+        System.out.println(circuitAccordingVector.hashCode());
+        ArrayList <GateLevel> gatesLevels = circuitAccordingVector.getLevelCircuit().getGateLevels(); //this.levelCircuit.getGateLevels();
+        
         for (int j = gatesLevels.size()-1; j >=0; j--) {
 
             ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
@@ -1621,20 +1626,18 @@ import signalProbability.ProbCircuit;
                     final DepthGate gate = (DepthGate) object;
 
 
-
                     //gate.getGate().getType()
                     //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
                     //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
-
-                    //TODO: I want to return if the output is suscptible to faults
+                    //TODO: I want to return if the output is susceptible to faults
                     //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
 
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
-                        Signal sig = gate.getGate().getOutputs().get(s);
+                        Signal sig =  gate.getGate().getOutputs().get(s);
                         System.out.println(vector + " Fsig " + faultSig + " "  + this.getThreadId()
                                 + " - Level " + j + " Gate " + gatesInThisLevel.get(k)
-                                + "  type: "+ gate.getGate().getType() + "    outSig: " +  sig.getId() + " " + sig.getOriginalLogicValue());
+                                + "  type: "+ gate.getGate().getType() + "    outSig: " +  sig.getId() + " " + sig.getLogicValue() + " " + sig.getSignalOriginalAndNewValue() + " " + sig.getLogicValueBoolean());
 
                        //¹¹ System.out.println("Sig: " +  sig.getId() + " " + sig.getOriginalLogicValue());
                         /*
@@ -5014,8 +5017,8 @@ import signalProbability.ProbCircuit;
 
         }
 
-    public void creatCircuitAccordingVector() {
-        createCircuitVectorIndependent newCircuit = new createCircuitVectorIndependent(this.circuit, this.cellLibrary, this.levelCircuit);
+    public void creatCircuitAccordingVector(int index) {
+        createCircuitVectorIndependent newCircuit = new createCircuitVectorIndependent(this.circuit, this.cellLibrary, this.levelCircuit, index);
         this.circuitAccordingVector.add(newCircuit);
     }
 
