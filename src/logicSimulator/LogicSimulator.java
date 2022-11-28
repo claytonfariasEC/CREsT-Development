@@ -47,6 +47,8 @@ import signalProbability.ProbCircuit;
         private LevelCircuit lCircuit; 
         private List<TestVectorInformation> threadSimulationList =  Collections.synchronizedList(new ArrayList<TestVectorInformation>()); //new ArrayList<>();
         private Circuit circuit;
+
+        private ArrayList <createCircuitVectorIndependent> circuitAccordingVector = new ArrayList<>();
         private CellLibrary cellLibrary;
         private LevelCircuit levelCircuit;
         private  ArrayList <Cell>  cells; 
@@ -1595,6 +1597,104 @@ import signalProbability.ProbCircuit;
 
     }
 
+    private  void propagateFaultInjectionsFAULT_NewAprouch(int testNumber, ArrayList <Integer> vector, Signal faultSig, int index, TestVectorInformation thread_item) throws IOException, WriteException{
+
+        this.threadID = (long) Thread.currentThread().getId();
+
+        //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
+        //System.out.println("  Vector: " + vector);
+        ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+
+
+        for (int j = gatesLevels.size()-1; j >=0; j--) {
+
+            ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+
+            for (int k = 0; k < gatesInThisLevel.size(); k++) {
+
+
+                String AwnsString = gatesInThisLevel.get(k).getClass().toString();
+                //System.out.println("Aws: "+ AwnsString);
+
+                if(AwnsString.equals("class levelDatastructures.DepthGate")){
+                    Object object = gatesInThisLevel.get(k);
+                    final DepthGate gate = (DepthGate) object;
+
+
+
+                    //gate.getGate().getType()
+                    //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
+                    //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
+
+                    //TODO: I want to return if the output is suscptible to faults
+                    //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
+
+                    for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
+
+                        Signal sig = gate.getGate().getOutputs().get(s);
+                        System.out.println(vector + " Fsig " + faultSig + " "  + this.getThreadId()
+                                + " - Level " + j + " Gate " + gatesInThisLevel.get(k)
+                                + "  type: "+ gate.getGate().getType() + "    outSig: " +  sig.getId() + " " + sig.getOriginalLogicValue());
+
+                       //¹¹ System.out.println("Sig: " +  sig.getId() + " " + sig.getOriginalLogicValue());
+                        /*
+                        if(gateResult == true){  //Gate Output
+
+                            gate.getGate().getOutputs().get(s).setOriginalLogicValue(1);
+                            gate.getGate().getOutputs().get(s).setLogicValue(1);
+                            gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.TRUE);
+
+
+                            if(sig.getId().equals(faultSig.getId())){
+                                // System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
+                                faultSig.setOriginalLogicValue(1);
+                                faultSig.setLogicValue(0); // bitfip
+                                faultSig.setLogicValueBoolean(Boolean.FALSE);
+
+                                thread_item.setSignalOriginalValue(1);
+                                thread_item.setFaultSignalValue(0);
+
+
+                            }
+
+                        }
+                        else{
+                            gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
+                            gate.getGate().getOutputs().get(s).setLogicValue(0);
+                            gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.FALSE);
+
+
+
+                            if(sig.getId().equals(faultSig.getId())){
+                                // System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
+                                faultSig.setOriginalLogicValue(0);
+                                faultSig.setLogicValue(1); // bitfip
+                                faultSig.setLogicValueBoolean(Boolean.TRUE);
+
+                                thread_item.setSignalOriginalValue(0);
+                                thread_item.setFaultSignalValue(1);
+                            }
+
+
+                        }
+
+                         */
+                    }
+
+                }
+
+
+            }
+
+
+
+        }
+        System.out.println();
+
+
+    }
+
+
     private  void propagateMultipleFaultInjections(int testNumber, ArrayList <Integer> vector, Signal faultSig, int index, TestVectorInformation thread_item) throws IOException, WriteException{
 
         this.threadID = (long) Thread.currentThread().getId();
@@ -2855,7 +2955,8 @@ import signalProbability.ProbCircuit;
 
 
                 this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
-                this.propagateFaultInjectionsFAULT(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getFaultSignal(), i,  this.threadSimulationList.get(i));
+                //this.propagateFaultInjectionsFAULT(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getFaultSignal(), i,  this.threadSimulationList.get(i));
+                this.propagateFaultInjectionsFAULT_NewAprouch(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getFaultSignal(), i,  this.threadSimulationList.get(i));
                 this.getFaultInjectionResults(this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i));
 
                 /*
@@ -4867,7 +4968,7 @@ import signalProbability.ProbCircuit;
 
                     break;
 
-                case ("Single_Fault"): //TODO:HERE
+                case ("Single_Fault"): //TODO:HERE today my friend
                     System.out.println("SIMULATION ID (000Fault): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
                     try {
                         startSimulationFaultFree();
@@ -4913,7 +5014,16 @@ import signalProbability.ProbCircuit;
 
         }
 
-        private void PrintSpecs() {
+    public void creatCircuitAccordingVector() {
+        createCircuitVectorIndependent newCircuit = new createCircuitVectorIndependent(this.circuit, this.cellLibrary, this.levelCircuit);
+        this.circuitAccordingVector.add(newCircuit);
+    }
+
+    public ArrayList<createCircuitVectorIndependent> getCircuitAccordingVector(){
+        return circuitAccordingVector;
+    }
+
+    private void PrintSpecs() {
          Thread t = Thread.currentThread();
          System.out.println("\n"
                  + " - Thread: " +(long) Thread.currentThread().getId()//
