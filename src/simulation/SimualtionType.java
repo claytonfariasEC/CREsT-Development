@@ -295,6 +295,31 @@ public class SimualtionType {
                 + "2^Signals * Gates)");
     }
 
+
+    /**
+     *
+     * @throws Exception
+     */
+    public void faultToleranceExhaustiveSETAPIFAULTCALCULATEAS_FRONTBACK() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
+
+        /*
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath() + simulationCircuit.getGenlib(), simulationCircuit.getRelativePath() + simulationCircuit.getCircuit());
+
+         */
+        System.out.println("Exaustive");
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
+
+        //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.runMultithreadingExhausticSimulationAndNotMaskedSensitiveAreaNEWAPROUCH(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.printSensitiveAreasAnalysis();
+
+        //simulacaoMultithreading.printSensitiveAreasAnalysis();
+        this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
+                + "2^Signals * Gates)");
+    }
+
     /**
      *
      * @throws Exception
