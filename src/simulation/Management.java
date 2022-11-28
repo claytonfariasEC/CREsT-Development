@@ -5,6 +5,8 @@ import datastructures.Circuit;
 import datastructures.Gate;
 import datastructures.Signal;
 import jxl.write.WriteException;
+import levelDatastructures.DepthGate;
+import levelDatastructures.GateLevel;
 import levelDatastructures.LevelCircuit;
 import logicSimulator.*;
 import readers.MappedVerilogReader;
@@ -1210,7 +1212,8 @@ public class Management extends MAIN {
 
                         for (int j = start; j < end; j++) {
 
-                                for (int aux = 0; aux < this.signals_to_inject_faults.size(); aux++) {
+                               // for (int aux = 0; aux < this.signals_to_inject_faults.size(); aux++) {
+                                        for (int aux = 0; aux < 1; aux++) {
 
                                         inputVector = this.get_Input_Vectors(ListInputVectors, j); //input Test n
 
@@ -4285,6 +4288,93 @@ public class Management extends MAIN {
                 this.classifyTotalSensitiveAreas();
 
                 this.classifyGatesSensitiveAreas(); // Create Table
+
+
+
+                System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
+
+        }
+
+        public void printPropagationGates(){
+                //System.out.println("CElls: " + this.sensitive_cells);
+                System.out.println("\n\n\n------------ Gates values -------------------");
+                float counter = 0;
+                float sum = 0;
+
+                System.out.println("sample: " + this.sampleSize);
+                int idx = 0;
+                System.out.println("Printing the first 10 vectors");
+                for (int i = 0; i < this.itemx_list.size(); i++) {
+                        List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
+
+
+                                for (int j = 0; j < x.size(); j++) {
+                                        if(j < 4) {
+                                        System.out.println("\n------------ Values  -------------------");
+                                        for (int k = 0; k < x.get(j).getGatesLevelsThreadList().size(); k++) {
+
+                                                //ArrayList <GateLevel> tempGateLevel = x.get(j).getGatesLevelsThreadList().get(k);
+                                                ArrayList<GateLevel> gatesLevels = x.get(j).getGatesLevelsThreadList().get(k);//this.levelCircuit.getGateLevels();
+
+                                                for (int t = 0; t <  gatesLevels.size(); t++) {
+
+                                                        ArrayList<Object> gatesInThisLevel = gatesLevels.get(t).getGates();
+
+                                                        for (int z = 0; z < gatesInThisLevel.size(); z++) {
+
+                                                                String AwnsString = gatesInThisLevel.get(z).getClass().toString();
+                                                                //System.out.println("Aws: "+ AwnsString);
+
+                                                                if (AwnsString.equals("class levelDatastructures.DepthGate")) {
+                                                                        Object object = gatesInThisLevel.get(z);
+                                                                        final DepthGate gate = (DepthGate) object;
+
+
+                                                                        //gate.getGate().getType()
+                                                                        //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
+                                                                        //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
+
+                                                                        //TODO: I want to return if the output is suscptible to faults
+                                                                        //boolean gateResult = this.calculateOutputFacultInjectionGateValueFAULT(gate.getGate().getType(), gate, gate.getGate().getInputs(), faultSig, thread_item);  //Method calc the output from the gate cal bitflip
+
+                                                                        for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
+
+                                                                               final Signal sig = gate.getGate().getOutputs().get(s);
+                                                                                System.out.println(x.get(j).getinputVector()   + " "
+                                                                                        + " - Level " + t + " Gate " + gatesInThisLevel.get(z)
+                                                                                        + "  type: " + gate.getGate().getType() + "    outSig: " + sig.getId() + " " + sig.getOriginalLogicValue() + " N: " + sig.getLogicValue() + " :::: ");
+
+
+                                                                        }
+
+                                                                }
+
+
+                                                        }
+
+                                                       // System.out.println(x.get(j).getSimulationIndex() + " Vector: " + " " + x.get(j).getinputVector() + " AS sum: " + x.get(j).getSum_sensitive_cells_area());
+                                                }
+                                        }
+
+
+                                        idx++;
+                                        sum += x.get(j).getSum_sensitive_cells_area();
+                                        counter++;
+
+
+                                }
+                        }
+
+                }
+
+                this.ASReal = sum/counter;
+                System.out.println("\n");
+                System.out.println("- Sensitive Area average (SAavg) based in AS average from each cell: " + this.avgASFLOAT);
+                System.out.println("- Sensitive Area average (SAreal) based in (" + counter + " vectors): " + (sum/counter));
+                //System.out.println("- Sensitive Areas (ASvec) based on " + counter + " vectors: " + (sum/counter) + " and ASavg based in AS average from each cell: " + this.avgASFLOAT);
+                System.out.println("- Difference : " + (((sum/counter)/this.avgASFLOAT) - 1) + "(%)");
+
+
 
 
 

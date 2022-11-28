@@ -109,7 +109,7 @@ import signalProbability.ProbCircuit;
                 CellLibrary cellLib = new CellLibrary();
                 this.cellLibrary = cellLib;
                 this.cellLibrary.initLibrary(this.genlibPATH);
-                
+
                 //System.out.println("--- Reading celllib ...");
                 //System.out.println("  - Avaliable logic gatesin this library: "+cellLib.getCells());
                 /*----------------------*/
@@ -173,8 +173,10 @@ import signalProbability.ProbCircuit;
  
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
-                    this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i));
-                    this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
+                    //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+                this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+
+                this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
             }  
         }
 
@@ -362,7 +364,7 @@ import signalProbability.ProbCircuit;
                 //System.out.println("Aws: "+ AwnsString);
                 if(AwnsString.equals("class levelDatastructures.DepthGate")){
                     Object object = gatesInThisLevel.get(k);
-                    DepthGate gate = (DepthGate) object;
+                    final DepthGate gate = (DepthGate) object;
                     //gate.getGate().getType()
                     //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
@@ -377,6 +379,7 @@ import signalProbability.ProbCircuit;
                     ArrayList <Boolean> input = new ArrayList<>();
                     ArrayList <Integer> signals = new ArrayList<>();
 
+                    //for (int index = 0; index < inputsSignals.size(); index++) {
                     for (int index = 0; index < inputsSignals.size(); index++) {
                         signals.add(inputsSignals.get(index).getLogicValue());
 
@@ -430,12 +433,13 @@ import signalProbability.ProbCircuit;
 
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
-                        Signal sig = gate.getGate().getOutputs().get(s);
+                        final Signal sig = gate.getGate().getOutputs().get(s);
 
                         //System.out.println(faultSig+" Sig EQUAL "+sig);
 
                         if(outputGate == true){    //Saida do GATE  = 1
                             thread_item.setSignalOriginalValue(1);
+
 
 
                             //sig.setLogicValue(1);
@@ -477,7 +481,7 @@ import signalProbability.ProbCircuit;
 
         }
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
-
+        thread_item.setGatesLevelsThreadList(gatesLevels);
 
 
     }
@@ -5030,7 +5034,7 @@ import signalProbability.ProbCircuit;
                     System.out.println("SIMULATION ID (000 Fault NEW): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
                     try {
                         startSimulationFaultFree();
-                        startSimulationFaultInjectionLogicalMasking();
+                        //startSimulationFaultInjectionLogicalMasking();
                         //startSimulationFaultInjectionLogicalMasking();
                         //startSimulationMultipleFaultInjection();
 

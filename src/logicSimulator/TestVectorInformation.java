@@ -7,6 +7,7 @@ package logicSimulator;
 
 import datastructures.Signal;
 import levelDatastructures.DepthGate;
+import levelDatastructures.GateLevel;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -40,6 +41,10 @@ public class TestVectorInformation {
     public ConcurrentHashMap <String, Signal>  MTF_Fault_LIST_thd = new ConcurrentHashMap<>();
 
     public ArrayList <DepthGate>  help = new ArrayList<>();
+
+    //public ArrayList <DepthGate>  gatesNewAprouch = new ArrayList<>();
+    ArrayList <ArrayList <GateLevel>> gatesLevelsThreadList = new ArrayList<>();
+
     public ArrayList <Float>  vectorSensitiveAreaSum = new ArrayList<>();
     //private ArrayList <Signal> MTF_FaultSignal_List_Base;
     //private ArrayList <SignalExtendedProperties> MTF_FaultSignal_List_Extended;
@@ -56,6 +61,15 @@ public class TestVectorInformation {
         System.out.println("        MTF_PERSONAL_LIST: " + this.MTF_PERSONAL_LIST.size());
         System.out.println("        -------- ");
 
+    }
+
+    public void setGatesLevelsThreadList(ArrayList<GateLevel> gatesLevelsThreadList) {
+        final ArrayList<GateLevel> temp = gatesLevelsThreadList;
+        this.gatesLevelsThreadList.add(temp);
+    }
+
+    public ArrayList <ArrayList <GateLevel>> getGatesLevelsThreadList() {
+        return this.gatesLevelsThreadList;
     }
 
     public Signal getFaultSignals() {
