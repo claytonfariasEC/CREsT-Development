@@ -4311,6 +4311,7 @@ public class Management extends MAIN {
                                         String info = "id: " + xindex + " > " + x.get(xindex).getinputVector();
                                         for (int j = 0; j < gatesSimulationTemp.size(); j++) {
                                                 info = info + " Gate: " + gatesSimulationTemp.get(j).getGate().toString()
+                                                        + " SA(" +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal() + ")"
                                                         //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
                                                         + " " + gatesSimulationTemp.get(j).getInputsOriginal()
                                                         + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal();
