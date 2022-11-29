@@ -173,11 +173,25 @@ import signalProbability.ProbCircuit;
  
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
+                    this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+                    this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
+            }  
+        }
+
+    /** NEW VERSION FOR RUN PROPAGATION GOLD AND COMPUTE AS AT ONCE TIME
+     *
+     * @throws IOException
+     * @throws WriteException
+     */
+    private void startSimulationFaultFreeONCE() throws IOException, WriteException{
+
+            for (int i = 0; i < this.threadSimulationList.size(); i++) {
+                    this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
                     //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
                 this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
 
                 this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
-            }  
+            }
         }
 
         private void startCalculationSensitiveAreas() throws IOException, WriteException{
@@ -338,7 +352,7 @@ import signalProbability.ProbCircuit;
      }
 
     /**
-     * NEW VWESION COULD ONTAIN ERRORS AND BUGS
+     * NEW VERSION COULD CONTAIN ERRORS AND BUGS
      * @param testNumber
      * @param vector
      * @param thread_item
@@ -390,7 +404,7 @@ import signalProbability.ProbCircuit;
                             input.add(Boolean.TRUE);
                         }
                     }
-
+                        /*
                     //System.out.println("                                Input Signal: " + inputsSignals + " v: "+input);
                     Object output = "stuck";
 
@@ -428,8 +442,39 @@ import signalProbability.ProbCircuit;
                     }else{
                         System.out.println("ERROR stuck !!!!! out : " + output + "  GATE: " + gate.getGate() + "  -- INFO type : " + gate.getGate().getType() );
                     }
-
+                          */
                     //NEW bLOCK
+                    boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
+                    //Do something about masking
+
+
+                    GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
+                    gateSensitivivity.setGate(gate);
+                    gateSensitivivity.setCell(cells);
+                    gateSensitivivity.setInputs(input);
+                    gateSensitivivity.setInputsOriginal(input);
+                    gateSensitivivity.setOutputs(output_converted_original);
+                    gateSensitivivity.setOutputsOriginal(output_converted_original);
+                    //Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
+
+                    //thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
+                    // thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
+
+                    String key = "";
+                    String key_original = "";
+                    if(gate.getGate().getType().toString().contains("X1")){ // "X1" version
+                        key = gate.getGate().getType()  + "_" + concat_inputs; // Calculate the exact input vector
+                        key_original =  gate.getGate().getType()  + "_" + concat_inputs_original;
+                    }
+                    else{
+                        key = gate.getGate().getType()  + "X1_" + concat_inputs; // Calculate the exact input vector
+                        key_original = gate.getGate().getType()  + "X1_" + concat_inputs_original; // Calculate the exact input vector
+                    }
+
+                    SensitiveCell cell = this.sensitive_cells.get(key);
+
+                    gateSensitivivity.setgateSensitiveArea(Float.parseFloat(cells.getSensitive_are()));
+                    thread_item.setGatesLogicalPath(gateSensitivivity);
 
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
@@ -437,7 +482,7 @@ import signalProbability.ProbCircuit;
 
                         //System.out.println(faultSig+" Sig EQUAL "+sig);
 
-                        if(outputGate == true){    //Saida do GATE  = 1
+                        if(output_converted_original == true){    //Saida do GATE  = 1
                             thread_item.setSignalOriginalValue(1);
 
 
@@ -481,7 +526,7 @@ import signalProbability.ProbCircuit;
 
         }
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
-        thread_item.setGatesLevelsThreadList(gatesLevels);
+        //thread_item.setGatesLevelsThreadList(gatesLevels);
 
 
     }
@@ -5033,7 +5078,7 @@ import signalProbability.ProbCircuit;
                 case ("Single_Fault_NEW"):
                     System.out.println("SIMULATION ID (000 Fault NEW): ~~~~~~ Single Transient Event - SET ~~~~~~ thd: " + this.threadID);
                     try {
-                        startSimulationFaultFree();
+                        startSimulationFaultFreeONCE();
                         //startSimulationFaultInjectionLogicalMasking();
                         //startSimulationFaultInjectionLogicalMasking();
                         //startSimulationMultipleFaultInjection();
