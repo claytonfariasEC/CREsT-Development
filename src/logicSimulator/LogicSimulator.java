@@ -379,16 +379,11 @@ import signalProbability.ProbCircuit;
                 if(AwnsString.equals("class levelDatastructures.DepthGate")){
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
-                    //gate.getGate().getType()
-                    //System.out.println("              - Gate: "+ gatesInThisLevel.get(k)  + "  type: "+ gate.getGate().getType());
+
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
-
-
-                    // NEW BLOCK
+                    // ----------------------------- Start Inputs propagation ----------------------------------//
                     Cell cells = gate.getGate().getType();
-                    //DepthGate gate;
                     ArrayList <Signal> inputsSignals = gate.getGate().getInputs();
-
                     Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
                     ArrayList <Boolean> input = new ArrayList<>();
                     ArrayList <Integer> signals = new ArrayList<>();
@@ -408,11 +403,8 @@ import signalProbability.ProbCircuit;
                         }
                     }
 
-                    //NEW bLOCK
+                    // ------------- Calculate SA for each gate ------------------- //
                     boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
-                    //Do something about masking
-
-
                     GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
                     gateSensitivivity.setGate(gate);
                     gateSensitivivity.setCell(cells);
@@ -420,11 +412,6 @@ import signalProbability.ProbCircuit;
                     gateSensitivivity.setInputsOriginal(input);
                     gateSensitivivity.setOutputs(output_converted_original);
                     gateSensitivivity.setOutputsOriginal(output_converted_original);
-
-                    //Boolean masked =  gateSensitivivity.calculatGateSusceptibilityLogicalMasking(input, input_original);
-                    //thread_item.sum_sensitive_cells_area(Float.parseFloat(cell.getSensitive_are()));
-                    // thread_item.sum_sensitive_cells_area_gate(Float.parseFloat(cell.getSensitive_are()), gate);
-
 
                     String key_original = "";
                     if(gate.getGate().getType().toString().contains("X1")){ // "X1" version
@@ -435,57 +422,37 @@ import signalProbability.ProbCircuit;
                     }
 
                     SensitiveCell gatecell = this.sensitive_cells.get(key_original);
-
                     //gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
                     gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
+                    // ------------- SAVE SA for each gate ------------------- //
                     thread_item.setGatesLogicalPath(gateSensitivivity);
+
 
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
                         final Signal sig = gate.getGate().getOutputs().get(s);
 
-                        //System.out.println(faultSig+" Sig EQUAL "+sig);
-
                         if(output_converted_original == true){    //Saida do GATE  = 1
                             thread_item.setSignalOriginalValue(1);
 
-
-
-                            //sig.setLogicValue(1);
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.TRUE);
 
-                                /*
-                                if(sig.getId().equals(faultSig.getId())){
-                                   // System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
-                                    faultSig.setOriginalLogicValue(1);
-                                }
-                                */
                         }
                         else{
                             thread_item.setSignalOriginalValue(0);
-                            //sig.setLogicValue(0);
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
                             gate.getGate().getOutputs().get(s).setLogicValue(0);
                             gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.FALSE);
 
-                                /*
-                                if(sig.getId().equals(faultSig.getId())){
-                                    //System.out.println("@ "+faultSig+" Sig EQUAL "+sig);
-                                    faultSig.setOriginalLogicValue(0);
-                                }
-                                */
                         }
-                            /*
-                             System.out.println("              - Gate: "+ gatesInThisLevel.get(k)
-                                     +  "  type: "+ gate.getGate().getType()
-                                     +  " - Inputs: " + gate.getGate().getInputs().get(0) + " value: " + gate.getGate().getInputs().get(0).getLogicValue()
-                                     +  " - Inputs: " + gate.getGate().getInputs().get(1)+ " value: " + gate.getGate().getInputs().get(1).getLogicValue()
-                                     +  "              - output: " + sig.getOriginalLogicValue());
-                            */
                     }
+
+                    // ----------------------------- Start Inputs propagation ----------------------------------//
                 }
+
+
             }
 
         }
