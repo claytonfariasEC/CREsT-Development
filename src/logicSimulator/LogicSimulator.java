@@ -368,12 +368,13 @@ import signalProbability.ProbCircuit;
         //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
         //System.out.println("  Vector: " + vector);
         final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+        String concatInformation = thread_item.getinputVector() + " ";
 
         for (int j = 0; j < gatesLevels.size(); j++) {
 
             final ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
-            for (int k = 0; k < gatesInThisLevel.size(); k++) {
+            for (int k = 0; k < gatesInThisLevel.size(); k++){
                 String AwnsString = gatesInThisLevel.get(k).getClass().toString();
                 //System.out.println("Aws: "+ AwnsString);
                 if(AwnsString.equals("class levelDatastructures.DepthGate")){
@@ -422,22 +423,25 @@ import signalProbability.ProbCircuit;
                     }
 
                     SensitiveCell gatecell = this.sensitive_cells.get(key_original);
-                    //gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
+                    gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
                     gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
+
                     // ------------- SAVE SA for each gate ------------------- //
                     thread_item.setGatesLogicalPath(gateSensitivivity);
 
 
+                    // ------------- assign gate output  ------------------- //
+                    String outputStr = "";
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
                         final Signal sig = gate.getGate().getOutputs().get(s);
 
                         if(output_converted_original == true){    //Saida do GATE  = 1
                             thread_item.setSignalOriginalValue(1);
-
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.TRUE);
+                            outputStr = "1";
 
                         }
                         else{
@@ -445,22 +449,72 @@ import signalProbability.ProbCircuit;
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
                             gate.getGate().getOutputs().get(s).setLogicValue(0);
                             gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.FALSE);
+                            outputStr = "0";
 
                         }
                     }
 
-                    // ----------------------------- Start Inputs propagation ----------------------------------//
+                    // ----------------------------- End Inputs propagation ----------------------------------//
+                    // GOLD & AS
+                    concatInformation = concatInformation + " Gate: " + gate.getGate().getId()
+                            + " [" + concat_inputs_original + "] "
+                            + " [" + outputStr + "] > ";
                 }
 
 
             }
 
         }
+
+        System.out.println("GOLD version: " + concatInformation);
+
+        this.calculateSensitiveAreaReverse(testNumber, vector, thread_item, indexThread);
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
 
 
     }
+
+    private  void calculateSensitiveAreaReverse(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException{
+
+        this.threadID = (long) Thread.currentThread().getId();
+        thread_item.setThreadID(this.threadID);
+
+        //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
+        //System.out.println("  Vector: " + vector);
+        final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+
+        String concatInformation = thread_item.getinputVector() + " ";
+
+        for (int j = gatesLevels.size()-1; j >=0; j--) {
+
+            final ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+
+            for (int k = 0; k < gatesInThisLevel.size(); k++){
+                String AwnsString = gatesInThisLevel.get(k).getClass().toString();
+                //System.out.println("Aws: "+ AwnsString);
+                if(AwnsString.equals("class levelDatastructures.DepthGate")){
+                    Object object = gatesInThisLevel.get(k);
+                    final DepthGate gate = (DepthGate) object;
+                    //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
+                    // GOLD & AS
+                    concatInformation = concatInformation + " Gate: " + gate.getGate().getId()
+                            + " [" + gate.getGate().getInputsValuesToString()+ "] "
+                            + " [" + gate.getGate().getOutputsOriginalValuesToString() + "] > ";
+                }
+
+
+            }
+
+        }
+
+        System.out.println("Rev. version: " +  concatInformation);
+        //this.creatCircuitAccordingVector(indexThread, gatesLevels);
+        //thread_item.setGatesLevelsThreadList(gatesLevels);
+
+
+    }
+
     private  void propagateInputVectorsForSensitiveAreaCalculation(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item) throws IOException, WriteException{
 
         this.threadID = (long) Thread.currentThread().getId();
