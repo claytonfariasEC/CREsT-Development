@@ -5,10 +5,8 @@
  */
 package logicSimulator;
 
-import datastructures.Cell;
-import datastructures.CellLibrary;
-import datastructures.Circuit;
-import datastructures.Signal;
+import datastructures.*;
+
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
@@ -360,45 +358,46 @@ import signalProbability.ProbCircuit;
      * @throws IOException
      * @throws WriteException
      */
-    private  void propagateInputVectors(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException{
+    private  void propagateInputVectors(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException {
 
         this.threadID = (long) Thread.currentThread().getId();
         thread_item.setThreadID(this.threadID);
 
         //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
         //System.out.println("  Vector: " + vector);
-        final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+        final ArrayList<GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
         String concatInformation = thread_item.getinputVector() + " ";
 
+        GateDetailedInformation gateSensitivivity = null;
         for (int j = 0; j < gatesLevels.size(); j++) {
 
-            final ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+            final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
-            for (int k = 0; k < gatesInThisLevel.size(); k++){
+            for (int k = 0; k < gatesInThisLevel.size(); k++) {
                 String AwnsString = gatesInThisLevel.get(k).getClass().toString();
                 //System.out.println("Aws: "+ AwnsString);
-                if(AwnsString.equals("class levelDatastructures.DepthGate")){
+                if (AwnsString.equals("class levelDatastructures.DepthGate")) {
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
 
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
                     // ----------------------------- Start Inputs propagation ----------------------------------//
                     Cell cells = gate.getGate().getType();
-                    ArrayList <Signal> inputsSignals = gate.getGate().getInputs();
+                    ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
                     Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
-                    ArrayList <Boolean> input = new ArrayList<>();
-                    ArrayList <Integer> signals = new ArrayList<>();
+                    ArrayList<Boolean> input = new ArrayList<>();
+                    ArrayList<Integer> signals = new ArrayList<>();
                     String concat_inputs_original = "";
 
                     //for (int index = 0; index < inputsSignals.size(); index++) {
                     for (int index = 0; index < inputsSignals.size(); index++) {
                         signals.add(inputsSignals.get(index).getLogicValue());
 
-                        if(inputsSignals.get(index).getLogicValue() == 0){
+                        if (inputsSignals.get(index).getLogicValue() == 0) {
                             input.add(Boolean.FALSE);
                             concat_inputs_original = concat_inputs_original + "0";
                         }
-                        if(inputsSignals.get(index).getLogicValue() == 1){
+                        if (inputsSignals.get(index).getLogicValue() == 1) {
                             input.add(Boolean.TRUE);
                             concat_inputs_original = concat_inputs_original + "1";
                         }
@@ -406,7 +405,7 @@ import signalProbability.ProbCircuit;
 
                     // ------------- Calculate SA for each gate ------------------- //
                     boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
-                    GateDetailedInformation gateSensitivivity = new GateDetailedInformation();
+                    gateSensitivivity = new GateDetailedInformation();
                     gateSensitivivity.setGate(gate);
                     gateSensitivivity.setCell(cells);
                     gateSensitivivity.setInputs(input);
@@ -415,11 +414,10 @@ import signalProbability.ProbCircuit;
                     gateSensitivivity.setOutputsOriginal(output_converted_original);
 
                     String key_original = "";
-                    if(gate.getGate().getType().toString().contains("X1")){ // "X1" version
-                        key_original =  gate.getGate().getType()  + "_" + concat_inputs_original;
-                    }
-                    else{
-                        key_original = gate.getGate().getType()  + "X1_" + concat_inputs_original; // Calculate the exact input vector
+                    if (gate.getGate().getType().toString().contains("X1")) { // "X1" version
+                        key_original = gate.getGate().getType() + "_" + concat_inputs_original;
+                    } else {
+                        key_original = gate.getGate().getType() + "X1_" + concat_inputs_original; // Calculate the exact input vector
                     }
 
                     SensitiveCell gatecell = this.sensitive_cells.get(key_original);
@@ -430,21 +428,21 @@ import signalProbability.ProbCircuit;
                     thread_item.setGatesLogicalPath(gateSensitivivity);
 
 
+
                     // ------------- assign gate output  ------------------- //
                     String outputStr = "";
                     for (int s = 0; s < gate.getGate().getOutputs().size(); s++) {
 
                         final Signal sig = gate.getGate().getOutputs().get(s);
 
-                        if(output_converted_original == true){    //Saida do GATE  = 1
+                        if (output_converted_original == true) {    //Saida do GATE  = 1
                             thread_item.setSignalOriginalValue(1);
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValue(1);
                             gate.getGate().getOutputs().get(s).setLogicValueBoolean(Boolean.TRUE);
                             outputStr = "1";
 
-                        }
-                        else{
+                        } else {
                             thread_item.setSignalOriginalValue(0);
                             gate.getGate().getOutputs().get(s).setOriginalLogicValue(0);
                             gate.getGate().getOutputs().get(s).setLogicValue(0);
@@ -457,8 +455,10 @@ import signalProbability.ProbCircuit;
                     // ----------------------------- End Inputs propagation ----------------------------------//
                     // GOLD & AS
                     concatInformation = concatInformation + " Gate: " + gate.getGate().getId()
+                            + " (" + gateSensitivivity.getgateSensitiveAreaOriginal() + ") "
                             + " [" + concat_inputs_original + "] "
                             + " [" + outputStr + "] > ";
+
                 }
 
 
@@ -486,7 +486,9 @@ import signalProbability.ProbCircuit;
 
         String concatInformation = thread_item.getinputVector() + " ";
 
-        for (int j = gatesLevels.size()-1; j >=0; j--) {
+        String strInfo = " NOT MASKED";
+
+        for (int j = gatesLevels.size()-1; j >= 0; j--) { // Gate level
 
             final ArrayList <Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
@@ -497,10 +499,87 @@ import signalProbability.ProbCircuit;
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
+
+
                     // GOLD & AS
-                    concatInformation = concatInformation + " Gate: " + gate.getGate().getId()
-                            + " [" + gate.getGate().getInputsValuesToString()+ "] "
+                    Cell cells = gate.getGate().getType();
+                    //ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
+                    Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+                    ArrayList<Boolean> input = new ArrayList<>();
+                    //ArrayList<Boolean> inputBitfliped = new ArrayList<>();
+
+                    //ArrayList<Integer> signals = new ArrayList<>();
+                    String concat_inputs_original = "";
+
+                    //for (int index = 0; index < inputsSignals.size(); index++) {
+                    for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
+                        //signals.add(inputsSignals.get(index).getLogicValue());
+
+                        if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
+                            input.add(Boolean.FALSE);
+                            //inputBitfliped.add(Boolean.TRUE);
+                            //concat_inputs_original = concat_inputs_original + "0";
+                        }
+                        if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
+                            input.add(Boolean.TRUE);
+                            //inputBitfliped.add(Boolean.FALSE);
+                            //concat_inputs_original = concat_inputs_original + "0";
+                        }
+
+                    }
+
+                    // ------------- Calculate SA for each gate ------------------- //
+                    boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
+                    ArrayList <Signal> sensitiveList = new ArrayList<>();
+                    Boolean flag = false;
+
+                    Float sensitivity = 0.0F;
+                    String temp = "";
+
+                    for (int i = 0; i < input.size(); i++){
+                        // Bitflip one signal at once
+                        if(flag == false) {
+                            ArrayList<Boolean> inputBitfliped = new ArrayList<>(input);
+
+                            if (input.get(i) == Boolean.TRUE) {
+                                inputBitfliped.set(i, Boolean.FALSE);
+                            }
+                            if (input.get(i) == Boolean.FALSE) {
+                                inputBitfliped.set(i, Boolean.TRUE);
+                            }
+                            boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
+
+                            if (output_convertedBitfliped != output_converted_original) {
+                                strInfo = strInfo + (" Gate: " + gate.getGate().getId()
+                                        + " [" + input + "] [" + inputBitfliped + "] OutOriginal: "
+                                        + output_converted_original + "," + output_convertedBitfliped);
+                                sensitiveList.add(gate.getGate().getInputs().get(i));
+
+                                flag = true;
+
+                            }
+                        }
+
+                    }
+
+
+
+
+                    concatInformation = concatInformation + " Gate: " + gate.getGate().getId();
+
+                    if(flag){
+                        concatInformation = concatInformation + " (" + sensitivity + ") ";
+                    }
+                            //+ " (" + gateSensitivivity.getgateSensitiveAreaOriginal() + ") "
+                    concatInformation = concatInformation +  " [" + gate.getGate().getInputsValuesToString()+ "] "
                             + " [" + gate.getGate().getOutputsOriginalValuesToString() + "] > ";
+
+
+
+
+                    //Calculate the sensitive area information
+
+
                 }
 
 
@@ -509,12 +588,74 @@ import signalProbability.ProbCircuit;
         }
 
         System.out.println("Rev. version: " +  concatInformation);
+
+
+
+        System.out.println(strInfo);
+        System.out.println();
+
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
 
 
     }
 
+    private void getGateSensibilitySignals(DepthGate gate){
+
+        // GOLD & AS
+        Cell cells = gate.getGate().getType();
+        //ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
+        Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+        ArrayList<Boolean> input = new ArrayList<>();
+        //ArrayList<Boolean> inputBitfliped = new ArrayList<>();
+
+        //ArrayList<Integer> signals = new ArrayList<>();
+        String concat_inputs_original = "";
+
+        //for (int index = 0; index < inputsSignals.size(); index++) {
+        for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
+            //signals.add(inputsSignals.get(index).getLogicValue());
+
+            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
+                input.add(Boolean.FALSE);
+                //inputBitfliped.add(Boolean.TRUE);
+                //concat_inputs_original = concat_inputs_original + "0";
+            }
+            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
+                input.add(Boolean.TRUE);
+                //inputBitfliped.add(Boolean.FALSE);
+                //concat_inputs_original = concat_inputs_original + "0";
+            }
+
+        }
+
+        // ------------- Calculate SA for each gate ------------------- //
+        boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
+        ArrayList <Signal> sensitiveList = new ArrayList<>();
+        String strInfo = "";
+        for (int i = 0; i < input.size(); i++){
+            // Bitflip one signal at once
+            ArrayList<Boolean> inputBitfliped = new ArrayList<>(input);
+
+            if(input.get(i) == Boolean.TRUE){
+                inputBitfliped.set(i, Boolean.FALSE);
+            }
+            if(input.get(i) == Boolean.FALSE){
+                inputBitfliped.set(i, Boolean.TRUE);
+            }
+            boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
+
+            if(output_convertedBitfliped != output_converted_original){
+                strInfo = strInfo + (" - NOT MASKED Gate: " + gate.getGate().getId()
+                         + " [" + input + "] [" + inputBitfliped + "] OutOriginal: "
+                         + output_converted_original + " New out: " + output_convertedBitfliped);
+                sensitiveList.add(gate.getGate().getInputs().get(i));
+            }
+
+        }
+
+
+    }
     private  void propagateInputVectorsForSensitiveAreaCalculation(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item) throws IOException, WriteException{
 
         this.threadID = (long) Thread.currentThread().getId();
