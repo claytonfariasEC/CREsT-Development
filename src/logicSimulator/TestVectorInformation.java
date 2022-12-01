@@ -49,6 +49,7 @@ public class TestVectorInformation {
     //private ArrayList <Signal> MTF_FaultSignal_List_Base;
     //private ArrayList <SignalExtendedProperties> MTF_FaultSignal_List_Extended;
     public ArrayList <GateDetailedInformation> gatesLogicalPath;
+    public ArrayList <GateDetailedInformation> gatesSensitiveLogicalPath;
 
     public Float circuitSensitiveArea;
 
@@ -130,6 +131,7 @@ public class TestVectorInformation {
             //this.MTF_FaultSignal_List_Extended.add(x);
 
             this.gatesLogicalPath = new ArrayList<>();
+        this.gatesSensitiveLogicalPath = new ArrayList<>();
             this.circuitSensitiveArea = 0.0F;
             
     }
@@ -137,9 +139,16 @@ public class TestVectorInformation {
     public void setGatesLogicalPath(GateDetailedInformation gatex) {
         this.gatesLogicalPath.add(gatex);
     }
+    public void setSensitiveGatesLogicalPath(GateDetailedInformation gatex) {
+        this.gatesSensitiveLogicalPath.add(gatex);
+    }
 
     public ArrayList<GateDetailedInformation> getGatesLogicalPath() {
-        return gatesLogicalPath;
+        return this.gatesLogicalPath;
+    }
+
+    public ArrayList<GateDetailedInformation> getSensitiveGatesLogicalPath() {
+        return this.gatesSensitiveLogicalPath;
     }
 
     public int searchGatecircuitGatesInPath(DepthGate gate){

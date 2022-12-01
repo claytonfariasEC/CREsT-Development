@@ -382,6 +382,7 @@ import signalProbability.ProbCircuit;
 
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
                     // ----------------------------- Start Inputs propagation ----------------------------------//
+
                     Cell cells = gate.getGate().getType();
                     ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
                     Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
@@ -404,7 +405,10 @@ import signalProbability.ProbCircuit;
                     }
 
                     // ------------- Calculate SA for each gate ------------------- //
+
                     boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
+
+
                     gateSensitivivity = new GateDetailedInformation();
                     gateSensitivivity.setGate(gate);
                     gateSensitivivity.setCell(cells);
@@ -412,6 +416,8 @@ import signalProbability.ProbCircuit;
                     gateSensitivivity.setInputsOriginal(input);
                     gateSensitivivity.setOutputs(output_converted_original);
                     gateSensitivivity.setOutputsOriginal(output_converted_original);
+                    gateSensitivivity.setgateSensitiveAreaOriginal(0.F);
+
 
                     String key_original = "";
                     if (gate.getGate().getType().toString().contains("X1")) { // "X1" version
@@ -424,8 +430,10 @@ import signalProbability.ProbCircuit;
                     gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
                     gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
 
+
+
                     // ------------- SAVE SA for each gate ------------------- //
-                    thread_item.setGatesLogicalPath(gateSensitivivity);
+                    //thread_item.setGatesLogicalPath(gateSensitivivity);
 
 
 
@@ -475,6 +483,58 @@ import signalProbability.ProbCircuit;
 
     }
 
+    private GateDetailedInformation calculateSensitiveAreaGate(DepthGate gate, ArrayList<Boolean> input, String concat_inputs_original){
+        GateDetailedInformation gateSensitivivity = null;
+        Cell cells = gate.getGate().getType();
+        //ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
+        Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+        //ArrayList<Boolean> input = new ArrayList<>();
+        //ArrayList<Integer> signals = new ArrayList<>();
+        //String concat_inputs_original = "";
+
+        //for (int index = 0; index < inputsSignals.size(); index++) {
+        /*
+        for (int index = 0; index < inputsSignals.size(); index++) {
+            signals.add(inputsSignals.get(index).getLogicValue());
+
+            if (inputsSignals.get(index).getLogicValue() == 0) {
+                input.add(Boolean.FALSE);
+                concat_inputs_original = concat_inputs_original + "0";
+            }
+            if (inputsSignals.get(index).getLogicValue() == 1) {
+                input.add(Boolean.TRUE);
+                concat_inputs_original = concat_inputs_original + "1";
+            }
+        }
+
+         */
+
+        // ------------- Calculate SA for each gate ------------------- //
+        boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
+        gateSensitivivity = new GateDetailedInformation();
+        gateSensitivivity.setGate(gate);
+        gateSensitivivity.setCell(cells);
+        gateSensitivivity.setInputs(input);
+        gateSensitivivity.setInputsOriginal(input);
+        gateSensitivivity.setOutputs(output_converted_original);
+        gateSensitivivity.setOutputsOriginal(output_converted_original);
+
+        String key_original = "";
+        if (gate.getGate().getType().toString().contains("X1")) { // "X1" version
+            key_original = gate.getGate().getType() + "_" + concat_inputs_original;
+        } else {
+            key_original = gate.getGate().getType() + "X1_" + concat_inputs_original; // Calculate the exact input vector
+        }
+
+        SensitiveCell gatecell = this.sensitive_cells.get(key_original);
+        gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
+        gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
+
+
+        return gateSensitivivity;
+
+    }
+
     private  void calculateSensitiveAreaReverse(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException{
 
         this.threadID = (long) Thread.currentThread().getId();
@@ -499,7 +559,7 @@ import signalProbability.ProbCircuit;
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
                     //boolean outputGate = this.calculateFaultFreeOutputGateValue(gate.getGate().getType(), gate, gate.getGate().getInputs());  //Method calc the output from the gate
-
+                    //String concat_inputs_original = "";
 
                     // GOLD & AS
                     Cell cells = gate.getGate().getType();
@@ -518,19 +578,19 @@ import signalProbability.ProbCircuit;
                         if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
                             input.add(Boolean.FALSE);
                             //inputBitfliped.add(Boolean.TRUE);
-                            //concat_inputs_original = concat_inputs_original + "0";
+                            concat_inputs_original = concat_inputs_original + "0";
                         }
                         if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
                             input.add(Boolean.TRUE);
                             //inputBitfliped.add(Boolean.FALSE);
-                            //concat_inputs_original = concat_inputs_original + "0";
+                            concat_inputs_original = concat_inputs_original + "1";
                         }
 
                     }
 
                     // ------------- Calculate SA for each gate ------------------- //
                     boolean output_converted_original = this.calculateTheOutputGatesInBoolean(comb, input, gate);
-                    ArrayList <Signal> sensitiveList = new ArrayList<>();
+                    ArrayList <DepthGate> sensitiveList = new ArrayList<>();
                     Boolean flag = false;
 
                     Float sensitivity = 0.0F;
@@ -550,11 +610,18 @@ import signalProbability.ProbCircuit;
                             boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
 
                             if (output_convertedBitfliped != output_converted_original) {
-                                strInfo = strInfo + (" Gate: " + gate.getGate().getId()
-                                        + " [" + input + "] [" + inputBitfliped + "] OutOriginal: "
-                                        + output_converted_original + "," + output_convertedBitfliped);
-                                sensitiveList.add(gate.getGate().getInputs().get(i));
 
+                                GateDetailedInformation saObject =  this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                                Float sa = saObject.getgateSensitiveArea();
+
+                                strInfo = strInfo + (" Gate: " + gate.getGate().getId()
+                                        + " [" + input + "] [" + inputBitfliped + "] Out: "
+                                        + output_converted_original + "," + output_convertedBitfliped) + " SA(" + sa+ ")";
+
+                                //sensitiveList.add(gate);
+                                thread_item.setSensitiveGatesLogicalPath(saObject);
+
+                                thread_item.sum_sensitive_cells_area(sa);
                                 flag = true;
 
                             }

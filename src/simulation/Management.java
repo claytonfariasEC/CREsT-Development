@@ -4307,7 +4307,7 @@ public class Management extends MAIN {
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
 
                                 for (int xindex = 0; xindex < x.size(); xindex++) {
-                                        ArrayList<GateDetailedInformation> gatesSimulationTemp = x.get(xindex).getGatesLogicalPath();
+                                        ArrayList<GateDetailedInformation> gatesSimulationTemp = x.get(xindex).getSensitiveGatesLogicalPath();
                                         String info = "id: " + xindex + " > " + x.get(xindex).getinputVector();
                                         for (int j = 0; j < gatesSimulationTemp.size(); j++) {
                                                 info = info + " Gate: " + gatesSimulationTemp.get(j).getGate().toString()
@@ -4316,7 +4316,7 @@ public class Management extends MAIN {
                                                         + " " + gatesSimulationTemp.get(j).getInputsOriginal()
                                                         + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal();
                                         }
-                                        System.out.println(info);
+                                        System.out.println(info + "  Sensitive Area Sum: " + x.get(xindex).getSum_sensitive_cells_area());
 
                                 }
 
