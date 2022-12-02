@@ -25,6 +25,8 @@ import levelDatastructures.LevelCircuit;
 import readers.MappedVerilogReader;
 import signalProbability.ProbCircuit;
 
+
+
 /**
  * teste Clayton Dale Grêmio
  * teste2
@@ -595,39 +597,94 @@ import signalProbability.ProbCircuit;
 
                     Float sensitivity = 0.0F;
                     String temp = "";
+                    ArrayList <Integer> index = new ArrayList<>();
+                    ArrayList <Integer> indexValue = new ArrayList<>();
 
-                    for (int i = 0; i < input.size(); i++){
-                        // Bitflip one signal at once
-                        if(flag == false) {
-                            ArrayList<Boolean> inputBitfliped = new ArrayList<>(input);
+                    if(k == gatesInThisLevel.size()-1){   //Last level inject fault in everything
 
-                            if (input.get(i) == Boolean.TRUE) {
-                                inputBitfliped.set(i, Boolean.FALSE);
+                        for (int i = 0; i < input.size(); i++){
+                            // Bitflip one signal at once
+                            if(flag == false) {
+                                ArrayList<Boolean> inputBitfliped = new ArrayList<>(input);
+
+                                if (input.get(i) == Boolean.TRUE) {
+                                    inputBitfliped.set(i, Boolean.FALSE);
+
+                                }
+                                if (input.get(i) == Boolean.FALSE) {
+                                    inputBitfliped.set(i, Boolean.TRUE);
+
+                                }
+                                boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
+
+                                if ( output_converted_original  != output_convertedBitfliped) {
+
+                                    GateDetailedInformation saObject =  this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                                    Float sa = saObject.getgateSensitiveArea();
+
+                                    strInfo = strInfo + (" Gate: " + gate.getGate().getId()
+                                            + " [" + input + "] [" + inputBitfliped + "] Out: "
+                                            + output_converted_original + "," + output_convertedBitfliped) + " SA(" + sa+ ")";
+
+                                    //sensitiveList.add(gate);
+                                    thread_item.setSensitiveGatesLogicalPath(saObject);
+
+                                    // Method to create the leaf
+
+                                    thread_item.sum_sensitive_cells_area(sa);
+                                    flag = true;
+
+                                }
                             }
-                            if (input.get(i) == Boolean.FALSE) {
-                                inputBitfliped.set(i, Boolean.TRUE);
+
+                        }
+                    }
+                    else{
+
+
+                        for (int i = 0; i < input.size(); i++){  //other levels signals
+                            // Bitflip one signal at once
+                            if(flag == false) {
+                                ArrayList<Boolean> inputBitfliped = new ArrayList<>(input);
+
+                                if (input.get(i) == Boolean.TRUE) {
+                                    inputBitfliped.set(i, Boolean.FALSE);
+                                    index.add(i);
+                                    indexValue.add(0);
+                                }
+                                if (input.get(i) == Boolean.FALSE) {
+                                    inputBitfliped.set(i, Boolean.TRUE);
+                                    index.add(i);
+                                    indexValue.add(1);
+                                }
+                                boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
+
+                                if ( output_converted_original  != output_convertedBitfliped) {
+
+                                    GateDetailedInformation saObject =  this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                                    Float sa = saObject.getgateSensitiveArea();
+
+                                    strInfo = strInfo + (" Gate: " + gate.getGate().getId()
+                                            + " [" + input + "] [" + inputBitfliped + "] Out: "
+                                            + output_converted_original + "," + output_convertedBitfliped) + " SA(" + sa+ ")";
+
+                                    //sensitiveList.add(gate);
+                                    thread_item.setSensitiveGatesLogicalPath(saObject);
+
+                                    // Method to create the leaf
+
+                                    thread_item.sum_sensitive_cells_area(sa);
+                                    flag = true;
+
+                                }
                             }
-                            boolean output_convertedBitfliped = this.calculateTheOutputGatesInBoolean(comb, inputBitfliped, gate);
 
-                            if (output_convertedBitfliped != output_converted_original) {
-
-                                GateDetailedInformation saObject =  this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
-                                Float sa = saObject.getgateSensitiveArea();
-
-                                strInfo = strInfo + (" Gate: " + gate.getGate().getId()
-                                        + " [" + input + "] [" + inputBitfliped + "] Out: "
-                                        + output_converted_original + "," + output_convertedBitfliped) + " SA(" + sa+ ")";
-
-                                //sensitiveList.add(gate);
-                                thread_item.setSensitiveGatesLogicalPath(saObject);
-
-                                thread_item.sum_sensitive_cells_area(sa);
-                                flag = true;
-
-                            }
                         }
 
+
                     }
+
+
 
 
 
