@@ -640,6 +640,11 @@ import signalProbability.ProbCircuit;
                                     gate.getGate().setIndexArraylist(i);
 
                                 }
+
+
+
+
+
                             }
 
                         }
