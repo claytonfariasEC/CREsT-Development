@@ -16,7 +16,9 @@ public class Gate {
     private String id;
     private ArrayList<Signal> inputs;
     private ArrayList<Signal> outputs;    
-    private Cell type;    
+    private Cell type;
+
+    private  ArrayList <Integer> sensitiveSignalsIndex;
     
     /**
      * Simple Gate constructor.
@@ -25,8 +27,11 @@ public class Gate {
     public Gate() {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
+
         inputs = new ArrayList<>();
         outputs = new ArrayList<>();
+
+        this. sensitiveSignalsIndex = new ArrayList<>();
     }
     
     /**
@@ -38,6 +43,7 @@ public class Gate {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
         this.id = id;
+        this. sensitiveSignalsIndex = new ArrayList<>();
     }
     
     /**
@@ -51,6 +57,7 @@ public class Gate {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
         this.type = type;
+        this. sensitiveSignalsIndex = new ArrayList<>();
     }
     
     /**
@@ -67,6 +74,15 @@ public class Gate {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
         this.type = type;
+    }
+    public void setIndexArraylist(Integer index){
+        this.sensitiveSignalsIndex.add(index);
+    }
+    public Integer getIndexArraylist(Integer index){
+        return this.sensitiveSignalsIndex.get(index);
+    }
+    public ArrayList<Integer> sensitiveSignalsIndex(){
+        return  this.sensitiveSignalsIndex;
     }
     
     /**
