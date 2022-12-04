@@ -487,6 +487,8 @@ import signalProbability.ProbCircuit;
         //this.calculateSensitiveAreaReverse(testNumber, vector, thread_item, indexThread);
 
         //Assinalar falhas para todas as saídas no ultimo nível lógico
+
+        ArrayList <String> info = new ArrayList<>();
         for (int j = gatesLevels.size()-1; j < gatesLevels.size(); j++) {
 
             final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
@@ -502,7 +504,7 @@ import signalProbability.ProbCircuit;
                         System.out.println("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " Gate SA: " + lastLevelGatesSensibilities.get(k).getGate().getGate().getId() + " " +  lastLevelGatesSensibilities.get(k).getInputs() + " " + lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
                         //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
                         thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
-                        this.calculateSensitiveAreaReverseRecursive(thread_item, gate, "Start: Gate: "+j+k, gate.getGate().getOutputs().get(0));
+                        info.add(this.calculateSensitiveAreaReverseRecursive(thread_item, gate, "Recursion " + thread_item.getinputVector() + " " + j + "_" + k + " ", gate.getGate().getOutputs().get(0)));
                     }
 
                 }
@@ -512,7 +514,7 @@ import signalProbability.ProbCircuit;
 
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
-
+        System.out.println(info);
 
     }
 
@@ -774,7 +776,32 @@ import signalProbability.ProbCircuit;
 
 
     }
-    private void findSignalAccordingGate(){
+
+    private DepthGate findSignalAccordingGate(Gate gateToFind){
+
+        final ArrayList<GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
+
+        for (int j = gatesLevels.size()-1; j >= 0; j--) {
+
+            final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+
+            for (int k = 0; k < gatesInThisLevel.size(); k++) {
+                String AwnsString = gatesInThisLevel.get(k).getClass().toString();
+                //System.out.println("Aws: "+ AwnsString);
+                if (AwnsString.equals("class levelDatastructures.DepthGate")) {
+                    Object object = gatesInThisLevel.get(k);
+                    final DepthGate gate = (DepthGate) object;
+                    if( gate.getGate().getId() == gateToFind.getId()) {
+                            return gate;
+                        //System.out.println("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " Gate SA: " + lastLevelGatesSensibilities.get(k).getGate().getGate().getId() + " " +  lastLevelGatesSensibilities.get(k).getInputs() + " " + lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
+                        //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
+                    }
+
+                }
+            }
+        }
+        return null;
+
 
     }
 
@@ -787,9 +814,9 @@ import signalProbability.ProbCircuit;
         //System.out.println("  Vector: " + vector);
         final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
 
-        String concatInformation = thread_item.getinputVector() + " ";
+        String concatInformation = " ";
 
-        String strInfo = " NOT MASKED";
+        String strInfo = " NOT MASKED" ;
 
 
 
@@ -808,7 +835,7 @@ import signalProbability.ProbCircuit;
 
                     // GOLD & AS
                     Cell cells = gate.getGate().getType();
-                    //ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
+                    ArrayList<Signal> inputsSignals = gate.getGate().getInputs();
                     Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
                     ArrayList<Boolean> input = new ArrayList<>();
                     //ArrayList<Boolean> inputBitfliped = new ArrayList<>();
@@ -877,7 +904,17 @@ import signalProbability.ProbCircuit;
                                     thread_item.sum_sensitive_cells_area(sa);
                                     flag = true;
 
-                                    this.calculateSensitiveAreaReverseRecursive(thread_item, gate, previousInfo + " " + concatInformation, gate.getGate().getInputs().get(i) );
+                                    for (int j = 0; j < gate.getGate().getInputs().get(i).getDestiny().size(); j++) {
+                                        Object object =  gate.getGate().getInputs().get(i).getDestiny().get(j);//gatesInThisLevel.get(indexGate);
+                                        final Gate previousGate = (Gate) object;
+                                        final DepthGate gateFinded = (DepthGate) this.findSignalAccordingGate(previousGate);
+                                        //this.findSignalAccordingGate();
+                                        if(gateFinded != null) {
+                                            System.out.println("Gate finded: " + gateFinded.getGate().getId()  + " sig " + gate.getGate().getInputs().get(i) + " Gate: "+ gateFinded.getGate().getInputsValuesToString() + " Destiny: " + gate.getGate().getInputs().get(i).getDestiny() + " j: "+ j);
+                                            //this.calculateSensitiveAreaReverseRecursive(thread_item, gateFinded, previousInfo + " " + concatInformation, gate.getGate().getInputs().get(i));
+                                        }
+                                    }
+
 
                                 }
                             }
@@ -921,7 +958,8 @@ import signalProbability.ProbCircuit;
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
 
-        return  previousInfo + " " + concatInformation;
+        //return  previousInfo + " " + concatInformation;
+        return  strInfo;
 
     }
 
