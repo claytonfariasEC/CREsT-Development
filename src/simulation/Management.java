@@ -4303,6 +4303,9 @@ public class Management extends MAIN {
                 System.out.println("sample: " + this.sampleSize);
                 int idx = 0;
                 System.out.println("Printing alll vectors values");
+
+                ArrayList  <String> passedGates = new ArrayList<>();
+
                 for (int i = 0; i < this.itemx_list.size(); i++) {
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
 
@@ -4315,8 +4318,16 @@ public class Management extends MAIN {
                                                         //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
                                                         + " " + gatesSimulationTemp.get(j).getInputsOriginal()
                                                         + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal();
+
+                                                if(!passedGates.contains(gatesSimulationTemp.get(j).getGate().toString())){
+                                                        sum = sum +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal();
+
+                                                        info = info + "  | " +  gatesSimulationTemp.get(j).getGate().toString() + " |";
+                                                        passedGates.add(gatesSimulationTemp.get(j).getGate().toString());
+                                                }
+
                                         }
-                                        System.out.println(info + "  Sensitive Area Sum: " + x.get(xindex).getSum_sensitive_cells_area());
+                                        System.out.println(info + "  Sensitive Area Sum: " + x.get(xindex).getSum_sensitive_cells_area()+ " OR: " + sum);
 
                                 }
 
