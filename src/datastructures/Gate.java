@@ -19,7 +19,7 @@ public class Gate {
     private Cell type;
 
     private  ArrayList <Integer> sensitiveSignalsIndex;
-    
+    private Boolean visited;
     /**
      * Simple Gate constructor.
      *
@@ -44,6 +44,8 @@ public class Gate {
         this.outputs = new ArrayList<>();
         this.id = id;
         this. sensitiveSignalsIndex = new ArrayList<>();
+
+        this.visited = Boolean.FALSE;
     }
     
     /**
@@ -58,6 +60,8 @@ public class Gate {
         this.outputs = new ArrayList<>();
         this.type = type;
         this. sensitiveSignalsIndex = new ArrayList<>();
+
+        this.visited = Boolean.FALSE;
     }
     
     /**
@@ -74,6 +78,8 @@ public class Gate {
         this.inputs = new ArrayList<>();
         this.outputs = new ArrayList<>();
         this.type = type;
+
+        this.visited = Boolean.FALSE;
     }
     public void setIndexArraylist(Integer index){
         this.sensitiveSignalsIndex.add(index);
@@ -101,6 +107,13 @@ public class Gate {
      */
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setVisited(){
+        this.visited = Boolean.TRUE;
+    }
+    public Boolean getVisited(){
+        return this.visited;
     }
 
     /**
