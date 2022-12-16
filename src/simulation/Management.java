@@ -4317,7 +4317,7 @@ public class Management extends MAIN {
                                                         + " SA(" +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal() + ")"
                                                         //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
                                                         + " " + gatesSimulationTemp.get(j).getInputsOriginal()
-                                                        + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal();
+                                                        + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal() + " SUMTEMP: " + sum;
 
                                                 if(!passedGates.contains(gatesSimulationTemp.get(j).getGate().toString())){
                                                         sum = sum +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal();
