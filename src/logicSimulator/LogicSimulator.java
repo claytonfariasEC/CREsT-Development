@@ -543,6 +543,28 @@ import signalProbability.ProbCircuit;
                         //info.add(this.calculateSensitiveAreaReverse(thread_item, gate, "Recursion " + thread_item.getinputVector() + " " + j + "_" + k + " ", gate.getGate().getOutputs().get(0), Boolean.FALSE));
                         listSensitiveSignals.add(gate.getGate().getOutputs().get(0));
                         listSensitiveGates.add(gate);
+
+                        Cell cells = gate.getGate().getType();
+                        Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+                        ArrayList<Boolean> input = new ArrayList<>();
+                        String concat_inputs_original = "";
+
+
+                        for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
+
+                            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
+                                input.add(Boolean.FALSE);
+                                concat_inputs_original = concat_inputs_original + "0";
+                            }
+                            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
+                                input.add(Boolean.TRUE);
+                                concat_inputs_original = concat_inputs_original + "1";
+                            }
+
+                        }
+
+                        GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                        thread_item.setSensitiveGatesLogicalPath(saObject);
                     }
                 }
             }
@@ -1086,11 +1108,13 @@ import signalProbability.ProbCircuit;
                      List Sensitive Signals: listSensitiveSignals
                      - G6gat
                      - G7gat
-                     - W4
                      - W3
+                     - W1
+                     - G4gat
 
                      List Sensitive Gates: listSensitiveGates
                      - U5
+                     - U3
                  */
 
                 final DepthGate gate = (DepthGate) this.findGateAccordingSignal(listSensitiveSignals.get(indexList), listNotMaskedGates.get(listNotMaskedGates.size()-1).getGate());
@@ -1102,7 +1126,6 @@ import signalProbability.ProbCircuit;
                     Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
                     ArrayList<Boolean> input = new ArrayList<>();
                     String concat_inputs_original = "";
-
 
                     for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
 
@@ -1118,6 +1141,10 @@ import signalProbability.ProbCircuit;
                     }
                     previousInfo = previousInfo + " <G: " + gate.getGate().getId() + ">";
 
+                    listSensitiveGates.add(gate); // Add sensitive Gate
+                    GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                    Float sa = saObject.getgateSensitiveArea();
+                    thread_item.setSensitiveGatesLogicalPath(saObject);
 
                     // ------------- Calculate SA for each gate ------------------- //
                     // boolean output_converted_original = //this.calculateTheOutputGatesInBoolean(comb, input, gate);
@@ -1142,16 +1169,10 @@ import signalProbability.ProbCircuit;
 
                             if (output_converted_original != output_convertedBitfliped) {
 
-                                GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
-                                Float sa = saObject.getgateSensitiveArea();
-
-                                thread_item.setSensitiveGatesLogicalPath(saObject);
-
 
                                 // Ensure that the signal is unique in sensitive list
                                 if(!listSensitiveSignals.contains(gate.getGate().getInputs().get(i))) {
                                     listSensitiveSignals.add(gate.getGate().getInputs().get(i));
-                                    listSensitiveGates.add(gate); // Add sensitive Gate
                                 }
 
                                 strInfo = strInfo + (" - NEWOP Gate: " + gate.getGate().getId()
@@ -1188,34 +1209,24 @@ import signalProbability.ProbCircuit;
                     }
                 }
                 indexList++;
+
+
             }
 
+        // convert ArrayList to HastSet.
+        HashSet<DepthGate> hset = new HashSet<DepthGate>(listSensitiveGates);
 
-
-
-
-        //}
-
-
-
-
-
-
-
-
-
-
-        //Calculate the sensitive area information
-
-
-
-
-        //System.out.println("Rev. version: " +  concatInformation);
+        // display HastSet
 
 
         System.out.println(listSensitiveGates);
+        System.out.println("Unique gates: " + hset);
         System.out.println(listSensitiveSignals);
-        //System.out.println(previousInfo);
+        System.out.println(previousInfo);
+       /// for (int i = 0; i < thread_item.getSensitiveGatesLogicalPath().size(); i++) {
+        System.out.println(thread_item.getSensitiveGatesLogicalPath());
+       // }
+
         System.out.println(strInfo);
 
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
