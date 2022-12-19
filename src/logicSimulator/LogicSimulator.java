@@ -209,7 +209,7 @@ import signalProbability.ProbCircuit;
                     ArrayList<GateDetailedInformation> x = this.gates_SENSITIVE.get(j);
                     for (int f = 0; f < x.size(); f++) {
                         if(f == 0 ){
-                            d =  x.get(f).getGate().getGate().getId();
+                            d = d +   x.get(f).getGate().getGate().getId();
                         }else{
                             d = d +  ", " + x.get(f).getGate().getGate().getId();
                         }
