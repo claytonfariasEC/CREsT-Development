@@ -536,7 +536,7 @@ import signalProbability.ProbCircuit;
 
             final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
-            for (int k = gatesInThisLevel.size()-1; k >= 0; k--) {
+            for (int k = gatesInThisLevel.size()-1; k >= 0; k--) { // Add last signals
                 String AwnsString = gatesInThisLevel.get(k).getClass().toString();
                 //System.out.println("Aws: "+ AwnsString);
                 if (AwnsString.equals("class levelDatastructures.DepthGate")){
@@ -865,7 +865,7 @@ import signalProbability.ProbCircuit;
     private DepthGate findGateAccordingSignal(Signal gateToFind, Gate notsearchThisOne){
 
         final ArrayList<GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
-        String info = "NEEDED sig: " + gateToFind;
+        String info = " Searching Signal: " + gateToFind;
 
         for (int j = gatesLevels.size()-1; j >= 0; j--) {
 
@@ -881,9 +881,12 @@ import signalProbability.ProbCircuit;
 
                     for (int z = 0; z < gate.getGate().getOutputs().size(); z++) {
                         //info = info + ("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " SignalTOFind: " +gateToFind.getId() + " ");
-                        info = info + ("> l: " + j + " p: " + k  + " G: " + gate.getGate().getId()+ " In: " + gate.getGate().getInputs() + " Outs: " + gate.getGate().getOutputs());
-                        if ((gate.getGate().getOutputs().get(z).getId() == gateToFind.getId()) && (gate.getGate().getId() != notsearchThisOne.getId())) {
-                            info = info + "<FINDED>";
+                       // info = info + ("> l: " + j + " p: " + k  + " G: " + gate.getGate().getId()+ " In: " + gate.getGate().getInputs() + " Outs: " + gate.getGate().getOutputs());
+
+                        //if ((gate.getGate().getOutputs().get(z).getId() == gateToFind.getId()) && (gate.getGate().getId() != notsearchThisOne.getId())) {
+                        if ((gate.getGate().getOutputs().get(z).getId() == gateToFind.getId()) && (!gate.getGate().getVisited())) {
+                            info = info + gate.getGate().getId() + " <FINDED>";
+                            gate.setVisited();
                             return gate;
 
                             //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
@@ -1154,6 +1157,7 @@ import signalProbability.ProbCircuit;
                     Float sa = saObject.getgateSensitiveArea();
                     //thread_item.setSensitiveGatesLogicalPath(saObject);
                     sensitiveGates.add(saObject);
+                    listSensitiveGates.add(gate);
 
                     // ------------- Calculate SA for each gate ------------------- //
                     // boolean output_converted_original = //this.calculateTheOutputGatesInBoolean(comb, input, gate);
@@ -1214,7 +1218,8 @@ import signalProbability.ProbCircuit;
                                  */
                             }
                         }
-
+                        System.out.println("Gate: " + gate.getGate().getId()  + " Gatelist: " + sensitiveGates + " GateList: " + listSensitiveGates);
+                        System.out.println("Signal: " + listSensitiveSignals.get(indexList) + "  SignalList: " + listSensitiveSignals );
                     }
                 }
                 indexList++;
