@@ -606,14 +606,18 @@ import signalProbability.ProbCircuit;
 
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
-        System.out.println(info);
-        System.out.println("results: ");
-        String information = "'" + thread_item.getinputVector() + "; " + sensitiveGates.get(0).getGate().getGate().getId() ;
+
+        //System.out.println(info);
+        //System.out.println("results: ");
+        String information =  "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId() ;
         for (int i = 1; i < sensitiveGates.size() ; i++) {
-            information = information + "," + sensitiveGates.get(i).getGate().getGate().getId();
+            information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
         }
         System.out.println(information);
+        
         this.gates_SENSITIVE.add(sensitiveGates);
+
+        System.out.println("-------------------------------------------------------------------------");
 
 
 
@@ -1119,7 +1123,7 @@ import signalProbability.ProbCircuit;
     private ArrayList <GateDetailedInformation> calculateSensitiveAreaReverseV2(TestVectorInformation thread_item,  ArrayList <DepthGate>  listSensitiveGates, ArrayList<Signal> listSensitiveSignals) throws IOException, WriteException{
 
         //final ArrayList <GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
-        String strInfo = " NOT MASKED" ;
+        String strInfo = "GATES NOT MASKED" ;
         String previousInfo = "";
         ArrayList <DepthGate>  listNotMaskedGates = new ArrayList<>(listSensitiveGates);
         ArrayList <GateDetailedInformation>  sensitiveGates = new ArrayList<>();
@@ -1249,8 +1253,8 @@ import signalProbability.ProbCircuit;
                                  */
                             }
                         }
-                        System.out.println("Gate: " + gate.getGate().getId()  + " Gatelist: " + sensitiveGates + " GateList: " + listSensitiveGates);
-                        System.out.println("Signal: " + listSensitiveSignals.get(indexList) + "  SignalList: " + listSensitiveSignals );
+                       // System.out.println("Gate: " + gate.getGate().getId()  + " Gatelist: " + sensitiveGates + " GateList: " + listSensitiveGates);
+                       // System.out.println("Signal: " + listSensitiveSignals.get(indexList) + "  SignalList: " + listSensitiveSignals );
                     }
                 }
                 indexList++;
@@ -1267,7 +1271,9 @@ import signalProbability.ProbCircuit;
         //System.out.println(listSensitiveGates);
         //System.out.println("Unique gates: " + hset);
         //System.out.println(listSensitiveSignals);
-        System.out.println(previousInfo);
+
+        //System.out.println(previousInfo);
+
         //System.out.println("ARR: " + sensitiveGates);
 
 
@@ -1277,6 +1283,7 @@ import signalProbability.ProbCircuit;
 
             int j = 0;
 
+            // Replace redundances in list
         while(j<thread_item.getSensitiveGatesLogicalPath().size()){
             for (int i = 0; i < sensitiveGates.size(); i++) {
                 if(!thread_item.getSensitiveGatesLogicalPath().contains(sensitiveGates.get(i))) {
@@ -1288,6 +1295,7 @@ import signalProbability.ProbCircuit;
         ArrayList <String> l = new ArrayList<>();
        // HashSet<GateDetailedInformation> hset = new HashSet<GateDetailedInformation>();
 
+        /*
         for (GateDetailedInformation g: thread_item.getSensitiveGatesLogicalPath()) {
             System.out.println("G: " + g.getGate());
             if(!l.contains(g.getGate().getGate().getId())) {
@@ -1297,6 +1305,7 @@ import signalProbability.ProbCircuit;
             }
         }
         System.out.println("Unique: " + l);
+         */
         
         //this.creatCircuitAccordingVector(indexThread, gatesLevels);
         //thread_item.setGatesLevelsThreadList(gatesLevels);
