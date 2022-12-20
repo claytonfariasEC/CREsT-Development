@@ -1249,8 +1249,8 @@ import signalProbability.ProbCircuit;
                                  */
                             }
                         }
-                        //System.out.println("Gate: " + gate.getGate().getId()  + " Gatelist: " + sensitiveGates + " GateList: " + listSensitiveGates);
-                        //System.out.println("Signal: " + listSensitiveSignals.get(indexList) + "  SignalList: " + listSensitiveSignals );
+                        System.out.println("Gate: " + gate.getGate().getId()  + " Gatelist: " + sensitiveGates + " GateList: " + listSensitiveGates);
+                        System.out.println("Signal: " + listSensitiveSignals.get(indexList) + "  SignalList: " + listSensitiveSignals );
                     }
                 }
                 indexList++;
