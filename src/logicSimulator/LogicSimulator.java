@@ -614,7 +614,7 @@ import signalProbability.ProbCircuit;
             information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
         }
         System.out.println(information);
-        
+
         this.gates_SENSITIVE.add(sensitiveGates);
 
         System.out.println("-------------------------------------------------------------------------");

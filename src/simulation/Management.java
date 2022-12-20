@@ -4298,27 +4298,40 @@ public class Management extends MAIN {
                 //System.out.println("CElls: " + this.sensitive_cells);
                 System.out.println("\n\n\n------------ Gates values -------------------");
                 float counter = 0;
-                float sum = 0;
+
 
                 System.out.println("sample: " + this.sampleSize);
                 int idx = 0;
-                System.out.println("Printing alll vectors values");
+                System.out.println("Sensitive Area: Vectors x Gates");
 
                 ArrayList  <String> passedGates = new ArrayList<>();
 
                 for (int i = 0; i < this.itemx_list.size(); i++) {
+
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
+                        ArrayList<ArrayList<GateDetailedInformation>> gatesSA= this.itemx_list.get(i).getSensitiveGates(); ;//x.get(xindex).getSensitiveGatesLogicalPath();
 
-                                for (int xindex = 0; xindex < x.size(); xindex++) {
-                                        ArrayList<GateDetailedInformation> gatesSimulationTemp = x.get(xindex).getSensitiveGatesLogicalPath();
-                                        String info = "id: " + xindex + " > " + x.get(xindex).getinputVector();
-                                        for (int j = 0; j < gatesSimulationTemp.size(); j++) {
-                                                info = info + " Gate: " + gatesSimulationTemp.get(j).getGate().toString()
-                                                        + " SA(" +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal() + ")"
-                                                        //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
-                                                        + " " + gatesSimulationTemp.get(j).getInputsOriginal()
-                                                        + " out: " +  gatesSimulationTemp.get(j).getOutputsOriginal() + " SUMTEMP: " + sum;
+                        //for (int xindex = 0; xindex < x.; xindex++) {
 
+                                        for (int j = 0; j < gatesSA.size(); j++) {
+                                                String AS = "";
+
+                                                String info = "id: " + j + " > " + x.get(j).getinputVector();
+
+                                                float sum = 0;
+                                                ArrayList<GateDetailedInformation> gatesSimulationTemp = gatesSA.get(j);
+
+                                                for (int k = 0; k < gatesSimulationTemp.size(); k++) {
+                                                        AS = AS + ", " + gatesSimulationTemp.get(k).getGate().toString();
+                                                         sum = sum + gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal();
+
+                                                        info = info + " Gate: " + gatesSimulationTemp.get(k).getGate().toString()
+                                                                + " SA(" +  gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal() + ")"
+                                                                //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
+                                                                + " " + gatesSimulationTemp.get(k).getInputsOriginal()
+                                                                + " out: " +  gatesSimulationTemp.get(k).getOutputsOriginal()
+                                                                + " SumTemp: " + sum;
+                                                /*
                                                 if(!passedGates.contains(gatesSimulationTemp.get(j).getGate().toString())){
                                                         sum = sum +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal();
 
@@ -4326,10 +4339,14 @@ public class Management extends MAIN {
                                                         passedGates.add(gatesSimulationTemp.get(j).getGate().toString());
                                                 }
 
-                                        }
-                                        System.out.println(info + "  Sensitive Area Sum: " + x.get(xindex).getSum_sensitive_cells_area()+ " OR: " + sum);
+                                                 */
 
-                                }
+                                                }
+                                                System.out.println(info + "  Sensitive Area Sum: " + x.get(j).getSum_sensitive_cells_area()+ " OR: " + sum + " " + AS);
+                                        }
+
+
+                             //   }
 
                 }
 
