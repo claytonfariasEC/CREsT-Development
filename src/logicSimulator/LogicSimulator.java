@@ -214,7 +214,6 @@ import signalProbability.ProbCircuit;
                             d = d +  ", " + x.get(f).getGate().getGate().getId();
                         }
 
-
                     }
                     d = d + "\n";
                     e = e + d;
@@ -515,6 +514,8 @@ import signalProbability.ProbCircuit;
             }
 
         }
+
+        thread_item.setCircuitSensitiveArea(sa_sum);
 
         System.out.println("GOLD version: " + concatInformation);
 

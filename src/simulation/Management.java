@@ -2242,8 +2242,7 @@ public class Management extends MAIN {
                 System.out.println("----------------------------------------------------------------------");
 
 
-
-                this.printResults("Exhaustive", formattedDate, formattedDate2, bitfipCcounter, timeElapsed_loadTime, timeElapsed_PrepareTime, timeElapsed_ThreadingTime, timeElapsed_logGeneration, timeElapsed_Instant);
+                        this.printResults("Exhaustive", formattedDate, formattedDate2, bitfipCcounter, timeElapsed_loadTime, timeElapsed_PrepareTime, timeElapsed_ThreadingTime, timeElapsed_logGeneration, timeElapsed_Instant);
                 //String specific, String formattedDate, String formattedDate2,
                 // int bitfipCcounter, long timeElapsed_loadTime, long timeElapsed_PrepareTime,
                 // long timeElapsed_ThreadingTime, long timeElapsed_logGeneration, long timeElapsed_Instant){
@@ -4304,11 +4303,15 @@ public class Management extends MAIN {
                 int idx = 0;
                 System.out.println("Sensitive Area: Vectors x Gates");
 
-                ArrayList  <String> passedGates = new ArrayList<>();
+                String f_header = "INPUTS;SA_VECTOR_GOLD;SA_NOT_MASKED;SENSITIVE_GATES";
+
+                ArrayList  <String> f = new ArrayList<>();
+                f.add(f_header);
 
                 for (int i = 0; i < this.itemx_list.size(); i++) {
 
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
+
                         ArrayList<ArrayList<GateDetailedInformation>> gatesSA= this.itemx_list.get(i).getSensitiveGates(); ;//x.get(xindex).getSensitiveGatesLogicalPath();
 
                         //for (int xindex = 0; xindex < x.; xindex++) {
@@ -4322,7 +4325,11 @@ public class Management extends MAIN {
                                                 ArrayList<GateDetailedInformation> gatesSimulationTemp = gatesSA.get(j);
 
                                                 for (int k = 0; k < gatesSimulationTemp.size(); k++) {
-                                                        AS = AS + ", " + gatesSimulationTemp.get(k).getGate().toString();
+                                                        if(k==0) {
+                                                                AS = AS + " " + gatesSimulationTemp.get(k).getGate().toString();
+                                                        }else{
+                                                                AS = AS + ", " + gatesSimulationTemp.get(k).getGate().toString();
+                                                        }
                                                          sum = sum + gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal();
 
                                                         info = info + " Gate: " + gatesSimulationTemp.get(k).getGate().toString()
@@ -4342,11 +4349,17 @@ public class Management extends MAIN {
                                                  */
 
                                                 }
-                                                System.out.println(info + "  Sensitive Area Sum: " + x.get(j).getSum_sensitive_cells_area()+ " OR: " + sum + " " + AS);
+                                                System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
+                                                f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
                                         }
+
+                       // for (int j = 0; j < x.size(); j++) {
+                       //         System.out.println(x.get(j).getinputVector() + " SA: " + x.get(j).getCircuitOriginalSensitiveArea());
+                       // }
 
 
                              //   }
+
 
                 }
 
@@ -4357,6 +4370,10 @@ public class Management extends MAIN {
 
 
                 System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
+
+
+                // File content table in csv
+                WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName(), f, ".csv");
 
         }
 

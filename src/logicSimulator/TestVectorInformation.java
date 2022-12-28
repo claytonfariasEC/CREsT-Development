@@ -174,7 +174,7 @@ public class TestVectorInformation {
         this.sum_sensitive_cells_area_original = this.sum_sensitive_cells_area_original + cells_sensitive_area;
     }
 
-    public Float getCircuitSensitiveArea() {
+    public Float getCircuitOriginalSensitiveArea() {
         return circuitSensitiveArea;
     }
 
