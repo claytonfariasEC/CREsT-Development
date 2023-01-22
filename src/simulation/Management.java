@@ -2172,6 +2172,8 @@ public class Management extends MAIN {
 
                 System.out.println(this.sensitive_cells);
 
+                System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size());
+
                 System.out.println("    - Simulation start in : " + formattedDate);
                 System.out.println("    - Threads in execution: " + this.threads);
 
@@ -4303,7 +4305,7 @@ public class Management extends MAIN {
                 int idx = 0;
                 System.out.println("Sensitive Area: Vectors x Gates");
 
-                String f_header = "INPUTS;SA_VECTOR_GOLD;SA_NOT_MASKED;SENSITIVE_GATES";
+                String f_header = "INPUTS;SA_VECTOR_GOLD(TOTAL);SA_NOT_MASKED;SENSITIVE_GATES";
 
                 ArrayList  <String> f = new ArrayList<>();
                 f.add(f_header);
@@ -4349,8 +4351,15 @@ public class Management extends MAIN {
                                                  */
 
                                                 }
-                                                System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
-                                                f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
+
+
+                                                String sumStr = String.format("%.03f", sum);
+                                                //String ASStr = String.format("%.03f", AS);
+
+                                                System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
+                                                //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
+                                                f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS);
+                                                ///f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
                                         }
 
                        // for (int j = 0; j < x.size(); j++) {

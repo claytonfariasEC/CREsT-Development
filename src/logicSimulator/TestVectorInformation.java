@@ -11,6 +11,7 @@ import levelDatastructures.GateLevel;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Formatter;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -175,7 +176,15 @@ public class TestVectorInformation {
     }
 
     public Float getCircuitOriginalSensitiveArea() {
+
         return circuitSensitiveArea;
+    }
+    public String getCircuitOriginalSensitiveAreaStr() {
+        float myFloat = circuitSensitiveArea;
+
+        String formattedString = String.format("%.03f", myFloat);
+
+        return formattedString;
     }
 
     public void setCircuitSensitiveArea(Float circuitSensitiveArea) {
