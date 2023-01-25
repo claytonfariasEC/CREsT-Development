@@ -94,26 +94,33 @@ for genlib in glob.glob(pathx+"*.%s" % library):
 
 #print("files: " + str(circuitLists)))
 
-for lib in libList:
-    output_path = get_lib_name(lib)
-    if not os.path.exists(output_path):
-        os.makedirs(output_path)
 
+for lib in libList:
+    output_path = get_lib_name(lib) #+ "/"
+    print(" falg: " + output_path)
+    if not os.path.exists(output_path):
+        #os.makedirs(output_path)
+        os.system("sudo mkdir " + output_path)
+
+    
     for i in circuitList:
         #mapCircuit(i, lib, bench_type, "read_verilog -m", output_path,pathx)
         lib_cmd = "read_genlib"
         bench_cmd = "read_verilog -m"
-        first_step_cmd = "%s %s;" % (lib_cmd, str(genlib))
-        second_step_cmd = "%s %s;" % (bench_cmd, str(i))
-        third_step_cmd = "map;"
+        first_step_cmd = "%s %s; %s;" % (bench_cmd, str(i), "print_gates")
+        second_step_cmd = "%s %s;" % (lib_cmd, str(genlib))
+        third_step_cmd = "map; print_gates;"
         g = genlib.split("/")
-        #print(g)
+        print(g)
         gen = g[1].split(".")
         x = gen[0]
-        #print(x) 
+        print(x) 
         c = i.split("/")
         circ = c[1]
-        fourth_step_cmd = "write_verilog " + g[0] + "/" + x + "/" + circ + "_" + x + ".v"
-        abc_full_cmd = "./abc -c \'%s %s %s %s\'" % (first_step_cmd, second_step_cmd, third_step_cmd, fourth_step_cmd)
+        circName = circ.split(".")
+        print("--> circuito: " + circ)
+        fourth_step_cmd = "write_verilog " + g[0] + "/" + x + "/" + circName[0] + "_" + x + ".v"
+        abc_full_cmd = "sudo ./abc -c \'%s %s %s %s %s\'" % ("read_genlib cadence_original.genlib;",first_step_cmd, second_step_cmd, third_step_cmd, fourth_step_cmd)
+        print("- Command line: " + abc_full_cmd)
         os.system(abc_full_cmd)
     print("-----------")
