@@ -556,72 +556,75 @@ import signalProbability.ProbCircuit;
         ArrayList <Signal> listSensitiveSignals =  new ArrayList<>();
         ArrayList <DepthGate> listSensitiveGates =  new ArrayList<>();
 
+        Boolean  flag_pass = Boolean.TRUE;
 
-        // Loop inside the last gate level and passing through gates
-        for (int j = gatesLevels.size()-1; j < gatesLevels.size(); j++) {
+        if(flag_pass) {
 
-            final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
+            // Loop inside the last gate level and passing through gates
+            for (int j = gatesLevels.size() - 1; j < gatesLevels.size(); j++) {
 
-            for (int k = gatesInThisLevel.size()-1; k >= 0; k--) { // Add last signals
-                String AwnsString = gatesInThisLevel.get(k).getClass().toString();
-                //System.out.println("Aws: "+ AwnsString);
-                if (AwnsString.equals("class levelDatastructures.DepthGate")){
-                    Object object = gatesInThisLevel.get(k);
-                    final DepthGate gate = (DepthGate) object;
-                    if(gate.getGate().getId() == lastLevelGatesSensibilities.get(k).getGate().getGate().getId()) {
-                        //System.out.println("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " Gate SA: " + lastLevelGatesSensibilities.get(k).getGate().getGate().getId() + " " +  lastLevelGatesSensibilities.get(k).getInputs() + " " + lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
-                        //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
-                        thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
-                        passedGates.add(lastLevelGatesSensibilities.get(k));
-                        //info.add(this.calculateSensitiveAreaReverse(thread_item, gate, "Recursion " + thread_item.getinputVector() + " " + j + "_" + k + " ", gate.getGate().getOutputs().get(0), Boolean.FALSE));
-                        listSensitiveSignals.add(gate.getGate().getOutputs().get(0));
-                        listSensitiveGates.add(gate);
+                final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
-                        Cell cells = gate.getGate().getType();
-                        Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
-                        ArrayList<Boolean> input = new ArrayList<>();
-                        String concat_inputs_original = "";
+                for (int k = gatesInThisLevel.size() - 1; k >= 0; k--) { // Add last signals
+                    String AwnsString = gatesInThisLevel.get(k).getClass().toString();
+                    //System.out.println("Aws: "+ AwnsString);
+                    if (AwnsString.equals("class levelDatastructures.DepthGate")) {
+                        Object object = gatesInThisLevel.get(k);
+                        final DepthGate gate = (DepthGate) object;
+                        if (gate.getGate().getId() == lastLevelGatesSensibilities.get(k).getGate().getGate().getId()) {
+                            //System.out.println("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " Gate SA: " + lastLevelGatesSensibilities.get(k).getGate().getGate().getId() + " " +  lastLevelGatesSensibilities.get(k).getInputs() + " " + lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
+                            //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
+                            thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
+                            passedGates.add(lastLevelGatesSensibilities.get(k));
+                            //info.add(this.calculateSensitiveAreaReverse(thread_item, gate, "Recursion " + thread_item.getinputVector() + " " + j + "_" + k + " ", gate.getGate().getOutputs().get(0), Boolean.FALSE));
+                            listSensitiveSignals.add(gate.getGate().getOutputs().get(0));
+                            listSensitiveGates.add(gate);
+
+                            Cell cells = gate.getGate().getType();
+                            Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+                            ArrayList<Boolean> input = new ArrayList<>();
+                            String concat_inputs_original = "";
 
 
-                        for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
+                            for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
 
-                            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
-                                input.add(Boolean.FALSE);
-                                concat_inputs_original = concat_inputs_original + "0";
+                                if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
+                                    input.add(Boolean.FALSE);
+                                    concat_inputs_original = concat_inputs_original + "0";
+                                }
+                                if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
+                                    input.add(Boolean.TRUE);
+                                    concat_inputs_original = concat_inputs_original + "1";
+                                }
+
                             }
-                            if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
-                                input.add(Boolean.TRUE);
-                                concat_inputs_original = concat_inputs_original + "1";
-                            }
 
+                            GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                            thread_item.setSensitiveGatesLogicalPath(saObject);
                         }
-
-                        GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
-                        thread_item.setSensitiveGatesLogicalPath(saObject);
                     }
                 }
             }
+
+            ArrayList<GateDetailedInformation> sensitiveGates = this.calculateSensitiveAreaReverseV2(thread_item, listSensitiveGates, listSensitiveSignals);
+
+            //this.creatCircuitAccordingVector(indexThread, gatesLevels);
+            //thread_item.setGatesLevelsThreadList(gatesLevels);
+
+            //System.out.println(info);
+            //System.out.println("results: ");
+            String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
+            for (int i = 1; i < sensitiveGates.size(); i++) {
+                information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
+            }
+            System.out.println(information);
+
+            this.gates_SENSITIVE.add(sensitiveGates);
+
+            System.out.println("-------------------------------------------------------------------------");
+
+
         }
-
-        ArrayList<GateDetailedInformation> sensitiveGates = this.calculateSensitiveAreaReverseV2(thread_item, listSensitiveGates ,listSensitiveSignals);
-
-        //this.creatCircuitAccordingVector(indexThread, gatesLevels);
-        //thread_item.setGatesLevelsThreadList(gatesLevels);
-
-        //System.out.println(info);
-        //System.out.println("results: ");
-        String information =  "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId() ;
-        for (int i = 1; i < sensitiveGates.size() ; i++) {
-            information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
-        }
-        System.out.println(information);
-
-        this.gates_SENSITIVE.add(sensitiveGates);
-
-        System.out.println("-------------------------------------------------------------------------");
-
-
-
     }
 
     private GateDetailedInformation calculateSensitiveAreaGate(DepthGate gate, ArrayList<Boolean> input, String concat_inputs_original){

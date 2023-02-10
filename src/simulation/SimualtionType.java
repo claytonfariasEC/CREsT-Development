@@ -312,11 +312,43 @@ public class SimualtionType {
                 simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
 
         //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
+        //simulacaoMultithreading.classifyGatesSensitiveAreas();
+
+
+        /* Monte Carlo Simulation */
+        //simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
         simulacaoMultithreading.runMultithreadingExhausticSimulationAndNotMaskedSensitiveAreaNEWAPROUCH(simulationCircuit.getSignalsToinjectFault());
+        simulacaoMultithreading.classifyTotalSensitiveAreas();
+
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
         simulacaoMultithreading.printPropagationGates();
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
+        this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
+                + "2^Signals * Gates)");
+    }
+    public void faultToleranceMonteCarloSETAPIFAULTCALCULATEAS_FRONTBACK() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
+
+        /*
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath() + simulationCircuit.getGenlib(), simulationCircuit.getRelativePath() + simulationCircuit.getCircuit());
+
+         */
+        String Sensitive_Library  = "teste/lookup_table.csv";
+        System.out.println("Exaustive");
+        Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
+                simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
+
+        //this.output_sample = simulacaoMultithreading.SampleSizeExausticSimulation(simulationCircuit.getSignalsToinjectFault());
+        //simulacaoMultithreading.classifyGatesSensitiveAreas();
+
+        /* Monte Carlo Simulation */
+        simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
+
+        //simulacaoMultithreading.classifyTotalSensitiveAreas();
+
+        //simulacaoMultithreading.printPropagationGates();
+
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");
     }

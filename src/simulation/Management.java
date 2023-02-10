@@ -59,6 +59,8 @@ public class Management extends MAIN {
         private String SAMode="";
         //abc test
 
+        private String ThreadSimulationFlag = "";
+
         private ArrayList<Signal> signals_to_inject_faults = new ArrayList<>();
         private final ArrayList<String> inputListValues = new ArrayList<>();
         private final ArrayList<ArrayList<String>> inputListValuesStr = new ArrayList<>();
@@ -898,7 +900,10 @@ public class Management extends MAIN {
                         ArrayList<TestVectorInformation> temp = new ArrayList<TestVectorInformation>(ItemxSimulationList.subList(start, end));
                         LogicSimulator threadItem = new LogicSimulator(temp, this.circuit, this.cellLibrary, this.levelCircuit, start, end, this.genlib, this.circuitNameStr); // Thread contex info
 
-                        threadItem.setMode("MTF-Sensitive_Area-Generate_Netlist");
+
+                        //threadItem.setMode("MTF-Sensitive_Area-Generate_Netlist");
+                        threadItem.setMode(this.ThreadSimulationFlag);
+
                         threadItem.setSensitiveCellsMap(this.sensitive_cells);
                         itemx_list.add(threadItem);
 
@@ -2194,6 +2199,7 @@ public class Management extends MAIN {
                 List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA_NEW");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
+                System.out.println("Gates: " + this.circuit.getGates().size());
 
                 sizeExasuticTest = (this.sampleSize * this.signals_to_inject_faults.size());
 
@@ -3424,6 +3430,8 @@ public class Management extends MAIN {
                 //this.sampleSize = N;
 
                 if (sumProportionPercentage(mtf_list) == 1.0 && (sample > 0)) {  // 100%
+
+                        this.ThreadSimulationFlag = "Single_Fault_NEW";
 
                         Map <String, SensitiveCell> sensitive_cells = readCsvFileAndMapSensitiveCellsArea(file, ",");
 
