@@ -154,7 +154,7 @@ public class MAIN {  //Class to run debug tests
                  ///sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
-               sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTCALCULATEAS_FRONTBACK(); //TODO Working NEW APROUCH
+                sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTCALCULATEAS_FRONTBACK(); //TODO Working NEW APROUCH
                // sim_mtf_debug.faultToleranceMonteCarloSETAPIFAULTCALCULATEAS_FRONTBACK(); //TODO Teste
 
                 //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTADAPTIVE();  //TODO Working
