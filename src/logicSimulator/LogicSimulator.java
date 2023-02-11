@@ -199,7 +199,12 @@ import signalProbability.ProbCircuit;
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
                     //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
-                this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+
+                //WORKS
+                //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
+
+                //Better solution
+                this.propagateInputVectorsSmart(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
 
                 this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
             }
@@ -818,24 +823,76 @@ import signalProbability.ProbCircuit;
         ArrayList <DepthGate> listSensitiveGates =  new ArrayList<>();
 
         Boolean  flag_pass = Boolean.TRUE;
-
         Boolean flag_newAprouch = Boolean.TRUE;
 
         if(flag_pass) {
 
 
 
+            ArrayList <DepthGate>  listNotMaskedGates = new ArrayList<>(listSensitiveGates);
+            //ArrayList <GateDetailedInformation>  sensitiveGates = new ArrayList<>();
+
+            listNotMaskedGates.add(new DepthGate(new Gate()));
 
             for (int i = 0; i < this.circuit.getOutputs().size(); i++) {
-                System.out.println("Circuits output: " + this.circuit.getOutputs().get(i));
+                    listSensitiveSignals.add(this.circuit.getOutputs().get(i));
+                    final DepthGate gate = (DepthGate) this.findGateAccordingSignal(listSensitiveSignals.get(i), listNotMaskedGates.get(listNotMaskedGates.size()-1).getGate());
+                    listSensitiveGates.add(gate);
+
+                    if(testNumber < 4) {
+                        System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
+                     }
             }
 
+            for (int k = 0; k < listSensitiveGates.size(); k++) {
+                //System.out.println("Gate: " + listSensitiveGates.get(k));
+                final DepthGate gate = (DepthGate) listSensitiveGates.get(k);
+
+                thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
+                passedGates.add(lastLevelGatesSensibilities.get(k));
+
+                //listSensitiveSignals.add(gate.getGate().getOutputs().get(0)); // Saidas
+                //listSensitiveGates.add(gate);
+
+                Cell cells = gate.getGate().getType();
+                Map<ArrayList<Boolean>, Boolean> comb = cells.getComb();
+                ArrayList<Boolean> input = new ArrayList<>();
+                String concat_inputs_original = "";
+
+
+                for (int index = 0; index < gate.getGate().getInputs().size(); index++) {
+
+                    if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 0) {
+                        input.add(Boolean.FALSE);
+                        concat_inputs_original = concat_inputs_original + "0";
+                    }
+                    if (gate.getGate().getInputs().get(index).getOriginalLogicValue() == 1) {
+                        input.add(Boolean.TRUE);
+                        concat_inputs_original = concat_inputs_original + "1";
+                    }
+
+                }
+
+                GateDetailedInformation saObject = this.calculateSensitiveAreaGate(gate, input, concat_inputs_original);
+                thread_item.setSensitiveGatesLogicalPath(saObject);
+            }
+
+            ArrayList<GateDetailedInformation> sensitiveGates = this.calculateSensitiveAreaReverseV2(thread_item, listSensitiveGates, listSensitiveSignals);
+            /*
+            String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
+            for (int i = 1; i < sensitiveGates.size(); i++) {
+                information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
+            }
+
+             */
+
+            //TODO: Uncomment
+           // System.out.println(information);
+
+            this.gates_SENSITIVE.add(sensitiveGates);
 
             // Loop inside the last gate level and passing through gates
-            for (int j = gatesLevels.size() - 1; j < gatesLevels.size(); j++) {
-
-                final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
-
+            //for (int j = gatesLevels.size() - 1; j < gatesLevels.size(); j++) {
 
 
 
@@ -907,7 +964,7 @@ import signalProbability.ProbCircuit;
 
         }
         **/
-            }
+            //}
         }
 
     }
