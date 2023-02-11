@@ -345,9 +345,9 @@ public class SimualtionType {
         /* Monte Carlo Simulation */
         simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
 
-        //simulacaoMultithreading.classifyTotalSensitiveAreas();
+        simulacaoMultithreading.classifyTotalSensitiveAreas();
 
-        //simulacaoMultithreading.printPropagationGates();
+        simulacaoMultithreading.printPropagationGates();
 
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");

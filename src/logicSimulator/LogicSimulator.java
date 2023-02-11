@@ -218,7 +218,7 @@ import signalProbability.ProbCircuit;
                     d = d + "\n";
                     e = e + d;
                 }
-        System.out.println(e);
+        //System.out.println(e);
         }
 
         private void startCalculationSensitiveAreas() throws IOException, WriteException{
@@ -516,8 +516,8 @@ import signalProbability.ProbCircuit;
         }
 
         thread_item.setCircuitSensitiveArea(sa_sum);
-
-        System.out.println("GOLD version: " + concatInformation);
+         //TODO: Uncomment
+         //    System.out.println("GOLD version: " + concatInformation);
 
         //this.calculateSensitiveAreaReverse(testNumber, vector, thread_item, indexThread);
 
@@ -558,6 +558,8 @@ import signalProbability.ProbCircuit;
 
         Boolean  flag_pass = Boolean.TRUE;
 
+        Boolean flag_newAprouch = Boolean.TRUE;
+
         if(flag_pass) {
 
             // Loop inside the last gate level and passing through gates
@@ -571,13 +573,14 @@ import signalProbability.ProbCircuit;
                     if (AwnsString.equals("class levelDatastructures.DepthGate")) {
                         Object object = gatesInThisLevel.get(k);
                         final DepthGate gate = (DepthGate) object;
+
                         if (gate.getGate().getId() == lastLevelGatesSensibilities.get(k).getGate().getGate().getId()) {
                             //System.out.println("Level: " + j + " index: " + k + " Gate: " + gate.getGate().getId() + " Gate SA: " + lastLevelGatesSensibilities.get(k).getGate().getGate().getId() + " " +  lastLevelGatesSensibilities.get(k).getInputs() + " " + lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
                             //thread_item.sum_sensitive_cells_area_original(lastLevelGatesSensibilities.get(k).getgateSensitiveArea());
                             thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
                             passedGates.add(lastLevelGatesSensibilities.get(k));
                             //info.add(this.calculateSensitiveAreaReverse(thread_item, gate, "Recursion " + thread_item.getinputVector() + " " + j + "_" + k + " ", gate.getGate().getOutputs().get(0), Boolean.FALSE));
-                            listSensitiveSignals.add(gate.getGate().getOutputs().get(0));
+                            listSensitiveSignals.add(gate.getGate().getOutputs().get(0)); // Saidas
                             listSensitiveGates.add(gate);
 
                             Cell cells = gate.getGate().getType();
@@ -617,11 +620,14 @@ import signalProbability.ProbCircuit;
             for (int i = 1; i < sensitiveGates.size(); i++) {
                 information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
             }
-            System.out.println(information);
+
+            //TODO: Uncomment
+           // System.out.println(information);
 
             this.gates_SENSITIVE.add(sensitiveGates);
 
-            System.out.println("-------------------------------------------------------------------------");
+            //TODO: Uncomment
+            //System.out.println("-------------------------------------------------------------------------");
 
 
         }
@@ -1280,8 +1286,8 @@ import signalProbability.ProbCircuit;
 
         //System.out.println("ARR: " + sensitiveGates);
 
-
-        System.out.println(strInfo);
+//TODO: Uncomment
+        //System.out.println(strInfo);
 
         //System.out.println(thread_item.getSensitiveGatesLogicalPath().size());
 

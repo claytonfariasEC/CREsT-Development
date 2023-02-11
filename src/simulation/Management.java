@@ -1899,7 +1899,7 @@ public class Management extends MAIN {
                 System.out.println("- Circuit: " + this.circuit.getName());
                 System.out.println("- Sample Size (N): " + this.sampleSize);
                 System.out.println("- Error Rate (ER) " + "  Ne/N = (" + this.unmasked_faults + "/" + this.sampleSize + ") = " + this.ER);
-                System.out.println("- Sensitive Area (u.m2): " + this.avgASFLOAT );
+                System.out.println("- Sensitive Area avg (um²): " + this.avgASFLOAT );
                 System.out.println("- Logic Cross Section (u.m2): " + (this.avgASFLOAT*this.ER) );
                 System.out.println("- Failure Rate (h/ particles * u.m2): " + (this.avgASFLOAT*this.ER * 0.000036F) );
                 System.out.println("- Reliability (MTBF) = (1 / (" + (this.ER)+  " x " + this.avgASFLOAT + " x 3,6 * 10-5) ) = " + this.MTBF);
@@ -4307,6 +4307,7 @@ public class Management extends MAIN {
                 //System.out.println("CElls: " + this.sensitive_cells);
                 System.out.println("\n\n\n------------ Gates values -------------------");
                 float counter = 0;
+                float sumASVECTORS = 0.F;
 
 
                 System.out.println("sample: " + this.sampleSize);
@@ -4323,7 +4324,7 @@ public class Management extends MAIN {
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
 
                         ArrayList<ArrayList<GateDetailedInformation>> gatesSA= this.itemx_list.get(i).getSensitiveGates(); ;//x.get(xindex).getSensitiveGatesLogicalPath();
-
+                        counter = counter + x.size();
                         //for (int xindex = 0; xindex < x.; xindex++) {
 
                                         for (int j = 0; j < gatesSA.size(); j++) {
@@ -4359,12 +4360,16 @@ public class Management extends MAIN {
                                                  */
 
                                                 }
-
+                                                sumASVECTORS = sumASVECTORS + sum;
 
                                                 String sumStr = String.format("%.03f", sum);
+
                                                 //String ASStr = String.format("%.03f", AS);
 
-                                                System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
+                                                //TODO: UNCOMENT
+                                                if(counter<10) {
+                                                        System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
+                                                }
                                                 //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
                                                 f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS);
                                                 ///f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
@@ -4387,7 +4392,7 @@ public class Management extends MAIN {
 
 
                 System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
-
+        System.out.println("- sumASNotMasked: " + sumASVECTORS + " n: " + counter  + " ASNotMasked: " + (sumASVECTORS/counter) );
 
                 // File content table in csv
                 WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName(), f, ".csv");
