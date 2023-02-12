@@ -623,10 +623,10 @@ import signalProbability.ProbCircuit;
 
             //System.out.println(info);
             //System.out.println("results: ");
-            String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
-            for (int i = 1; i < sensitiveGates.size(); i++) {
-                information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
-            }
+            //String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
+            //for (int i = 1; i < sensitiveGates.size(); i++) {
+             //   information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
+            //}
 
             //TODO: Uncomment
            // System.out.println(information);
@@ -666,7 +666,7 @@ import signalProbability.ProbCircuit;
 
         ArrayList <GateDetailedInformation> passedGates =  new ArrayList<>();
 
-
+        System.out.println("List Sensitivity outputs: ");
         float  sa_sum = 0.F;
 
         GateDetailedInformation gateSensitivivity = null;
@@ -733,9 +733,9 @@ import signalProbability.ProbCircuit;
                     gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
                     gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
 
-                    if(j == gatesLevels.size()-1){
-                        lastLevelGatesSensibilities.add(gateSensitivivity);
-                    }
+                    //if(j == gatesLevels.size()-1){
+                      //  lastLevelGatesSensibilities.add(gateSensitivivity);
+                    //}
 
                     // ------------- SAVE SA for each gate ------------------- //
                     //thread_item.setGatesLogicalPath(gateSensitivivity);
@@ -843,13 +843,14 @@ import signalProbability.ProbCircuit;
                         System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
                      }
             }
-
+            System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
             for (int k = 0; k < listSensitiveGates.size(); k++) {
                 //System.out.println("Gate: " + listSensitiveGates.get(k));
                 final DepthGate gate = (DepthGate) listSensitiveGates.get(k);
 
+                //thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
                 thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
-                passedGates.add(lastLevelGatesSensibilities.get(k));
+                //passedGates.add(lastLevelGatesSensibilities.get(k));
 
                 //listSensitiveSignals.add(gate.getGate().getOutputs().get(0)); // Saidas
                 //listSensitiveGates.add(gate);
@@ -878,16 +879,16 @@ import signalProbability.ProbCircuit;
             }
 
             ArrayList<GateDetailedInformation> sensitiveGates = this.calculateSensitiveAreaReverseV2(thread_item, listSensitiveGates, listSensitiveSignals);
-            /*
+
             String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
             for (int i = 1; i < sensitiveGates.size(); i++) {
                 information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
             }
 
-             */
+
 
             //TODO: Uncomment
-           // System.out.println(information);
+            System.out.println(information);
 
             this.gates_SENSITIVE.add(sensitiveGates);
 
