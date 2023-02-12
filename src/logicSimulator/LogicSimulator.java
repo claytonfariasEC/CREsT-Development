@@ -851,7 +851,7 @@ import signalProbability.ProbCircuit;
                      }
             }
 
-            //System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
+            System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
             for (int k = 0; k < listSensitiveGates.size(); k++) {
                 //System.out.println("Gate: " + listSensitiveGates.get(k));
                 final DepthGate gate = (DepthGate) listSensitiveGates.get(k);

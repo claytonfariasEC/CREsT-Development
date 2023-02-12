@@ -300,7 +300,7 @@ public class SimualtionType {
      *
      * @throws Exception
      */
-    public void faultToleranceExhaustiveSETAPIFAULTCALCULATEAS_FRONTBACK() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
+    public void exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
 
         /*
         Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
@@ -327,7 +327,7 @@ public class SimualtionType {
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");
     }
-    public void faultToleranceMonteCarloSETAPIFAULTCALCULATEAS_FRONTBACK() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
+    public void monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked() throws Exception { //ou Signals =  "ALL_SIGNALS" for exaustive consider all_signals
 
         /*
         Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
