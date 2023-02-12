@@ -196,7 +196,7 @@ import signalProbability.ProbCircuit;
      * @throws WriteException
      */
     private void startSimulationFaultFreeONCE() throws IOException, WriteException{
-        System.out.println("-> ThreadSimulation: " + this.threadSimulationList.size());
+        System.out.println("-> ThreadSimulation: " + this.threadSimulationList.size() + " inputs: " + this.circuit.getInputs().size());
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
                     //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
