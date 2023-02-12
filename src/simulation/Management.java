@@ -4385,7 +4385,7 @@ public class Management extends MAIN {
 
 
                 // All vectors AS total
-                WriteFile file = new WriteFile(this.relativePath+"TotalASVectors_" + this.circuit.getName(), f, ".txt");
+              // WriteFile file = new WriteFile(this.relativePath+"TotalASVectors_" + this.circuit.getName(), f, ".txt");
 
                 /*
                 try {
