@@ -4646,7 +4646,23 @@ public class Management extends MAIN {
 
 
                 System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
-                                System.out.println("- sumASNotMasked: " + sumASVECTORS + " n: " + counter  + " ASNotMasked: " + (sumASVECTORS/counter) );
+                float asNotMasked = sumASVECTORS/counter;
+                String asNotMaskedStr =  Float. toString(asNotMasked);
+                String asAvgTotalStr =  Float. toString(this.avgASFLOAT);
+
+                asNotMaskedStr = asNotMaskedStr.replace(".", ",");
+                asAvgTotalStr = asAvgTotalStr.replace(".", ",");
+                ArrayList <String> content = new ArrayList<>();
+
+                content.add("Sensitive Area not Masked (um2);;;");
+                content.add("Circuit;AS(Total);AS notMasked(um2);");
+                content.add(this.circuit.getName() + ";"  + asAvgTotalStr + ";" + asNotMaskedStr + ";");
+                System.out.println("- sumASNotMasked: " + sumASVECTORS + " n: " + counter  + " ASNotMasked: " + (asNotMaskedStr) + " " + this.avgASFLOAT + " " + this.ASReal);
+
+
+                                WriteFile file_AS = new WriteFile(this.relativePath+"_ASnotMaked" + this.circuit.getName() + "_" + mode, content , ".csv");
+
+
 
                             // File content table in csv
                             WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName() + "_" + mode, f, ".csv");
