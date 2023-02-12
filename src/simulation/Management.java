@@ -880,7 +880,29 @@ public class Management extends MAIN {
 
                 start = 0;
                 end = partition;
-                for (int i = 0; i < this.threads; i++) { //Loop of simulations
+
+                if(threads == 1){
+                        System.out.println("Single thread start: " + start + " End: " + end);
+
+                        start = 0;
+                        end = N;
+                        ArrayList<TestVectorInformation> temp = new ArrayList<TestVectorInformation>(ItemxSimulationList.subList(start, end));
+                        LogicSimulator threadItem = new LogicSimulator(temp, this.circuit, this.cellLibrary, this.levelCircuit, start, end, this.genlib, this.circuitNameStr); // Thread contex info
+
+
+                        //threadItem.setMode("MTF-Sensitive_Area-Generate_Netlist");
+                        threadItem.setMode(this.ThreadSimulationFlag);
+
+                        threadItem.setSensitiveCellsMap(this.sensitive_cells);
+                        itemx_list.add(threadItem);
+
+                        Runnable runnable = threadItem;
+                        Thread thread = new Thread(runnable);
+                        thread.setName(Integer.toString(threadItem.hashCode()));
+                        thread_list.add(thread);
+                }
+                else{
+                        for (int i = 0; i < this.threads; i++) { //Loop of simulations
 
                         System.out.println("Start: " + start + " End: " + end);
                         if ((this.threads - 1) == (i)) {
@@ -912,7 +934,7 @@ public class Management extends MAIN {
                         thread.setName(Integer.toString(threadItem.hashCode()));
                         thread_list.add(thread);
                         //System.out.println("\n ->>>>>> " + i + " Start: " + start + " End: " + end + "  ThreadItem: " + threadItem.getStartendPos() + " size inputss: " + threadItem.getThreadSimulatinArray().size() + " real: " + temp.size());
-
+                    }
                 }
                 //System.out.println("Signal to inject fault: " + this.signals_to_inject_faults);
                 return thread_list;
@@ -1874,7 +1896,7 @@ public class Management extends MAIN {
                                 random_input_vectors = this.generateInputVector("RANDOM"); // Generate Random Input Vectors or InputTrueTable
                                 ListInputVectors = this.splitInputPatternsInInt(random_input_vectors, this.probCircuit.getInputs().size());
                                 // System.out.println(ListInputVectors.size());
-                                thread_list = this.particionateMultipletransientFaultInjectionVectorPerThreadProportionForElectricalSimulation(ListInputVectors, mtf_list); // x - vectors per thread
+                                thread_list = this.particionateMultipletransientFaultInjectionVectorPerThreadProportionForElectricalSimulation(ListInputVectors, this.mtf_list); // x - vectors per thread
 
                                 System.out.println(">>>>>> Input Vec: " + random_input_vectors.size() + " L: " + ListInputVectors.size() + " THD:  " + thread_list.size());
                                 break;

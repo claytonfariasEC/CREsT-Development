@@ -224,9 +224,10 @@ public class MAIN {  //Class to run debug tests
 
 
         int threads = 1;
+        int sample = 10;
 
         ArrayList<Float> mtf_sizes = new ArrayList<>();  //MTF's
-        mtf_sizes.add((float) 20000); // Sample
+        mtf_sizes.add((float) sample); // Sample
         mtf_sizes.add((float) 1); // STF
         mtf_sizes.add((float) 0); // MTF
         mtf_sizes.add((float) 0); // MTF

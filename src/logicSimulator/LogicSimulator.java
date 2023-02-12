@@ -195,7 +195,7 @@ import signalProbability.ProbCircuit;
      * @throws WriteException
      */
     private void startSimulationFaultFreeONCE() throws IOException, WriteException{
-
+        System.out.println("-> ThreadSimulation: " + this.threadSimulationList.size());
             for (int i = 0; i < this.threadSimulationList.size(); i++) {
                     this.insertInputVectors("selected", this.threadSimulationList.get(i).getinputVector());
                     //this.propagateInputVectors(this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i), i);
@@ -658,7 +658,7 @@ import signalProbability.ProbCircuit;
         this.threadID = (long) Thread.currentThread().getId();
         thread_item.setThreadID(this.threadID);
 
-        //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
+        System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
         //System.out.println("  Vector: " + vector);
         final ArrayList<GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
         String concatInformation = thread_item.getinputVector() + " ";
@@ -666,17 +666,18 @@ import signalProbability.ProbCircuit;
 
         ArrayList <GateDetailedInformation> passedGates =  new ArrayList<>();
 
-        System.out.println("List Sensitivity outputs: ");
+
         float  sa_sum = 0.F;
 
         GateDetailedInformation gateSensitivivity = null;
+
         for (int j = 0; j < gatesLevels.size(); j++) {
 
             final ArrayList<Object> gatesInThisLevel = gatesLevels.get(j).getGates();
 
             for (int k = 0; k < gatesInThisLevel.size(); k++) {
                 String AwnsString = gatesInThisLevel.get(k).getClass().toString();
-                //System.out.println("Aws: "+ AwnsString);
+                System.out.println("Aws: "+ AwnsString);
                 if (AwnsString.equals("class levelDatastructures.DepthGate")) {
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
