@@ -659,7 +659,7 @@ import signalProbability.ProbCircuit;
         this.threadID = (long) Thread.currentThread().getId();
         thread_item.setThreadID(this.threadID);
 
-        System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
+        //System.out.println("-> Propagating testNumber(" + testNumber + ")" + " - at Thread_ID - " + this.threadID );
         //System.out.println("  Vector: " + vector);
         final ArrayList<GateLevel> gatesLevels = this.levelCircuit.getGateLevels();
         String concatInformation = thread_item.getinputVector() + " ";
@@ -792,7 +792,7 @@ import signalProbability.ProbCircuit;
         }
 
         thread_item.setCircuitSensitiveArea(sa_sum);
-        System.out.println("- END LOGIC Sim -");
+        //System.out.println("- END LOGIC Sim -");
         // END ------------    Logic simulation ------------------------
 
         //TODO: Uncomment
@@ -851,7 +851,7 @@ import signalProbability.ProbCircuit;
                      }
             }
 
-            System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
+            //System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
             for (int k = 0; k < listSensitiveGates.size(); k++) {
                 //System.out.println("Gate: " + listSensitiveGates.get(k));
                 final DepthGate gate = (DepthGate) listSensitiveGates.get(k);
@@ -888,15 +888,18 @@ import signalProbability.ProbCircuit;
 
             ArrayList<GateDetailedInformation> sensitiveGates = this.calculateSensitiveAreaReverseV2(thread_item, listSensitiveGates, listSensitiveSignals);
 
+            /*
             String information = "Sensitive Gates -> " + sensitiveGates.get(0).getGate().getGate().getId();
             for (int i = 1; i < sensitiveGates.size(); i++) {
                 information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
             }
+            
+             */
 
 
 
             //TODO: Uncomment
-            System.out.println(information);
+            //System.out.println(information);
 
             this.gates_SENSITIVE.add(sensitiveGates);
 
