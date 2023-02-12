@@ -3773,7 +3773,7 @@ public class Management extends MAIN {
 
                         System.out.println(" ----------------------------------------------------------------------------------------------------------------------\n\n...");
 
-                        this.writeLogs(this.relativePath + option + "_MTF_MonteCarlo_Simple_Log_" +this.circuit.getName()+"_Threads-"+ this.threads +  "_sampleSize-" + this.sampleSize, formattedDate,  formattedDate2, timeElapsed_Instant, this.itemx_list, "MTF");
+                        ///this.writeLogs(this.relativePath + option + "_MTF_MonteCarlo_Simple_Log_" +this.circuit.getName()+"_Threads-"+ this.threads +  "_sampleSize-" + this.sampleSize, formattedDate,  formattedDate2, timeElapsed_Instant, this.itemx_list, "MTF");
 
                         long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
 
@@ -4596,8 +4596,8 @@ public class Management extends MAIN {
                                                         }
                                                          sum = sum + gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal();
 
-                                                        info = info + " Gate: " + gatesSimulationTemp.get(k).getGate().toString()
-                                                                + " SA(" +  gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal() + ")"
+                                                        info = info + " Gate " + gatesSimulationTemp.get(k).getGate().getGate().getType()  +  " : " + gatesSimulationTemp.get(k).getGate().toString()
+                                                                +" SA(" +  gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal() + ")"
                                                                 //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
                                                                 + " " + gatesSimulationTemp.get(k).getInputsOriginal()
                                                                 + " out: " +  gatesSimulationTemp.get(k).getOutputsOriginal()

@@ -154,8 +154,8 @@ public class MAIN {  //Class to run debug tests
                  ///sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
-                 sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
-               /// sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
+                // sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
+               sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
 
                 //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTADAPTIVE();  //TODO Working
                 //sim_mtf_debug.monteCarloReliability_SpiceGeneration_ElectricalSimulationAPI("teste/", "45nm_HP.pm", "Library.txt");
@@ -224,7 +224,7 @@ public class MAIN {  //Class to run debug tests
 
 
         int threads = 1;
-        int sample = 10;
+        int sample = 20000;
 
         ArrayList<Float> mtf_sizes = new ArrayList<>();  //MTF's
         mtf_sizes.add((float) sample); // Sample

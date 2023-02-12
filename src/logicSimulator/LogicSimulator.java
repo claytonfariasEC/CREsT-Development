@@ -847,8 +847,8 @@ import signalProbability.ProbCircuit;
                     listSensitiveGates.add(gate);
 
                     //if(testNumber < 4) {
-                    //    System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
-                    // }
+                       // System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
+                     //}
             }
 
             //System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
