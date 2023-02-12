@@ -654,7 +654,7 @@ import signalProbability.ProbCircuit;
      * @throws IOException
      * @throws WriteException
      */
-    private  void propagateInputVectorsSmart(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException {
+    private void propagateInputVectorsSmart(int testNumber, ArrayList <Integer> vector, TestVectorInformation thread_item, int indexThread) throws IOException, WriteException {
 
         this.threadID = (long) Thread.currentThread().getId();
         thread_item.setThreadID(this.threadID);
@@ -732,8 +732,16 @@ import signalProbability.ProbCircuit;
                     }
 
                     SensitiveCell gatecell = this.sensitive_cells.get(key_original);
-                    gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
-                    gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
+
+                    if(gatecell != null){
+                        gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
+                        gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
+                    }else{
+                        System.out.println("- Warning cell do no contains in sensitive library: " + key_original + " SAlibrary: " + this.sensitive_cells.size());
+                        return;
+                    }
+
+
 
                     //if(j == gatesLevels.size()-1){
                       //  lastLevelGatesSensibilities.add(gateSensitivivity);
@@ -843,7 +851,7 @@ import signalProbability.ProbCircuit;
                      }
             }
 
-            System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
+            //System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
             for (int k = 0; k < listSensitiveGates.size(); k++) {
                 //System.out.println("Gate: " + listSensitiveGates.get(k));
                 final DepthGate gate = (DepthGate) listSensitiveGates.get(k);
