@@ -782,6 +782,9 @@ import signalProbability.ProbCircuit;
         }
 
         thread_item.setCircuitSensitiveArea(sa_sum);
+
+        // END ------------    Logic simulation ------------------------
+
         //TODO: Uncomment
         //    System.out.println("GOLD version: " + concatInformation);
 
@@ -789,7 +792,7 @@ import signalProbability.ProbCircuit;
 
         //Assinalar falhas para todas as saídas no ultimo nível lógic
 
-        /* TODO:  This aprouch is based on recursive */  /*
+        /* TODO:  This aprouch is based on recursive - Depreciated */  /*
         ----------------------------------------------------------------
         ArrayList <String> info = new ArrayList<>();
         for (int j = gatesLevels.size()-1; j < gatesLevels.size(); j++) {
@@ -817,23 +820,17 @@ import signalProbability.ProbCircuit;
         System.out.println(info);
         -----------------------------------------------------------------*/
 
-        /* New solution based in list aprouch */
-        ArrayList <String> info = new ArrayList<>();
-        ArrayList <Signal> listSensitiveSignals =  new ArrayList<>();
-        ArrayList <DepthGate> listSensitiveGates =  new ArrayList<>();
-
+        /* ------ Extracting Sensitive Area Not Maskeed - New solution based in list aprouch */
         Boolean  flag_pass = Boolean.TRUE;
-        Boolean flag_newAprouch = Boolean.TRUE;
 
         if(flag_pass) {
-
-
-
-            ArrayList <DepthGate>  listNotMaskedGates = new ArrayList<>(listSensitiveGates);
-            //ArrayList <GateDetailedInformation>  sensitiveGates = new ArrayList<>();
+            ArrayList <Signal> listSensitiveSignals =  new ArrayList<>();
+            ArrayList <DepthGate> listSensitiveGates =  new ArrayList<>();
+            ArrayList <DepthGate>  listNotMaskedGates = new ArrayList<>(listSensitiveGates); // This logic already considers output gates as sensitive areas (Not masked anyway)
 
             listNotMaskedGates.add(new DepthGate(new Gate()));
 
+            /* -- Displaying all output gates  */
             for (int i = 0; i < this.circuit.getOutputs().size(); i++) {
                     listSensitiveSignals.add(this.circuit.getOutputs().get(i));
                     final DepthGate gate = (DepthGate) this.findGateAccordingSignal(listSensitiveSignals.get(i), listNotMaskedGates.get(listNotMaskedGates.size()-1).getGate());
@@ -843,6 +840,7 @@ import signalProbability.ProbCircuit;
                         System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
                      }
             }
+
             System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
             for (int k = 0; k < listSensitiveGates.size(); k++) {
                 //System.out.println("Gate: " + listSensitiveGates.get(k));
