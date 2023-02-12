@@ -2374,7 +2374,7 @@ public class Management extends MAIN {
 
                 //System.out.println("AVGS: " + this.avgASFLOAT);
 
-               // this.writeLogs(this.relativePath + option + "_ExausticSTFSimulation_" + this.circuit.getName() + "_Threads-" + this.threads + "_sampleSize-" + this.sampleSize, formattedDate, formattedDate2, timeElapsed_Instant, itemx_list, "STF");
+                //this.writeLogs(this.relativePath + option + "_ExausticSTFSimulation_" + this.circuit.getName() + "_Threads-" + this.threads + "_sampleSize-" + this.sampleSize, formattedDate, formattedDate2, timeElapsed_Instant, itemx_list, "STF");
 
                 System.out.println("----------------------------------------------------------------------");
 
@@ -4554,7 +4554,7 @@ public class Management extends MAIN {
 
         }
 
-        public void printPropagationGates(){
+        public void printPropagationGates(String mode){
                 //System.out.println("CElls: " + this.sensitive_cells);
                 System.out.println("\n\n\n------------ Gates values -------------------");
                 float counter = 0;
@@ -4620,9 +4620,10 @@ public class Management extends MAIN {
                                                 //String ASStr = String.format("%.03f", AS);
 
                                                 //TODO: UNCOMENT
-                                                if(counter<20) {
+                                                if(counter<25) {
                                                         System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
                                                 }
+
                                                 //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
                                                 f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS);
                                                 ///f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
@@ -4645,10 +4646,10 @@ public class Management extends MAIN {
 
 
                 System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
-        System.out.println("- sumASNotMasked: " + sumASVECTORS + " n: " + counter  + " ASNotMasked: " + (sumASVECTORS/counter) );
+                                System.out.println("- sumASNotMasked: " + sumASVECTORS + " n: " + counter  + " ASNotMasked: " + (sumASVECTORS/counter) );
 
-                // File content table in csv
-                WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName(), f, ".csv");
+                            // File content table in csv
+                            WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName() + "_" + mode, f, ".csv");
 
         }
 

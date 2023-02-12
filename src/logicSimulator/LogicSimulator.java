@@ -846,9 +846,9 @@ import signalProbability.ProbCircuit;
                     final DepthGate gate = (DepthGate) this.findGateAccordingSignal(listSensitiveSignals.get(i), listNotMaskedGates.get(listNotMaskedGates.size()-1).getGate());
                     listSensitiveGates.add(gate);
 
-                    if(testNumber < 4) {
-                        System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
-                     }
+                    //if(testNumber < 4) {
+                    //    System.out.println("Circuits output: " + this.circuit.getOutputs().toString() + "> sensitiveSignal: " + this.circuit.getOutputs().get(i) + " sensitiveGate: " + gate);
+                    // }
             }
 
             //System.out.println("List Sensitivity outputs: " + listSensitiveGates + "  signals: " + listSensitiveSignals );
@@ -893,7 +893,7 @@ import signalProbability.ProbCircuit;
             for (int i = 1; i < sensitiveGates.size(); i++) {
                 information = information + ", " + sensitiveGates.get(i).getGate().getGate().getId();
             }
-            
+
              */
 
 

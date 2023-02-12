@@ -321,7 +321,7 @@ public class SimualtionType {
         simulacaoMultithreading.classifyTotalSensitiveAreas();
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
-        simulacaoMultithreading.printPropagationGates();
+        simulacaoMultithreading.printPropagationGates("Exhaustive");
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
@@ -347,7 +347,7 @@ public class SimualtionType {
 
         simulacaoMultithreading.classifyTotalSensitiveAreas();
 
-        simulacaoMultithreading.printPropagationGates();
+        simulacaoMultithreading.printPropagationGates("Monte_Carlo");
 
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "
                 + "2^Signals * Gates)");
