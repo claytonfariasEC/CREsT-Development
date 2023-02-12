@@ -16,6 +16,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.crypto.spec.PSource;
 import javax.script.ScriptException;
 
 import jxl.write.WriteException;
@@ -677,7 +678,7 @@ import signalProbability.ProbCircuit;
 
             for (int k = 0; k < gatesInThisLevel.size(); k++) {
                 String AwnsString = gatesInThisLevel.get(k).getClass().toString();
-                System.out.println("Aws: "+ AwnsString);
+                //System.out.println("Aws: "+ AwnsString);
                 if (AwnsString.equals("class levelDatastructures.DepthGate")) {
                     Object object = gatesInThisLevel.get(k);
                     final DepthGate gate = (DepthGate) object;
@@ -783,7 +784,7 @@ import signalProbability.ProbCircuit;
         }
 
         thread_item.setCircuitSensitiveArea(sa_sum);
-
+        System.out.println("- END LOGIC Sim -");
         // END ------------    Logic simulation ------------------------
 
         //TODO: Uncomment
@@ -848,7 +849,7 @@ import signalProbability.ProbCircuit;
                 final DepthGate gate = (DepthGate) listSensitiveGates.get(k);
 
                 //thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
-                thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
+                //thread_item.setGatesLogicalPath(lastLevelGatesSensibilities.get(k));
                 //passedGates.add(lastLevelGatesSensibilities.get(k));
 
                 //listSensitiveSignals.add(gate.getGate().getOutputs().get(0)); // Saidas
