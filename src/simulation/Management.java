@@ -3436,7 +3436,6 @@ public class Management extends MAIN {
 
 
         }
-
         /**
          * This method orchestrates the settup enviroment for run Multithreading SET evaluation (Circuits Reliability (MTBF))
          * @param sample
@@ -3445,6 +3444,129 @@ public class Management extends MAIN {
          * @throws Exception
          */
         public void monteCarloReliability(int sample, ArrayList <Float> mtf_list, String option, String file) throws IOException, Exception{
+
+                //System.out.println("- SUM PROPORTION: " + sumProportionPercentage(mtf_list));
+                //List thread_list =  this.createVectorsAndParticionate(sampleSize, option, "MTF-Generate_Netlist");
+                //this.runElectricalSimulator(this.relativePath, this.relativePath + "netlist_files/" +"netlist_"+this.circuit.getName() + ".txt");
+                //this.sampleSize = N;
+
+                if (sumProportionPercentage(mtf_list) == 1.0 && (sample > 0)) {  // 100%
+
+                        this.ThreadSimulationFlag = "Single_Fault_NEW";
+
+                        Map <String, SensitiveCell> sensitive_cells = readCsvFileAndMapSensitiveCellsArea(file, ",");
+
+                        System.out.println("- Sensitive Cells: " + sensitive_cells.size());
+
+                        this.setSensitiveCells(sensitive_cells);
+                        //this.sensitive_cells = sensitive_cells;
+                        Instant start = Instant.now();
+
+                        LocalDateTime myDateObj = LocalDateTime.now();
+                        DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                        String formattedDate = myDateObj.format(myFormatObj);
+
+                        this.setupEnviroment(" ----- Monte Carlo version  for Multiple Transient Fault Injection -------");
+
+                        Instant loadTimeElapsed = Instant.now();
+
+                        Instant startPreparingSimulationTimeElapsed = Instant.now();
+
+                        this.sampleSize = sample; //(int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+
+                        int N = this.sampleSize; // random_input_vectors.size();//testNumber;
+
+                        //System.out.println("-  (input) Sample size = " + this.sampleSize);
+
+                        this.signals_to_inject_faults = this.signalsToInjectFault(option); // Consider all signals to fault inject
+
+                        this.mtf_list = mtf_list;
+
+                        System.out.println("-Sample Size: " + this.sampleSize);
+
+                        //this.signals_to_inject_faults = this.signalsToInjectFault(option); // Consider all signals to fault inject
+
+                        //this.mtf_list = mtf_list;
+
+                        System.out.println("-Signals: " + this.signals_to_inject_faults.size());
+
+                        //List thread_list =  this.createVectorsAndParticionate(sampleSize, option, "MTF-RANDOM");
+                        List thread_list =  this.createVectorsAndParticionate(this.sampleSize, option, "MTF-Sensitive_Area-Generate_Netlist");
+
+                        //System.out.println("THREAD LIST: " + thread_list);
+
+                        ArrayList<Float> tt = new ArrayList<>(mtf_list);
+                        tt.remove(0); // 20k
+
+                        Instant endPreparingSimulationTimeElapsed = Instant.now();
+
+                        Instant startThreadingTimeElapsed = Instant.now();
+
+                        this.executeThreadsSimulation(thread_list);
+
+                        Instant endThreadingTimeElapsed = Instant.now();
+
+                        int bitfipCcounter = this.parseResultsAndCalculateER();  // ER
+
+                        Instant finish = Instant.now();
+                        long timeElapsed_Instant = Duration.between(start, finish).toSeconds();
+
+                        LocalDateTime myDateObj2 = LocalDateTime.now();
+                        DateTimeFormatter myFormatObj2 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                        String formattedDate2 = myDateObj2.format(myFormatObj2);
+
+                        Instant startTimelogGeneration = Instant.now();
+
+                        long timeElapsed_loadTime = Duration.between(start, loadTimeElapsed).toSeconds();
+                        long timeElapsed_PrepareTime = Duration.between(startPreparingSimulationTimeElapsed, endPreparingSimulationTimeElapsed).toSeconds();
+                        long timeElapsed_ThreadingTime = Duration.between(startThreadingTimeElapsed, endThreadingTimeElapsed).toSeconds();
+
+                        Instant endTimelogGeneration = Instant.now();
+
+                        //String specific, String formattedDate, String formattedDate2,
+                        // int bitfipCcounter, long timeElapsed_loadTime, long timeElapsed_PrepareTime,
+                        // long timeElapsed_ThreadingTime, long timeElapsed_logGeneration, long timeElapsed_Instant){);
+
+                        System.out.println("-----------------------END SIMULATION---------------------------------");
+
+                        String avgAs = calculateTotalSensitiveArea();
+
+                        this.avgASFLOAT = Float.parseFloat(avgAs);
+
+                        float particle_flux = 0.000036F;
+                        float one = 1.0F;
+                        this.MTBF = one /(particle_flux * (this.ER) * this.avgASFLOAT);
+
+                        System.out.println("TFD = 1 - ER = " + (1-this.ER));
+
+                        System.out.println("MTBF = (1 / (" + (this.ER)+  " x " + this.avgASFLOAT + " x 3,6 * 10-5) ) = " + this.MTBF);
+
+                        System.out.println(" ----------------------------------------------------------------------------------------------------------------------\n\n...");
+
+                        this.writeLogs(this.relativePath + option + "_MTF_MonteCarlo_Simple_Log_" +this.circuit.getName()+"_Threads-"+ this.threads +  "_sampleSize-" + this.sampleSize, formattedDate,  formattedDate2, timeElapsed_Instant, this.itemx_list, "MTF");
+
+                        long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
+
+                        System.out.println("----------------------------------------------------------------------");
+
+                        this.printResults("MTF" , formattedDate, formattedDate2, bitfipCcounter, timeElapsed_loadTime, timeElapsed_PrepareTime, timeElapsed_ThreadingTime, timeElapsed_logGeneration, timeElapsed_Instant);
+
+                }
+                else{
+                        System.err.println("- Inputs inserted sum up ("+sumProportionPercentage(mtf_list)+") above 1 (100%), these were the inserted commands: " + mtf_list);
+                }
+
+        }
+
+
+        /**
+         * This method orchestrates the settup enviroment for run Multithreading SensitiveAreaAnalysis_AVG_and_NotMasked evaluation (um²)
+         * @param sample
+         * @param option
+         * @throws IOException
+         * @throws Exception
+         */
+        public void monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(int sample, ArrayList <Float> mtf_list, String option, String file) throws IOException, Exception{
 
                 //System.out.println("- SUM PROPORTION: " + sumProportionPercentage(mtf_list));
                 //List thread_list =  this.createVectorsAndParticionate(sampleSize, option, "MTF-Generate_Netlist");
@@ -4346,10 +4468,12 @@ public class Management extends MAIN {
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
 
                         ArrayList<ArrayList<GateDetailedInformation>> gatesSA= this.itemx_list.get(i).getSensitiveGates(); ;//x.get(xindex).getSensitiveGatesLogicalPath();
-                        counter = counter + x.size();
+                        ///counter = counter + x.size();
+
                         //for (int xindex = 0; xindex < x.; xindex++) {
 
                                         for (int j = 0; j < gatesSA.size(); j++) {
+                                                counter = counter + 1;
                                                 String AS = "";
 
                                                 String info = "id: " + j + " > " + x.get(j).getinputVector();
@@ -4389,7 +4513,7 @@ public class Management extends MAIN {
                                                 //String ASStr = String.format("%.03f", AS);
 
                                                 //TODO: UNCOMENT
-                                                if(counter<10) {
+                                                if(counter<20) {
                                                         System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
                                                 }
                                                 //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);

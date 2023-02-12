@@ -737,7 +737,7 @@ import signalProbability.ProbCircuit;
                         gateSensitivivity.setgateSensitiveArea(Float.parseFloat(gatecell.getSensitive_are()));
                         gateSensitivivity.setgateSensitiveAreaOriginal(Float.parseFloat(gatecell.getSensitive_are()));
                     }else{
-                        System.out.println("- Warning cell do no contains in sensitive library: " + key_original + " SAlibrary: " + this.sensitive_cells.size());
+                        System.err.println("- Warning cell do no contains in sensitive library: " + key_original + " SAlibrary: " + this.sensitive_cells.size());
                         return;
                     }
 

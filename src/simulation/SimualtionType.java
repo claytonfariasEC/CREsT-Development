@@ -335,7 +335,7 @@ public class SimualtionType {
 
          */
         String Sensitive_Library  = "teste/lookup_table.csv";
-        System.out.println("Exaustive");
+        //System.out.println("Exaustive");
         Management simulacaoMultithreading = new Management(simulationCircuit.getThreads(), simulationCircuit.getReliabilityConst(), simulationCircuit.getRelativePath(),
                 simulationCircuit.getRelativePath()+ simulationCircuit.getGenlib(), simulationCircuit.getRelativePath()+ simulationCircuit.getCircuit());
 
@@ -343,7 +343,7 @@ public class SimualtionType {
         //simulacaoMultithreading.classifyGatesSensitiveAreas();
 
         /* Monte Carlo Simulation */
-        simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
+        simulacaoMultithreading.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
 
         simulacaoMultithreading.classifyTotalSensitiveAreas();
 
