@@ -209,6 +209,7 @@ import signalProbability.ProbCircuit;
 
                 this.getPropagateFaultFreeResults( this.threadSimulationList.get(i).getinputVector(), this.threadSimulationList.get(i).getSimulationIndex(), this.threadSimulationList.get(i), i+1);
             }
+            /*
                 String e = "";
                 for (int j = 0; j < this.gates_SENSITIVE.size() ; j++) {
                     String d = this.threadSimulationList.get(j).getinputVector() + "; ";
@@ -224,6 +225,8 @@ import signalProbability.ProbCircuit;
                     d = d + "\n";
                     e = e + d;
                 }
+
+             */
         //System.out.println(e);
         }
 
@@ -1580,12 +1583,14 @@ import signalProbability.ProbCircuit;
                                 if(!listSensitiveSignals.contains(gate.getGate().getInputs().get(i))) {
                                     listSensitiveSignals.add(gate.getGate().getInputs().get(i));
                                 }
-
+                                /*
                                 strInfo = strInfo + (" - NEWOP Gate: " + gate.getGate().getId()
                                         ///+ " [" + input + "] ["
                                         + inputBitfliped + "] Out: "
                                         + output_converted_original
                                         + "," + output_convertedBitfliped) + " SA(" + sa + ")" + " [" + listSensitiveSignals + "]";
+
+                                 */
 
                                 //Object object = gate.getGate().getInputs().get(i);
                                 //final Signal previousGate = (Signal) object;
@@ -1650,7 +1655,7 @@ import signalProbability.ProbCircuit;
             }
             j++;
         }
-        ArrayList <String> l = new ArrayList<>();
+        //ArrayList <String> l = new ArrayList<>();
        // HashSet<GateDetailedInformation> hset = new HashSet<GateDetailedInformation>();
 
         /*

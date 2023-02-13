@@ -315,13 +315,24 @@ public class SimualtionType {
         //simulacaoMultithreading.classifyGatesSensitiveAreas();
 
 
-        /* Monte Carlo Simulation */
-        //simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
-        simulacaoMultithreading.runMultithreadingSimulationAndNotMaskedSensitiveArea(simulationCircuit.getSignalsToinjectFault());
-        simulacaoMultithreading.classifyTotalSensitiveAreas();
+        try {
+            /* Monte Carlo Simulation */
+            //simulacaoMultithreading.monteCarloReliability(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
+            simulacaoMultithreading.runMultithreadingSimulationAndNotMaskedSensitiveArea(simulationCircuit.getSignalsToinjectFault());
 
-        //simulacaoMultithreading.printSensitiveAreasAnalysis();
-        simulacaoMultithreading.printPropagationGates("Exhaustive");
+            // simulacaoMultithreading.classifyTotalSensitiveAreas();
+
+
+            //simulacaoMultithreading.printSensitiveAreasAnalysis();
+            simulacaoMultithreading.printPropagationGates("MC");
+
+        }catch (Exception e){
+            System.out.println("Error !!!");
+
+        }
+
+
+
 
         //simulacaoMultithreading.printSensitiveAreasAnalysis();
         this.OUTPUT_INFO = simulacaoMultithreading.getER("Sample (N = "

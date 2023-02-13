@@ -142,9 +142,10 @@ public class MAIN {  //Class to run debug tests
 
              //   try {
                     System.out.println(j + "  --> circ: "+ versao.getCircuitListSpecs().get(i).getCircuit());
-                   SimualtionType sim_mtf_debug = new SimualtionType(versao.getCircuitListSpecs().get(i));
+                   SimualtionType sim_mtf_mc = new SimualtionType(versao.getCircuitListSpecs().get(i));
+                SimualtionType sim_mtf_debug = new SimualtionType(versao.getCircuitListSpecs().get(i));
                   //  if(i) {
-                     //  sim_mtf_debug.monteCarloReliabilityAPI("teste/lookup_table.csv");
+               /// sim_mtf_mc.monteCarloReliabilityAPI("teste/lookup_table.csv");
                     //sim_mtf_debug.faultToleranceExhaustiveCompleteMETAPIESTIMATION();
 
                  // TODO: 26/09/2022  v1  TESTE
@@ -154,8 +155,9 @@ public class MAIN {  //Class to run debug tests
                  ///sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
-                // sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
-               sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
+                sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
+
+               //sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
 
                 //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTADAPTIVE();  //TODO Working
                 //sim_mtf_debug.monteCarloReliability_SpiceGeneration_ElectricalSimulationAPI("teste/", "45nm_HP.pm", "Library.txt");

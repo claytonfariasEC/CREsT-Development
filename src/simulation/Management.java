@@ -113,9 +113,12 @@ public class Management extends MAIN {
         }
 
         public void printSpecsSimulation() {
-                System.out.println("    ... Reading Genlib " + " at -> " + this.genlib + " ... ok");
                 System.out.println("    ... Avaliable logic gates in this library: " + this.cellLibrary.getCells().size());
                 System.out.println("    ... Reading verilog " + " at -> " + this.circuitNameStr + " ... ok");
+                System.out.println("    ... Gates " + this.circuit.getGates().size());
+                System.out.println("    ... Signals " + this.circuit.getSignals().size());
+                System.out.println("    ... Inputs " + this.circuit.getInputs().size());
+                System.out.println("    ... Outputs " + this.circuit.getOutputs().size());
         }
 
         /**
@@ -2336,6 +2339,8 @@ public class Management extends MAIN {
 
                 Instant startThreadingTimeElapsed = Instant.now();
 
+                System.out.println(formattedDate);
+
                 this.executeThreadsSimulation(thread_list);  // Prepare and run the thread simulation
 
                 Instant endThreadingTimeElapsed = Instant.now();
@@ -2388,7 +2393,7 @@ public class Management extends MAIN {
 
                 this.Performance_Time = "Simulation started at: " + formattedDate + " and finished at: " + formattedDate2;
 
-
+                System.out.println(formattedDate2);
 
         }
 
@@ -3559,7 +3564,7 @@ public class Management extends MAIN {
 
                 if (sumProportionPercentage(mtf_list) == 1.0 && (sample > 0)) {  // 100%
 
-                        this.ThreadSimulationFlag = "Single_Fault_NEW";
+                        this.ThreadSimulationFlag = "MTF-Sensitive_Area-Generate_Netlist";
 
                         Map <String, SensitiveCell> sensitive_cells = readCsvFileAndMapSensitiveCellsArea(file, ",");
 
@@ -3698,6 +3703,7 @@ public class Management extends MAIN {
 
                         this.setupEnviroment(" ----- Monte Carlo version  for Multiple Transient Fault Injection -------");
 
+
                         Instant loadTimeElapsed = Instant.now();
 
                         Instant startPreparingSimulationTimeElapsed = Instant.now();
@@ -3713,12 +3719,13 @@ public class Management extends MAIN {
                         this.mtf_list = mtf_list;
 
                         System.out.println("-Sample Size: " + this.sampleSize);
+                        this.printSpecsSimulation();
 
                         //this.signals_to_inject_faults = this.signalsToInjectFault(option); // Consider all signals to fault inject
 
                         //this.mtf_list = mtf_list;
 
-                        System.out.println("-Signals: " + this.signals_to_inject_faults.size());
+                        //System.out.println("-Signals: " + this.signals_to_inject_faults.size());
 
                         //List thread_list =  this.createVectorsAndParticionate(sampleSize, option, "MTF-RANDOM");
                         List thread_list =  this.createVectorsAndParticionate(this.sampleSize, option, "MTF-Sensitive_Area-Generate_Netlist");
@@ -4554,7 +4561,7 @@ public class Management extends MAIN {
 
         }
 
-        public void printPropagationGates(String mode){
+        public void printPropagationGates(String mode) throws IOException {
                 //System.out.println("CElls: " + this.sensitive_cells);
                 System.out.println("\n\n\n------------ Gates values -------------------");
                 float counter = 0;
@@ -4570,6 +4577,24 @@ public class Management extends MAIN {
                 ArrayList  <String> f = new ArrayList<>();
                 f.add(f_header);
 
+                //ArrayList  <String> f_temp = new ArrayList<>();
+                //f.add(f_header);
+                String f_temp = "";
+
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+
+                System.out.println(formattedDate);
+
+                FileWriter fileWriter = new FileWriter(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName() + "_" + mode+".csv");
+                PrintWriter printWriter = new PrintWriter(fileWriter);
+                printWriter.print("INPUTS;SA_VECTOR_GOLD(TOTAL);SA_NOT_MASKED;SENSITIVE_GATES");
+                //printWriter.printf("Product name is %s and its price is %d $", "iPhone", 1000);
+                //printWriter.close();
+
+                int test = 0;
+
                 for (int i = 0; i < this.itemx_list.size(); i++) {
 
                         List<TestVectorInformation> x = this.itemx_list.get(i).get_threadSimulationList();
@@ -4583,25 +4608,31 @@ public class Management extends MAIN {
                                                 counter = counter + 1;
                                                 String AS = "";
 
-                                                String info = "id: " + j + " > " + x.get(j).getinputVector();
+                                               // String info = "id: " + j + " > " + x.get(j).getinputVector();
+
 
                                                 float sum = 0;
                                                 ArrayList<GateDetailedInformation> gatesSimulationTemp = gatesSA.get(j);
 
                                                 for (int k = 0; k < gatesSimulationTemp.size(); k++) {
+
                                                         if(k==0) {
                                                                 AS = AS + " " + gatesSimulationTemp.get(k).getGate().toString();
                                                         }else{
                                                                 AS = AS + ", " + gatesSimulationTemp.get(k).getGate().toString();
                                                         }
+
                                                          sum = sum + gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal();
 
+                                                        /*
                                                         info = info + " Gate " + gatesSimulationTemp.get(k).getGate().getGate().getType()  +  " : " + gatesSimulationTemp.get(k).getGate().toString()
                                                                 +" SA(" +  gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal() + ")"
                                                                 //+ " type: " + gatesSimulationTemp.get(j).getGate().getGate().getType()
                                                                 + " " + gatesSimulationTemp.get(k).getInputsOriginal()
                                                                 + " out: " +  gatesSimulationTemp.get(k).getOutputsOriginal()
                                                                 + " SumTemp: " + sum;
+
+                                                         */
                                                 /*
                                                 if(!passedGates.contains(gatesSimulationTemp.get(j).getGate().toString())){
                                                         sum = sum +  gatesSimulationTemp.get(j).getgateSensitiveAreaOriginal();
@@ -4615,18 +4646,27 @@ public class Management extends MAIN {
                                                 }
                                                 sumASVECTORS = sumASVECTORS + sum;
 
-                                                String sumStr = String.format("%.03f", sum);
+                                                 String sumStr = String.format("%.03f", sum);
 
                                                 //String ASStr = String.format("%.03f", AS);
 
                                                 //TODO: UNCOMENT
-                                                if(counter<25) {
-                                                        System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
+                                                //if(counter<25) {
+                                                //        System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
+                                                //}
+                                                f_temp = f_temp + "\n" + x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS;
+
+                                                if(test > 500){ // Buffer
+                                                        test = 0;
+                                                        printWriter.print(f_temp + "\n");
+                                                        f_temp = "";
                                                 }
 
                                                 //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);
-                                                f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS);
-                                                ///f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveArea()  + ";" + sum + ";" + AS);
+
+                                                //f.add(x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sum + ";" + AS);
+
+
                                         }
 
                        // for (int j = 0; j < x.size(); j++) {
@@ -4635,14 +4675,20 @@ public class Management extends MAIN {
 
 
                              //   }
+                        if(i == this.itemx_list.size()-1){
+                                printWriter.print(f_temp + "\n");
+                                printWriter.close();
+                        }
 
-
+                                test = test + 1;
                 }
 
 
+                LocalDateTime myDateObj2 = LocalDateTime.now();
+                DateTimeFormatter myFormatObj2 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate2 = myDateObj2.format(myFormatObj);
 
-
-
+                System.out.println("End: " + formattedDate2);
 
 
                 System.out.println("------------ Extracting Total vector Sensitive (Cross Sections) -------------------");
@@ -4665,7 +4711,7 @@ public class Management extends MAIN {
 
 
                             // File content table in csv
-                            WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName() + "_" + mode, f, ".csv");
+                           // WriteFile file = new WriteFile(this.relativePath+"TABLE_AS_COMPARATIVE_" + this.circuit.getName() + "_" + mode, f, ".csv");
 
         }
 
