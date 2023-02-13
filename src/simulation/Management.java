@@ -4613,8 +4613,18 @@ public class Management extends MAIN {
 
                                                 float sum = 0;
                                                 ArrayList<GateDetailedInformation> gatesSimulationTemp = gatesSA.get(j);
+                                                String AS_temp = "";
+
+                                                int countK = 0;
 
                                                 for (int k = 0; k < gatesSimulationTemp.size(); k++) {
+
+
+                                                        if(countK > 10 ){
+                                                                countK = 0;
+                                                                AS_temp = AS_temp + AS;
+                                                                AS = "";
+                                                        }
 
                                                         if(k==0) {
                                                                 AS = AS + " " + gatesSimulationTemp.get(k).getGate().toString();
@@ -4623,7 +4633,7 @@ public class Management extends MAIN {
                                                         }
 
                                                          sum = sum + gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal();
-
+                                                        countK = countK + 1 ;
                                                         /*
                                                         info = info + " Gate " + gatesSimulationTemp.get(k).getGate().getGate().getType()  +  " : " + gatesSimulationTemp.get(k).getGate().toString()
                                                                 +" SA(" +  gatesSimulationTemp.get(k).getgateSensitiveAreaOriginal() + ")"
@@ -4654,12 +4664,14 @@ public class Management extends MAIN {
                                                 //if(counter<25) {
                                                 //        System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sumStr + " Sensitive Gates: " + AS);
                                                 //}
-                                                f_temp = f_temp + "\n" + x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS;
+                                                f_temp = f_temp + "\n" + x.get(j).getinputVector() + ";" +  x.get(j).getCircuitOriginalSensitiveAreaStr()  + ";" + sumStr + ";" + AS_temp;
 
                                                 if(test > 500){ // Buffer
+                                                        printWriter = new PrintWriter(fileWriter);
                                                         test = 0;
                                                         printWriter.print(f_temp + "\n");
                                                         f_temp = "";
+                                                        printWriter.close();
                                                 }
 
                                                 //System.out.println(info + " -->  Sensitive Area Sum ORIGINAL: " +  x.get(j).getCircuitOriginalSensitiveArea() + " NOT_MASKED: " + sum + " Sensitive Gates: " + AS);

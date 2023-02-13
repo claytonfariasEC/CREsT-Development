@@ -356,7 +356,7 @@ public class SimualtionType {
         /* Monte Carlo Simulation */
         simulacaoMultithreading.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(Math.round(simulationCircuit.getMtf_sizes().get(0)), simulationCircuit.getMtf_sizes(), simulationCircuit.getSignalsToinjectFault(), Sensitive_Library);
 
-        simulacaoMultithreading.classifyTotalSensitiveAreas();
+        //simulacaoMultithreading.classifyTotalSensitiveAreas();
 
         simulacaoMultithreading.printPropagationGates("Monte_Carlo");
 
