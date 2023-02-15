@@ -18,6 +18,7 @@ public class Manager extends ManagementUpdated {
         private int sampleSize;
 
     private ArrayList<LogicSimulator> itemx_list = new ArrayList<>();
+
     private CellLibrary cellLibrary;
     Circuit circuit;
     private final String circuitNameStr;
@@ -76,6 +77,7 @@ public class Manager extends ManagementUpdated {
         this.circuit = circuit;
     }
 
+
     public void setupManager(String flagSimulationType){
         //this.sampleSize = 0;
         computeSimulationSize(flagSimulationType);
@@ -93,7 +95,6 @@ public class Manager extends ManagementUpdated {
 
             case "MonteCarlo":
                 System.out.println("Monte Carlo Simulation ");
-                
                 /// Do something
                 break;
 
@@ -316,7 +317,28 @@ public class Manager extends ManagementUpdated {
     public ProbCircuit getProbCircuitManager() {
         return this.probCircuit;
     }
+
     public int getSampleSize() {
         return this.sampleSize;
+    }
+
+    public CellLibrary getCellLibrary() {
+        return this.cellLibrary;
+    }
+
+    public LevelCircuit getlCircuit() {
+        return this.lCircuit;
+    }
+
+    public LevelCircuit getLevelCircuit() {
+        return this.levelCircuit;
+    }
+
+    public String getCircuitNameStr() {
+        return circuitNameStr;
+    }
+
+    public ArrayList<LogicSimulator> getItemx_list() {
+        return this.itemx_list;
     }
 }

@@ -2110,7 +2110,9 @@ public class ManagementUpdated extends MAIN {
                 this.signals_to_inject_faults = setupEnviroment.assignsignalsToInjectFault(option); //this.signalsToInjectFault(option);
 
                 /* Decision block */
+
                         this.probCircuit = setupEnviroment.getProbCircuit();
+
                 List thread_list = setupEnviroment.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
