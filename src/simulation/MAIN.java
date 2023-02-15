@@ -157,12 +157,13 @@ public class MAIN {  //Class to run debug tests
                  //sim_mtf_debug.faultToleranceExhaustiveSET_SensitiveAreaAPI("teste/", "45nm_HP.pm", "Library.txt"); //TODO Working ....
 
                 // sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
-                 sim_mtf_debug.faultToleranceExhaustiveSETAPIUPDATE(); //TODO Working
+
+                // sim_mtf_debug.faultToleranceExhaustiveSETAPIUPDATE(); //TODO Working Refactoring
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
                // sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
 
-             //   sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
+               sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
 
                 //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTADAPTIVE();  //TODO Working
                 //sim_mtf_debug.monteCarloReliability_SpiceGeneration_ElectricalSimulationAPI("teste/", "45nm_HP.pm", "Library.txt");
