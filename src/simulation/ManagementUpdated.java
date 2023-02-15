@@ -34,10 +34,10 @@ public class ManagementUpdated extends MAIN {
         private ArrayList<LogicSimulator> itemx_list = new ArrayList<>();
         private int sampleSize;
         private CellLibrary cellLibrary;
-        private Circuit circuit;
+        Circuit circuit;
         private final String circuitNameStr;
         private LevelCircuit levelCircuit;
-        private ProbCircuit probCircuit;
+        ProbCircuit probCircuit;
         private LevelCircuit lCircuit;
         private int unmasked_faults;
         private float ER;
@@ -2063,6 +2063,11 @@ public class ManagementUpdated extends MAIN {
                 float one = 1.0F;
                 this.MTBFReal = one /(particle_flux * (this.ER) * this.ASReal);
         }
+
+        public ProbCircuit getProbCircuit() {
+                return this.probCircuit;
+        }
+
         /**
          * Exhaustic Single STF (SET) Simulation
          *
@@ -2072,7 +2077,7 @@ public class ManagementUpdated extends MAIN {
          */
         public void runMultithreadingExausticSimulation(String option) throws IOException, Exception { //Test All possibilities
 
-
+                this.threads = 4;
 
                 Instant start = Instant.now();
 
@@ -2081,6 +2086,8 @@ public class ManagementUpdated extends MAIN {
                 String formattedDate = myDateObj.format(myFormatObj);
 
                 this.setupEnviroment("\n ----- Simulation started ------");
+
+                Manager setupEnviroment  = new Manager(this.threads, this.reliabilityConst, this.relativePath, this.genlib, this.circuitNameStr, this.probCircuit, this.circuit);
 
                 //System.out.println(this.sensitive_cells);
 
@@ -2093,13 +2100,14 @@ public class ManagementUpdated extends MAIN {
 
                 /* Decision block */
 
-                int N = this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+                //this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+                setupEnviroment.setupManager("Exhaustive");
 
-                //int N = this.sampleSize; // random_input_vectors.size();//testNumber;
+                int N = this.sampleSize = setupEnviroment.getSampleSize(); // random_input_vectors.size();//testNumber;
 
                 int sizeExasuticTest; //= (this.sampleSize * this.signals_to_inject_faults.size());;
 
-                this.signals_to_inject_faults = this.signalsToInjectFault(option);
+                this.signals_to_inject_faults = setupEnviroment.signalsToInjectFault(option); //this.signalsToInjectFault(option);
 
                 /* Decision block */
 

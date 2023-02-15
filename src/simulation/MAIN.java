@@ -20,6 +20,10 @@ public class MAIN {  //Class to run debug tests
 
     }
 
+    public MAIN() {
+
+    }
+
     public void runloop(Simulation simulationDebug) throws Exception {
 
 
@@ -152,7 +156,8 @@ public class MAIN {  //Class to run debug tests
 
                  //sim_mtf_debug.faultToleranceExhaustiveSET_SensitiveAreaAPI("teste/", "45nm_HP.pm", "Library.txt"); //TODO Working ....
 
-                 sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
+                // sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
+                 sim_mtf_debug.faultToleranceExhaustiveSETAPIUPDATE(); //TODO Working
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
                // sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC

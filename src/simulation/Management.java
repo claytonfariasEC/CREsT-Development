@@ -2074,7 +2074,7 @@ public class Management extends MAIN {
          */
         public void runMultithreadingExausticSimulation(String option) throws IOException, Exception { //Test All possibilities
 
-
+                //this.threads = 4;
 
                 Instant start = Instant.now();
 
@@ -2140,17 +2140,17 @@ public class Management extends MAIN {
                 long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
 
 
-                //this.setSAMode("SA_FREE");
+                this.setSAMode("SA_FREE");
 
                 this.defineAvgSensitiveArea();
 
-                //this.printSensitiveAreasAnalysis();
+                this.printSensitiveAreasAnalysis();
 
                 this.defineMTBFBasedInAvgSensitiveAreaAvg();
 
                 this.defineMTBF();
 
-                //System.out.println("AVGS: " + this.avgASFLOAT);
+                System.out.println("AVGS: " + this.avgASFLOAT);
 
                 this.writeLogs(this.relativePath + option + "_ExausticSTFSimulation_" + this.circuit.getName() + "_Threads-" + this.threads + "_sampleSize-" + this.sampleSize, formattedDate, formattedDate2, timeElapsed_Instant, itemx_list, "STF");
 
