@@ -2107,11 +2107,11 @@ public class ManagementUpdated extends MAIN {
 
                 int sizeExasuticTest; //= (this.sampleSize * this.signals_to_inject_faults.size());;
 
-                this.signals_to_inject_faults = setupEnviroment.signalsToInjectFault(option); //this.signalsToInjectFault(option);
+                this.signals_to_inject_faults = setupEnviroment.assignsignalsToInjectFault(option); //this.signalsToInjectFault(option);
 
                 /* Decision block */
-
-                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE");
+                        this.probCircuit = setupEnviroment.getProbCircuit();
+                List thread_list = setupEnviroment.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE");
 
                 System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
 
