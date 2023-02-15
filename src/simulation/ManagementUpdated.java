@@ -5,8 +5,6 @@ import datastructures.Circuit;
 import datastructures.Gate;
 import datastructures.Signal;
 import jxl.write.WriteException;
-import levelDatastructures.DepthGate;
-import levelDatastructures.GateLevel;
 import levelDatastructures.LevelCircuit;
 import logicSimulator.*;
 import readers.MappedVerilogReader;
@@ -31,7 +29,7 @@ import java.util.*;
 
 //public class Management extends MAIN{
 
-public class Management extends MAIN {
+public class ManagementUpdated extends MAIN {
 
         private ArrayList<LogicSimulator> itemx_list = new ArrayList<>();
         private int sampleSize;
@@ -77,7 +75,7 @@ public class Management extends MAIN {
          * @param circuitName
          * @throws IOException
          */
-        public Management(int threads, String reliabilityConst, String relativePath, String genlib, String circuitName) throws IOException {
+        public ManagementUpdated(int threads, String reliabilityConst, String relativePath, String genlib, String circuitName) throws IOException {
                 super(threads, reliabilityConst, relativePath, genlib);
                 this.cellLibrary = new CellLibrary();
                 this.circuitNameStr = circuitName;
@@ -2082,9 +2080,9 @@ public class Management extends MAIN {
                 DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
                 String formattedDate = myDateObj.format(myFormatObj);
 
-                this.setupEnviroment("\n ----- Exaustive Simulation Version For SET (SF's) ------");
+                this.setupEnviroment("\n ----- Simulation started ------");
 
-                System.out.println(this.sensitive_cells);
+                //System.out.println(this.sensitive_cells);
 
                 System.out.println("    - Simulation start in : " + formattedDate);
                 System.out.println("    - Threads in execution: " + this.threads);
@@ -2093,13 +2091,17 @@ public class Management extends MAIN {
 
                 Instant startPreparingSimulationTimeElapsed = Instant.now();
 
-                this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+                /* Decision block */
 
-                int N = this.sampleSize; // random_input_vectors.size();//testNumber;
+                int N = this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+
+                //int N = this.sampleSize; // random_input_vectors.size();//testNumber;
 
                 int sizeExasuticTest; //= (this.sampleSize * this.signals_to_inject_faults.size());;
 
                 this.signals_to_inject_faults = this.signalsToInjectFault(option);
+
+                /* Decision block */
 
                 List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE");
 
@@ -2277,6 +2279,119 @@ public class Management extends MAIN {
 
 
         }
+
+        /**
+         * Template
+         *
+         * @param option
+         * @throws IOException
+         * @throws Exception
+         */
+        public void template(String option) throws IOException, Exception { //Test All possibilities
+
+
+
+                Instant start = Instant.now();
+
+                LocalDateTime myDateObj = LocalDateTime.now();
+                DateTimeFormatter myFormatObj = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate = myDateObj.format(myFormatObj);
+
+                this.setupEnviroment("\n ----- Simulatiopn started  ------");
+
+                //System.out.println(this.sensitive_cells);
+                //System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size());
+
+                System.out.println("    - Simulation start in : " + formattedDate);
+                System.out.println("    - Threads in execution: " + this.threads);
+
+                Instant loadTimeElapsed = Instant.now();
+                Instant startPreparingSimulationTimeElapsed = Instant.now();
+
+                /* Decision block */
+
+                this.sampleSize = (int) Math.pow(2, this.probCircuit.getInputs().size());  //(int) Math.pow(2, this.probCircuit.getInputs().size());
+
+                int N = this.sampleSize; // random_input_vectors.size();//testNumber;
+
+
+                /* Decision block */
+
+                int sizeExasuticTest; //= (this.sampleSize * this.signals_to_inject_faults.size());;
+
+                this.signals_to_inject_faults = this.signalsToInjectFault(option);
+
+                this.threads = 1;//this.sampleSize * this.signals_to_inject_faults.size();
+
+                List thread_list = this.createVectorsAndParticionate(sampleSize, option, "TRUE_TABLE_SINGLE_SA_NEW");
+
+                System.out.println("-   Sample size (N = 2^ENTRADAS): " + "2^" + this.circuit.getInputs().size() + " = " + this.sampleSize + "   Sigs: " + this.signals_to_inject_faults.size());
+                System.out.println("Gates: " + this.circuit.getGates().size());
+
+                sizeExasuticTest = (this.sampleSize * this.signals_to_inject_faults.size());
+
+                Instant endPreparingSimulationTimeElapsed = Instant.now();
+
+                Instant startThreadingTimeElapsed = Instant.now();
+
+                System.out.println(formattedDate);
+
+                this.executeThreadsSimulation(thread_list);  // Prepare and run the thread simulation
+
+                Instant endThreadingTimeElapsed = Instant.now();
+
+                this.sampleSize = sizeExasuticTest;
+
+                System.out.println("Sample Size: " + this.sampleSize);
+
+                int bitfipCcounter = this.parseResultsAndCalculateER();  // ER
+
+                Instant finish = Instant.now();
+
+                long timeElapsed_Instant = Duration.between(start, finish).toSeconds();
+
+                LocalDateTime myDateObj2 = LocalDateTime.now();
+                DateTimeFormatter myFormatObj2 = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm:ss");
+                String formattedDate2 = myDateObj2.format(myFormatObj2);
+
+                Instant startTimelogGeneration = Instant.now();
+
+                long timeElapsed_loadTime = Duration.between(start, loadTimeElapsed).toSeconds();
+                long timeElapsed_PrepareTime = Duration.between(startPreparingSimulationTimeElapsed, endPreparingSimulationTimeElapsed).toSeconds();
+                long timeElapsed_ThreadingTime = Duration.between(startThreadingTimeElapsed, endThreadingTimeElapsed).toSeconds();
+
+                Instant endTimelogGeneration = Instant.now();
+
+                long timeElapsed_logGeneration = Duration.between(startTimelogGeneration, endTimelogGeneration).toSeconds();
+
+                this.defineAvgSensitiveArea();
+
+                // this.printSensitiveAreasAnalysis();
+
+                this.defineMTBFBasedInAvgSensitiveAreaAvg();
+
+                this.defineMTBF();
+
+                //System.out.println("AVGS: " + this.avgASFLOAT);
+
+                //this.writeLogs(this.relativePath + option + "_ExausticSTFSimulation_" + this.circuit.getName() + "_Threads-" + this.threads + "_sampleSize-" + this.sampleSize, formattedDate, formattedDate2, timeElapsed_Instant, itemx_list, "STF");
+
+                System.out.println("----------------------------------------------------------------------");
+
+
+                //this.printResults("Exhaustive", formattedDate, formattedDate2, bitfipCcounter, timeElapsed_loadTime, timeElapsed_PrepareTime, timeElapsed_ThreadingTime, timeElapsed_logGeneration, timeElapsed_Instant);
+                //String specific, String formattedDate, String formattedDate2,
+                // int bitfipCcounter, long timeElapsed_loadTime, long timeElapsed_PrepareTime,
+                // long timeElapsed_ThreadingTime, long timeElapsed_logGeneration, long timeElapsed_Instant){
+
+                System.out.println("-----------------------END SIMULATION---------------------------------");
+
+                this.Performance_Time = "Simulation started at: " + formattedDate + " and finished at: " + formattedDate2;
+
+                System.out.println(formattedDate2);
+
+        }
+
 
         /**
          * Exhaustic Sensitive Area analisys (ASavg) and Sensitive Area  not logical masked + NEW APROUCH

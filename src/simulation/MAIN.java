@@ -152,12 +152,12 @@ public class MAIN {  //Class to run debug tests
 
                  //sim_mtf_debug.faultToleranceExhaustiveSET_SensitiveAreaAPI("teste/", "45nm_HP.pm", "Library.txt"); //TODO Working ....
 
-                 ///sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
+                 sim_mtf_debug.faultToleranceExhaustiveSETAPI(); //TODO Working
 
                  //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULT(); //TODO Working
-                //sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
+               // sim_mtf_debug.exhaustiveSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Working NEW APROUC
 
-                sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
+             //   sim_mtf_debug.monteCarloSensitiveAreaAnalysis_AVG_and_NotMasked(); //TODO Teste
 
                 //sim_mtf_debug.faultToleranceExhaustiveSETAPIFAULTADAPTIVE();  //TODO Working
                 //sim_mtf_debug.monteCarloReliability_SpiceGeneration_ElectricalSimulationAPI("teste/", "45nm_HP.pm", "Library.txt");
@@ -199,24 +199,13 @@ public class MAIN {  //Class to run debug tests
                 */
 
         }
-
-
-
-
             //info.add( sim_mtf_debug.printGates("circuitos/ISCAS89/min/lookup_table.csv"));  // Monte Carlo (n) - FMR e AS e MTBF
             //readResults("circuitos/ISCAS89/fullv2/");
         }
-
-
         for (int i = 0; i < info.size() ; i++) {
             System.out.println(info.get(i));
         }
     }
-
-
-
-
-
 
     public static void main(String[] args) throws Exception{
 
